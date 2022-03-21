@@ -24,7 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --watch",
     "eject": "react-scripts eject",
-    "deploy": "node deploy-gh.js"
+    "deploy": "yarn build && node deploy-gh.js"
   },
   "eslintConfig": {
     "extends": [

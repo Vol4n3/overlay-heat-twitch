@@ -133,8 +133,8 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     if(time%300 < 1){
-      this.velocity.x += Math.random() * 3 - 6;
-      this.velocity.y += Math.random() * 3 - 6;
+      this.velocity.x += Math.random() * 6 - 3;
+      this.velocity.y += Math.random() * 6 - 3;
       this.velocity.x = this.velocity.x > 3 ? 3 : this.velocity.x;
       this.velocity.y = this.velocity.y > 3 ? 3 : this.velocity.y;
       this.velocity.x = this.velocity.x < -3 ? -3 : this.velocity.x;
