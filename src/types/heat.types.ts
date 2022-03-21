@@ -1,3 +1,5 @@
+import {Point} from './point.types';
+
 export interface HeatApi {
   channel: number,
   id: string;
@@ -12,4 +14,8 @@ export interface HeatUser{
 }
 export interface MessageHeat {
   data: string;
+}
+export interface UserPoint extends Point {
+  uid: string,
+  userID: string;
 }

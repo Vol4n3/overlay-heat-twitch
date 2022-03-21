@@ -44,15 +44,23 @@ export const ReducerArray = <T>(current: T[], action: ActionArray<T>): T[] => {
 export interface ActionObject<T> {
   merge?: Partial<T>;
   replace?: T;
+  incrementNumber?: { key: keyof T, n: number, init?: number };
 }
 export type ReducerObjectType<T> = Reducer<T, ActionObject<T>>;
 export const ReducerObject = <T>(current: T, action: ActionObject<T>): T  => {
-  const { replace, merge} = action;
+  const { replace, merge,incrementNumber} = action;
   if (typeof replace !== 'undefined') {
     return replace;
   }
   if (typeof merge !== 'undefined') {
     return {...current, ...merge};
+  }
+  if (typeof incrementNumber !== 'undefined') {
+    // @ts-ignore
+    const prevValue: number = typeof current[incrementNumber.key] === 'number' ?
+     current[incrementNumber.key] :
+      0;
+    return {...current, [incrementNumber.key] : prevValue + incrementNumber.n };
   }
   return current;
 };

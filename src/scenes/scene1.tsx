@@ -1,23 +1,71 @@
-import React, {FC, useEffect, useRef} from 'react';
+import React, {FC, useEffect, useReducer, useRef} from 'react';
 import {Scene2d} from '../2d/scene2d';
-import {Ballon} from '../2d/objects/ballon';
+import {DartTarget} from '../2d/objects/dart-target';
+import {Arrow} from '../2d/objects/arrow';
+import {UserPoint} from '../types/heat.types';
+import {ReducerObject, ReducerObjectType} from '../utils/react-reducer.utils';
 
-export const Scene1:FC  = ()=>{
-  const containerRef = useRef<HTMLDivElement>(null)
+export const Scene1: FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {})
   useEffect(() => {
-    if (!containerRef.current) {
+    const div = containerRef.current;
+    if (!div) {
       return;
     }
-    const scene = new Scene2d(containerRef.current, 20);
-    const onClick = (event: MouseEvent) => {
-      const ballon = new Ballon(event.x, event.y);
-      scene.addAll(ballon);
+    const scene = new Scene2d(div, 20);
+    const dartTarget = new DartTarget(scene.ctx.canvas.width / 2 , scene.ctx.canvas.height / 2);
+    scene.addAll(dartTarget);
+    scene.target = dartTarget;
+    const addFlechette = (x: number, y: number, name: string) => {
+      const flechette = new Arrow(x, y, 60);
+      flechette.onTouched().then((result) => {
+        setScore({incrementNumber: {key: name, n: result}})
+      })
+      const ids = scene.addAll(flechette);
+      setTimeout(() => {
+        scene.removeAll(ids);
+      }, 20000)
     }
-    document.addEventListener("click", onClick)
-    return ()=>{
-      scene.destroy()
-      document.removeEventListener("click", onClick)
+    const onUserClick = (event: CustomEvent<UserPoint>) => {
+      if (event.detail) {
+        addFlechette(event.detail.x, event.detail.y, event.detail.userID);
+      }
+    }
+    const onClick = (event: MouseEvent) => {
+      addFlechette(event.x, event.y, "test");
+    }
+    // @ts-ignore
+    window.addEventListener("heatclick", onUserClick)
+    //window.addEventListener("click", onClick)
+    return () => {
+      scene.destroy();
+      if (!div) {
+        return;
+      }
+      // @ts-ignore
+      window.removeEventListener<CustomEvent<UserPoint>>("heatclick", onClick)
+      //window.removeEventListener("click", onClick)
     };
-    },[])
-  return <div className={"scene"} ref={containerRef}/>
+  }, [containerRef])
+  return <>
+    <div className={"scene"} ref={containerRef}>
+
+    </div>
+    <div style={{
+      position: 'absolute',
+      top: 20,
+      right: 20,
+      fontSize: "30px",
+      background: 'rgba(0,0,0,0.2)',
+      padding: "10px"
+    }}>
+      Jeu des fléchettes
+      {Object.keys(scores).map((key) => <div key={key} style={{
+        padding: "10px 0",
+      }}>
+        {key} : {scores[key]}
+      </div>)}
+    </div>
+  </>
 }
