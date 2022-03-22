@@ -10,17 +10,17 @@ const redCell = "rgba(198,3,3,0.6)";
 const targetSize = 300;
 const scorePadding = 60;
 const maxPointsRadius = targetSize - scorePadding;
-const greenCenterRadius = 40;
-const redCenterRadius = 20;
+const greenCenterRadius = 30;
+const redCenterRadius = 15;
 const extraPointSize = 20;
 const maxRadiusDoublePoint = maxPointsRadius;
-const maxRadiusTriplePoint = targetSize - 150;
+const maxRadiusTriplePoint = targetSize - 170;
 export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
   velocity = new Vector2(0,0);
   constructor(x: number,y:number) {
     super(x,y,targetSize);
   }
-  static getScore(vector:Vector2):number{
+  getScore(vector:Vector2):number{
     const length = vector.length
     if(length > maxPointsRadius){
       return 0;

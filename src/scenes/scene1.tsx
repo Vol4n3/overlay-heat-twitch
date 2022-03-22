@@ -16,9 +16,8 @@ export const Scene1: FC = () => {
     const scene = new Scene2d(div, 20);
     const dartTarget = new DartTarget(scene.ctx.canvas.width / 2 , scene.ctx.canvas.height / 2);
     scene.addAll(dartTarget);
-    scene.target = dartTarget;
     const addFlechette = (x: number, y: number, name: string) => {
-      const flechette = new Arrow(x, y, 60);
+      const flechette = new Arrow(x, y, dartTarget);
       flechette.onTouched().then((result) => {
         setScore({incrementNumber: {key: name, n: result}})
       })
@@ -36,7 +35,7 @@ export const Scene1: FC = () => {
       addFlechette(event.x, event.y, "test");
     }
     // @ts-ignore
-    window.addEventListener("heatclick", onUserClick)
+    window.addEventListener<CustomEvent<UserPoint>>("heatclick", onUserClick)
     //window.addEventListener("click", onClick)
     return () => {
       scene.destroy();

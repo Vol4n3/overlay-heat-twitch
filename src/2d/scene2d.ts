@@ -1,5 +1,3 @@
-import {DartTarget} from './objects/dart-target';
-
 export interface Drawable<T> {
   draw(scene: T, time: number): void;
 }
@@ -10,7 +8,6 @@ export interface Updatable<T> {
 
 export class Scene2d {
   public readonly ctx: CanvasRenderingContext2D;
-  public target: DartTarget | null = null;
   private readonly canvas: HTMLCanvasElement;
   private drawTime: number = 0;
   private drawables: (Drawable<Scene2d> | null)[] = [];

@@ -4,6 +4,9 @@ import {Vector2} from '../geometry/vector2';
 import {DartTarget} from './dart-target';
 
 export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
+  constructor(public x: number,public y: number,private target:DartTarget) {
+    super(x,y,80);
+  }
   public onTouched: () => Promise<number> = () => {
     return new Promise<number>(resolve => {
       const refInterval = setInterval(() => {
@@ -16,7 +19,7 @@ export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2
             clearInterval(refInterval);
             return
           }
-          resolve(DartTarget.getScore(this.targetVector));
+          resolve(this.target.getScore(this.targetVector));
           clearInterval(refInterval);
         }
       }, 200)
@@ -37,28 +40,27 @@ export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2
       ctx.lineTo(this.x + plume.x, this.y + plume.y);
     }
     ctx.lineWidth = 4;
-    ctx.strokeStyle = this.isTouched ? "yellow" : "rgba(0,0,0,0.4)";
+    ctx.strokeStyle = this.isTouched ? "yellow" : this.isMissed ? "rgba(0,0,0,0.5)" : "yellow";
     ctx.stroke();
     ctx.closePath();
     ctx.restore();
   }
 
   update(scene: Scene2d, time: number): void {
-    const target = scene.target;
-    if (!target || this.isMissed) {
+    if ( this.isMissed) {
       return;
     }
     if (this.isTouched && this.targetVector) {
-      this.x = target.x + this.targetVector.x;
-      this.y = target.y + this.targetVector.y;
+      this.x = this.target.x + this.targetVector.x;
+      this.y = this.target.y + this.targetVector.y;
       return;
     }
     if (this.radius > 20) {
       this.rotation += Math.round(Math.random() * 100 - 50) / 100;
       this.radius -= 10;
     } else {
-      this.targetVector = new Vector2(this.x - target.x, this.y - target.y);
-      if (this.targetVector.length < target.radius && !this.isTouched) {
+      this.targetVector = new Vector2(this.x - this.target.x, this.y - this.target.y);
+      if (this.targetVector.length < this.target.radius && !this.isTouched) {
         this.isTouched = true;
       } else {
         this.isMissed = true;
