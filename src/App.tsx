@@ -2,8 +2,8 @@ import React, {useEffect, useReducer, useRef} from 'react';
 import './2d/App.scss';
 import {useHeat} from './providers/heat.provider';
 import {ReducerArray, ReducerArrayType} from './utils/react-reducer.utils';
-import {Scene1} from './scenes/scene1';
 import {UserPoint} from './types/heat.types';
+import {Scene2} from './scenes/scene2';
 
 
 function simulateClick(x: number, y: number, userID: string, uid: string) {
@@ -53,7 +53,9 @@ function App() {
       <div style={{position: 'absolute', background: 'rgba(0,0,0,0.2)', padding: "10px", fontSize: "32px"}}>
         {clicks.map(click => <div key={click.uid}> click de {click.userID} en {click.x} : {click.y}  </div>)}
       </div>
-      <Scene1/>
+
+      {/*   <Scene1/>*/}
+      <Scene2/>
     </div>
   );
 }

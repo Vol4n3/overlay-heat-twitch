@@ -41,6 +41,11 @@ export class Scene2d {
 
   }
 
+  erase(): void {
+    this.drawables = [];
+    this.updatables = [];
+  }
+
   addDraw(item: Drawable<Scene2d>): number {
     const id = this.uid++;
     this.drawables.push({item, id})

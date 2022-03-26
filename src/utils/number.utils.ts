@@ -15,3 +15,6 @@ export const CoordinateRatioToScreen = (
     y: Math.round(height * y)
   }
 }
+export const AngleKeepRange = (n: number): number => {
+  return Math.abs(n) > Math.PI ? n > 0 ? n - Math.PI * 2 : n + Math.PI * 2 : n;
+}
