@@ -27,7 +27,7 @@ export const Scene1: FC = () => {
       const ids = scene.addAll(flechette);
       setTimeout(() => {
         scene.removeAll(ids);
-      }, 20000)
+      }, 10000)
     }
     const onUserClick = (event: CustomEvent<UserPoint>) => {
       if (event.detail) {
