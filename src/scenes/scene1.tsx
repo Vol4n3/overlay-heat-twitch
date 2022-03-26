@@ -7,7 +7,8 @@ import {ReducerObject, ReducerObjectType} from '../utils/react-reducer.utils';
 
 export const Scene1: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {})
+  const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {"lol":30});
+  const [shoots, setShoots] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {"lol":3});
   useEffect(() => {
     const div = containerRef.current;
     if (!div) {
@@ -18,8 +19,10 @@ export const Scene1: FC = () => {
     scene.addAll(dartTarget);
     const addFlechette = (x: number, y: number, name: string) => {
       const flechette = new Arrow(x, y, dartTarget);
+      setShoots({incrementNumber: {key: name, n: 1}});
+      setScore({incrementNumber: {key: name, n: 0}});
       flechette.onTouched().then((result) => {
-        setScore({incrementNumber: {key: name, n: result}})
+        setScore({incrementNumber: {key: name, n: result}});
       })
       const ids = scene.addAll(flechette);
       setTimeout(() => {
@@ -36,7 +39,7 @@ export const Scene1: FC = () => {
     }
     // @ts-ignore
     window.addEventListener<CustomEvent<UserPoint>>("heatclick", onUserClick)
-    //window.addEventListener("click", onClick)
+    window.addEventListener("click", onClick)
     return () => {
       scene.destroy();
       if (!div) {
@@ -44,7 +47,7 @@ export const Scene1: FC = () => {
       }
       // @ts-ignore
       window.removeEventListener<CustomEvent<UserPoint>>("heatclick", onClick)
-      //window.removeEventListener("click", onClick)
+      window.removeEventListener("click", onClick)
     };
   }, [containerRef])
   return <>
@@ -60,10 +63,19 @@ export const Scene1: FC = () => {
       padding: "10px"
     }}>
       Jeu des fléchettes
-      {Object.keys(scores).map((key) => <div key={key} style={{
+      {Object.keys(scores).sort((a,b)=>(scores[b]/shoots[b] - scores[a]/shoots[a]))
+        .map((key,index) => <div key={key} style={{
         padding: "10px 0",
+          display: 'flex',
+          justifyContent: 'space-between'
       }}>
-        {key} : {scores[key]}
+        <div >
+          [{index + 1}] {key} :
+        </div>
+        <div>
+          {scores[key]} ({shoots[key]})
+        </div>
+
       </div>)}
     </div>
   </>

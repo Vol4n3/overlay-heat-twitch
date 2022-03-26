@@ -5,7 +5,7 @@ import {DartTarget} from './dart-target';
 
 export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
   constructor(public x: number,public y: number,private target:DartTarget) {
-    super(x,y,80);
+    super(x,y,70);
   }
   public onTouched: () => Promise<number> = () => {
     return new Promise<number>(resolve => {
@@ -39,7 +39,7 @@ export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2
         this.radius)
       ctx.lineTo(this.x + plume.x, this.y + plume.y);
     }
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 3;
     ctx.strokeStyle = this.isTouched ? "yellow" : this.isMissed ? "rgba(0,0,0,0.5)" : "yellow";
     ctx.stroke();
     ctx.closePath();
@@ -55,7 +55,7 @@ export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2
       this.y = this.target.y + this.targetVector.y;
       return;
     }
-    if (this.radius > 20) {
+    if (this.radius > 15) {
       this.rotation += Math.round(Math.random() * 100 - 50) / 100;
       this.radius -= 10;
     } else {

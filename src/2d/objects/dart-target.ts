@@ -4,43 +4,25 @@ import {Vector2} from '../geometry/vector2';
 
 const PI2 = Math.PI * 2;
 const parts: number[] = [6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20, 1, 18, 4, 13];
-const vectorToPoint: number[] = [11,14,9,12,5,20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11]
+const vectorToPoint: number[] = [11, 14, 9, 12, 5, 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11]
 const greenCell = "rgba(5,124,46,0.74)";
 const redCell = "rgba(198,3,3,0.6)";
-const targetSize = 300;
-const scorePadding = 60;
+const targetSize = 160;
+const scorePadding = 30;
 const maxPointsRadius = targetSize - scorePadding;
-const greenCenterRadius = 30;
-const redCenterRadius = 15;
-const extraPointSize = 20;
+const greenCenterRadius = 15;
+const redCenterRadius = 7;
+const extraPointSize = 10;
 const maxRadiusDoublePoint = maxPointsRadius;
-const maxRadiusTriplePoint = targetSize - 170;
+const maxRadiusTriplePoint = targetSize - 100;
+
 export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
-  velocity = new Vector2(0,0);
-  constructor(x: number,y:number) {
-    super(x,y,targetSize);
+  velocity = new Vector2(0, 0);
+
+  constructor(x: number, y: number) {
+    super(x, y, targetSize);
   }
-  getScore(vector:Vector2):number{
-    const length = vector.length
-    if(length > maxPointsRadius){
-      return 0;
-    }
-    if(length < redCenterRadius){
-      return 50
-    }
-    if(length < greenCenterRadius){
-      return 25
-    }
-    const indexPoint = Math.round((vector.angle + Math.PI + (Math.PI / 2)) / (Math.PI/ 10 ) -5 ) ;
-    const score = vectorToPoint[indexPoint];
-    if(length < maxRadiusDoublePoint && length > (maxRadiusDoublePoint - extraPointSize)){
-      return score * 2;
-    }
-    if(length < maxRadiusTriplePoint && length > (maxRadiusTriplePoint - extraPointSize)){
-      return score * 3;
-    }
-    return score;
-  }
+
   draw({ctx}: Scene2d, time: number): void {
     this.drawCircle(ctx);
     this.writeNumbers(ctx);
@@ -57,7 +39,7 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
     ctx.fillStyle = redCell;
     ctx.arc(this.x, this.y, redCenterRadius, 0, PI2)
     ctx.fill();
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
     ctx.restore();
@@ -109,7 +91,7 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
         min,
         true);
       ctx.fill();
-      ctx.lineWidth = 5;
+      ctx.lineWidth = 2;
       ctx.strokeStyle = "black"
       ctx.stroke();
       ctx.closePath();
@@ -123,16 +105,38 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
     ctx.fillStyle = greenCell;
     ctx.arc(this.x, this.y, greenCenterRadius, 0, PI2)
     ctx.fill();
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 2;
     ctx.stroke();
     ctx.closePath();
     ctx.restore();
   }
 
+  getScore(vector: Vector2): number {
+    const length = vector.length
+    if (length > maxPointsRadius) {
+      return 0;
+    }
+    if (length < redCenterRadius) {
+      return 50
+    }
+    if (length < greenCenterRadius) {
+      return 25
+    }
+    const indexPoint = Math.round((vector.angle + Math.PI + (Math.PI / 2)) / (Math.PI / 10) - 5);
+    const score = vectorToPoint[indexPoint];
+    if (length < maxRadiusDoublePoint && length > (maxRadiusDoublePoint - extraPointSize)) {
+      return score * 2;
+    }
+    if (length < maxRadiusTriplePoint && length > (maxRadiusTriplePoint - extraPointSize)) {
+      return score * 3;
+    }
+    return score;
+  }
+
   update(scene: Scene2d, time: number): void {
     this.x += this.velocity.x;
     this.y += this.velocity.y;
-    if(time%300 < 1){
+    if (time % 300 < 1) {
       this.velocity.x += Math.random() * 6 - 3;
       this.velocity.y += Math.random() * 6 - 3;
       this.velocity.x = this.velocity.x > 3 ? 3 : this.velocity.x;
@@ -145,7 +149,7 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
       if (this.x > (scene.ctx.canvas.width - targetSize)) {
         this.x = (scene.ctx.canvas.width - targetSize)
       }
-      if(this.x < targetSize){
+      if (this.x < targetSize) {
         this.x = targetSize
       }
     }
@@ -154,7 +158,7 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
       if (this.y > (scene.ctx.canvas.height - targetSize)) {
         this.y = (scene.ctx.canvas.height - targetSize)
       }
-      if(this.y < targetSize){
+      if (this.y < targetSize) {
         this.y = targetSize
       }
     }
@@ -166,10 +170,10 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.font = "36px Arial";
+    ctx.font = "16px Arial";
     parts.forEach((num, index) => {
-      const x = this.x + Math.cos((Math.PI / 10) * index) * (this.radius - 30);
-      const y = this.y + Math.sin((Math.PI / 10) * index) * (this.radius - 30);
+      const x = this.x + Math.cos((Math.PI / 10) * index) * (this.radius - 15);
+      const y = this.y + Math.sin((Math.PI / 10) * index) * (this.radius - 15);
       ctx.fillText(num.toString(10), x, y);
     })
     ctx.closePath();

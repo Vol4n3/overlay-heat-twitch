@@ -11,12 +11,6 @@ function simulateClick(x: number, y: number, userID: string, uid: string) {
   if (!el) {
     return
   }
-  const event = new MouseEvent('click', {
-    bubbles: true,
-    cancelable: true,
-    clientX: x,
-    clientY: y,
-  });
   const custom = new CustomEvent<UserPoint>('heatclick', {
     bubbles: true,
     cancelable: true,
@@ -27,7 +21,6 @@ function simulateClick(x: number, y: number, userID: string, uid: string) {
       uid
     }
   });
-  el.dispatchEvent(event);
   el.dispatchEvent(custom);
 }
 
