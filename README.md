@@ -1,4 +1,7 @@
 # Overlay interactif twitch
+## disclaimer
+Je ne suis pas responsable et ni le développeur de l'extension Heat
+allez sur (https://heat.j38.net/) pour plus d'infos
 
 ## Comment l'intégrer à obs
 
@@ -8,7 +11,7 @@
 * ajouter une source navigateur/ web browser
 * mettre dans l'url avec le heatId à la https://vol4n3.github.io/overlay-heat-twitch/?heatId=
 * choisissez une bonne résolution pour votre source
-
+* les viewers ne pourrons pas interagir sur les jeux avec un scoreboard si ils n'autorisent pas l'extension Heat à accéder aux infos de twitch
 
 ## Contribuez au code source
 
