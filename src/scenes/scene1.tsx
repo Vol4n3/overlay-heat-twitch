@@ -7,8 +7,8 @@ import {ReducerObject, ReducerObjectType} from '../utils/react-reducer.utils';
 
 export const Scene1: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {"lol":30});
-  const [shoots, setShoots] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {"lol":3});
+  const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
+  const [shoots, setShoots] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
   useEffect(() => {
     const div = containerRef.current;
     if (!div) {
