@@ -1,9 +1,8 @@
 import {createContext, FC, useContext, useEffect, useRef} from 'react';
 import {Point} from '../types/point.types';
 import {HeatApi, MessageHeat} from '../types/heat.types';
-import {CoordinationRatioToScreen} from '../utils/number.utils';
+import {CoordinateRatioToScreen} from '../utils/number.utils';
 import {getUserName} from '../utils/heat.utils';
-
 
 
 interface UserPoint extends Point {
@@ -47,7 +46,7 @@ export const HeatProvider: FC = ({children}) => {
       }
       if (data.id.startsWith("A")) return;
       else if (data.id.startsWith("U")) return;
-      const screen = CoordinationRatioToScreen(parseFloat(data.x), parseFloat(data.y), document.body.clientWidth, document.body.clientHeight);
+      const screen = CoordinateRatioToScreen(parseFloat(data.x), parseFloat(data.y), document.body.clientWidth, document.body.clientHeight);
       getUserName(data.id).then(user => {
         if (listeners.current === null) return;
         listeners.current({...screen, userID: typeof user === 'string' ? user : user.display_name});

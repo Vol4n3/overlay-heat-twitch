@@ -7,10 +7,10 @@
  *
  */
 
-export const CoordinationRatioToScreen = (
+export const CoordinateRatioToScreen = (
   x: number, y: number, width: number, height: number
 ): { x: number, y: number } => {
-  return{
+  return {
     x: Math.round(width * x),
     y: Math.round(height * y)
   }

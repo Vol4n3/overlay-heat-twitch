@@ -7,8 +7,8 @@ const parts: number[] = [6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20
 const vectorToPoint: number[] = [11, 14, 9, 12, 5, 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11]
 const greenCell = "rgba(5,124,46,0.74)";
 const redCell = "rgba(198,3,3,0.6)";
-const targetSize = 160;
-const scorePadding = 30;
+const targetSize = 200;
+const scorePadding = 40;
 const maxPointsRadius = targetSize - scorePadding;
 const greenCenterRadius = 15;
 const redCenterRadius = 7;
@@ -170,10 +170,10 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.font = "16px Arial";
+    ctx.font = "20px Arial";
     parts.forEach((num, index) => {
-      const x = this.x + Math.cos((Math.PI / 10) * index) * (this.radius - 15);
-      const y = this.y + Math.sin((Math.PI / 10) * index) * (this.radius - 15);
+      const x = this.x + Math.cos((Math.PI / 10) * index) * (this.radius - 20);
+      const y = this.y + Math.sin((Math.PI / 10) * index) * (this.radius - 20);
       ctx.fillText(num.toString(10), x, y);
     })
     ctx.closePath();

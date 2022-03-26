@@ -12,6 +12,7 @@ body,html{
 }
 *{
   box-sizing: border-box;
+  user-select: none;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

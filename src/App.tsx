@@ -1,9 +1,9 @@
 import React, {useEffect, useReducer, useRef} from 'react';
-import './App.scss';
-import {useHeat} from '../providers/heat.provider';
-import {ReducerArray, ReducerArrayType} from '../utils/react-reducer.utils';
-import {Scene1} from '../scenes/scene1';
-import {UserPoint} from '../types/heat.types';
+import './2d/App.scss';
+import {useHeat} from './providers/heat.provider';
+import {ReducerArray, ReducerArrayType} from './utils/react-reducer.utils';
+import {Scene1} from './scenes/scene1';
+import {UserPoint} from './types/heat.types';
 
 
 function simulateClick(x: number, y: number, userID: string, uid: string) {
