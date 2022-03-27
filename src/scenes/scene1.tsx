@@ -16,7 +16,7 @@ export const Scene1: FC = () => {
     }
     const scene = new Scene2d(div, 20);
     const dartTarget = new DartTarget(scene.ctx.canvas.width / 2 , scene.ctx.canvas.height / 2);
-    scene.addAll(dartTarget);
+    scene.addItem(dartTarget);
     const addFlechette = (x: number, y: number, name: string) => {
       const flechette = new Arrow(x, y, dartTarget);
       setShoots({incrementNumber: {key: name, n: 1}});
@@ -24,9 +24,9 @@ export const Scene1: FC = () => {
       flechette.onTouched().then((result) => {
         setScore({incrementNumber: {key: name, n: result}});
       })
-      const ids = scene.addAll(flechette);
+      const ids = scene.addItem(flechette);
       setTimeout(() => {
-        scene.removeAll(ids);
+        scene.removeItem(ids);
       }, 10000)
     }
     const onUserClick = (event: CustomEvent<UserPoint>) => {

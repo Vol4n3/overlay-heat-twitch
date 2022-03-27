@@ -1,9 +1,9 @@
-import {Drawable, Scene2d, Updatable} from '../scene2d';
-import {Point} from '../../types/point.types';
+import {Scene2d, Scene2DItem} from '../scene2d';
 
-export class Ballon implements Drawable<Scene2d>, Point, Updatable<Scene2d> {
+export class Ballon implements Scene2DItem {
   private radius = 50;
   private rand = Math.round(Math.random() * 100000);
+
   constructor(public x: number, public y: number) {
   }
 

@@ -1,4 +1,4 @@
-import {Drawable, Scene2d, Updatable} from '../scene2d';
+import {Scene2d, Scene2DItem} from '../scene2d';
 import {Circle} from '../shapes/circle';
 import {Vector2} from '../geometry/vector2';
 
@@ -16,8 +16,8 @@ const extraPointSize = 10;
 const maxRadiusDoublePoint = maxPointsRadius;
 const maxRadiusTriplePoint = targetSize - 100;
 
-export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
-  velocity = new Vector2(0, 0);
+export class DartTarget extends Circle implements Scene2DItem {
+  direction = new Vector2(0, 0);
 
   constructor(x: number, y: number) {
     super(x, y, targetSize);
@@ -31,6 +31,18 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
     this.drawCenter(ctx);
     this.drawExtraPoint(ctx, maxRadiusDoublePoint);
     this.drawExtraPoint(ctx, maxRadiusTriplePoint);
+  }
+
+  update(scene: Scene2d, time: number): void {
+    this.position.x += this.direction.x;
+    this.position.y += this.direction.y;
+    this.bounceBoundary(targetSize, scene.ctx.canvas.width - targetSize, targetSize, scene.ctx.canvas.height - targetSize);
+    if (time % 300 < 1) {
+      this.direction.x += Math.random() * 6 - 3;
+      this.direction.y += Math.random() * 6 - 3;
+      this.direction.setRange(-3, 3, -3, 3);
+    }
+
   }
 
   drawCenter(ctx: CanvasRenderingContext2D): void {
@@ -131,18 +143,6 @@ export class DartTarget extends Circle implements Drawable<Scene2d>, Updatable<S
       return score * 3;
     }
     return score;
-  }
-
-  update(scene: Scene2d, time: number): void {
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
-    this.bounceBoundary(targetSize, scene.ctx.canvas.width - targetSize, targetSize, scene.ctx.canvas.height - targetSize);
-    if (time % 300 < 1) {
-      this.velocity.x += Math.random() * 6 - 3;
-      this.velocity.y += Math.random() * 6 - 3;
-      this.velocity.setRange(-3, 3, -3, 3);
-    }
-
   }
 
   writeNumbers(ctx: CanvasRenderingContext2D): void {

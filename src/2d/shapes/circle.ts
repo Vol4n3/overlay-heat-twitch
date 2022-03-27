@@ -3,7 +3,7 @@ import {Vector2} from '../geometry/vector2';
 
 export class Circle {
   public rotation: number = 0;
-  public velocity: Vector2 = new Vector2(0, 0);
+  public direction: Vector2 = new Vector2(0, 0);
   public position: Vector2;
 
   constructor(x: number, y: number, public radius: number) {
@@ -12,7 +12,7 @@ export class Circle {
 
   bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number) {
     if (this.position.x > xMax || this.position.x < xMin) {
-      this.velocity.x *= -1
+      this.direction.x *= -1
       if (this.position.x > xMax) {
         this.position.x = xMax
       }
@@ -21,7 +21,7 @@ export class Circle {
       }
     }
     if (this.position.y > yMax || this.position.y < yMin) {
-      this.velocity.y *= -1
+      this.direction.y *= -1
       if (this.position.y > yMax) {
         this.position.y = yMax
       }

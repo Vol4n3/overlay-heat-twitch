@@ -1,16 +1,17 @@
 import {Circle} from '../shapes/circle';
-import {Drawable, Scene2d, Updatable} from '../scene2d';
+import {Scene2d, Scene2DItem} from '../scene2d';
 import {Vector2} from '../geometry/vector2';
 import {DartTarget} from './dart-target';
 
-export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
+export class Arrow extends Circle implements Scene2DItem {
   constructor(x: number, y: number, private target: DartTarget) {
     super(x, y, 70);
   }
+
   public onTouched: () => Promise<number> = () => {
     return new Promise<number>(resolve => {
       const refInterval = setInterval(() => {
-        if(this.isMissed){
+        if (this.isMissed) {
           clearInterval(refInterval);
           return;
         }

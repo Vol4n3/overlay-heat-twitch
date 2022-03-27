@@ -1,12 +1,19 @@
 import {Circle} from '../shapes/circle';
-import {Drawable, Scene2d, Updatable} from '../scene2d';
+import {Scene2d, Scene2DItem} from '../scene2d';
 import {Vector2} from '../geometry/vector2';
 import {Starship} from './starship';
 
-export class Asteroid extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
-  constructor(x: number, y: number, private starship: Starship, private owner: string, private touchedListener: Function) {
+export class Asteroid extends Circle implements Scene2DItem {
+  constructor(
+    x: number,
+    y: number,
+    private starship: Starship,
+    private owner: string,
+    private touchedListener: Function,
+    direction: Vector2
+  ) {
     super(x, y, 50);
-    this.velocity = new Vector2(Math.random() * 10 - 5, Math.random() * 10 - 5);
+    this.direction = direction;
   }
 
   draw({ctx}: Scene2d, time: number): void {
@@ -20,7 +27,7 @@ export class Asteroid extends Circle implements Drawable<Scene2d>, Updatable<Sce
   }
 
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {
-    this.position.translateFrom(this.velocity);
+    this.position.translateFrom(this.direction);
     this.position.teleportBoundary(0, width, 0, height);
     const vectorCheck = this.position.createFromVectorDiff(this.starship.position);
     if (vectorCheck.length < (this.radius + this.starship.radius)) {

@@ -15,6 +15,12 @@ export class Vector2 {
     return VectorLength([this.x, this.y]);
   }
 
+  set length(len: number) {
+    const angle = this.angle;
+    this.x = Math.cos(angle) * len
+    this.y = Math.sin(angle) * len
+  }
+
   constructor(public x: number, public y: number) {
   }
 
