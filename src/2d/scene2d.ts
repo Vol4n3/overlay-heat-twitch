@@ -41,7 +41,7 @@ export class Scene2d {
 
   }
 
-  erase(): void {
+  cleanItems(): void {
     this.drawables = [];
     this.updatables = [];
   }

@@ -15,7 +15,7 @@ export const Scene2: FC = () => {
     const scene = new Scene2d(container, 30);
     let starship: Starship;
     const startPlay = (starshipOwner?: string) => {
-      scene.erase();
+      scene.cleanItems();
       starship = new Starship(container.clientWidth / 2, container.clientHeight / 2, starshipOwner);
       scene.addAll(starship);
     }
@@ -40,7 +40,7 @@ export const Scene2: FC = () => {
         starship.target = new Vector2(x, y);
         return;
       }
-      const vectorCheck = new Vector2(x - starship.x, y - starship.y);
+      const vectorCheck = new Vector2(x - starship.position.x, y - starship.position.y);
       if (vectorCheck.length < 300) {
         return;
       }

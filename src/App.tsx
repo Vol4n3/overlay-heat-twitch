@@ -54,7 +54,7 @@ function App() {
         {clicks.map(click => <div key={click.uid}> click de {click.userID} en {click.x} : {click.y}  </div>)}
       </div>
 
-      {/*   <Scene1/>*/}
+      {/*<Scene1/>*/}
       <Scene2/>
     </div>
   );

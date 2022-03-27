@@ -4,8 +4,8 @@ import {Vector2} from '../geometry/vector2';
 import {DartTarget} from './dart-target';
 
 export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2d> {
-  constructor(public x: number,public y: number,private target:DartTarget) {
-    super(x,y,70);
+  constructor(x: number, y: number, private target: DartTarget) {
+    super(x, y, 70);
   }
   public onTouched: () => Promise<number> = () => {
     return new Promise<number>(resolve => {
@@ -33,11 +33,11 @@ export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2
     ctx.save()
     ctx.beginPath()
     for (let i = 0; i < 4; i++) {
-      ctx.moveTo(this.x, this.y);
-      const plume = Vector2.createWithAngleLength(
+      ctx.moveTo(this.position.x, this.position.y);
+      const plume = Vector2.createFromAngle(
         ((Math.PI / 2) * i) + this.rotation,
         this.radius)
-      ctx.lineTo(this.x + plume.x, this.y + plume.y);
+      ctx.lineTo(this.position.x + plume.x, this.position.y + plume.y);
     }
     ctx.lineWidth = 3;
     ctx.strokeStyle = this.isTouched ? "yellow" : this.isMissed ? "rgba(0,0,0,0.5)" : "yellow";
@@ -51,15 +51,15 @@ export class Arrow extends Circle implements Drawable<Scene2d>, Updatable<Scene2
       return;
     }
     if (this.isTouched && this.targetVector) {
-      this.x = this.target.x + this.targetVector.x;
-      this.y = this.target.y + this.targetVector.y;
+      this.position.x = this.target.position.x + this.targetVector.x;
+      this.position.y = this.target.position.y + this.targetVector.y;
       return;
     }
     if (this.radius > 15) {
       this.rotation += Math.round(Math.random() * 100 - 50) / 100;
       this.radius -= 10;
     } else {
-      this.targetVector = new Vector2(this.x - this.target.x, this.y - this.target.y);
+      this.targetVector = new Vector2(this.position.x - this.target.position.x, this.position.y - this.target.position.y);
       if (this.targetVector.length < this.target.radius && !this.isTouched) {
         this.isTouched = true;
       } else {
