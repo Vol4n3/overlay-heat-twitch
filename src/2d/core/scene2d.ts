@@ -10,17 +10,20 @@ interface WithId<T> {
   priority: number;
 }
 
-export class Scene2d {
-  public readonly canvas: HTMLCanvasElement;
-  public readonly ctx: CanvasRenderingContext2D;
-  private drawTime: number = 0;
-  private items: (WithId<Scene2DItem>)[] = [];
-  private refResize = this.resize.bind(this)
-  private tickAnimation: number = 0;
-  private readonly tickInterval: number = 0;
-  private uid: number = 100;
-  private updateTime: number = 0;
+export type canvasWriteTextConfig = {
+  fillStyle?: string | CanvasGradient | CanvasPattern;
+  strokeStyle?: string | CanvasGradient | CanvasPattern;
+  textAlign?: CanvasTextAlign;
+  textBaseline?: CanvasTextBaseline;
+  direction?: CanvasDirection;
+  text: string;
+  font?: string;
+  x: number;
+  y: number;
+  lineWidth: number;
+}
 
+export class Scene2d {
   constructor(private container: HTMLDivElement, updateInterval: number = 30) {
     this.canvas = document.createElement('canvas');
     this.canvas.style.top = "0";
@@ -34,6 +37,16 @@ export class Scene2d {
     this.animate();
     this.tickInterval = window.setInterval(this.update.bind(this), updateInterval);
   }
+
+  public readonly canvas: HTMLCanvasElement;
+  public readonly ctx: CanvasRenderingContext2D;
+  private drawTime: number = 0;
+  private items: (WithId<Scene2DItem>)[] = [];
+  private refResize = this.resize.bind(this)
+  private tickAnimation: number = 0;
+  private readonly tickInterval: number = 0;
+  private uid: number = 100;
+  private updateTime: number = 0;
 
   addItem(item: Scene2DItem, order?: number): number {
     const id = this.uid++;
@@ -51,6 +64,20 @@ export class Scene2d {
     });
     this.drawTime++;
     this.tickAnimation = requestAnimationFrame(this.animate.bind(this))
+  }
+
+  writeText(config: canvasWriteTextConfig) {
+    this.ctx.save();
+    if (config.fillStyle) this.ctx.fillStyle = config.fillStyle;
+    if (config.strokeStyle) this.ctx.strokeStyle = config.strokeStyle;
+    if (config.textAlign) this.ctx.textAlign = config.textAlign;
+    if (config.direction) this.ctx.direction = config.direction;
+    if (config.textBaseline) this.ctx.textBaseline = config.textBaseline;
+    if (config.lineWidth) this.ctx.lineWidth = config.lineWidth;
+    this.ctx.font = config.font || "26px Arial";
+    if (config.fillStyle) this.ctx.fillText(config.text, config.x, config.y);
+    if (config.strokeStyle) this.ctx.strokeText(config.text, config.x, config.y);
+    this.ctx.restore();
   }
 
   cleanItems(): void {

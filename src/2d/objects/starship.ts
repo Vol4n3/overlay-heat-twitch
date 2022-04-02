@@ -14,7 +14,6 @@ export class Starship extends Circle2 implements Scene2DItem {
   rotation = 0;
   target: Vector2 | null = null;
   easingRotation: EasingCallback | null = null;
-
   constructor(x: number, y: number, public owner: string = "") {
     super(x, y, 40);
   }

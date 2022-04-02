@@ -4,7 +4,7 @@ import {Point2} from './point2';
 
 export class Circle2 {
   public direction: Vector2 = new Vector2(0, 0);
-
+  public rotationSpeed: number = 0;
   constructor(x: number, y: number, public radius: number) {
     this.position = new Point2(x, y);
   }
