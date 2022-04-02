@@ -1,9 +1,9 @@
-import {Circle} from '../shapes/circle';
+import {Circle2} from '../geometry/circle2';
 import {Scene2d, Scene2DItem} from '../scene2d';
 import {Vector2} from '../geometry/vector2';
 import {DartTarget} from './dart-target';
 
-export class Arrow extends Circle implements Scene2DItem {
+export class Arrow extends Circle2 implements Scene2DItem {
   constructor(x: number, y: number, private target: DartTarget) {
     super(x, y, 70);
   }
@@ -31,7 +31,6 @@ export class Arrow extends Circle implements Scene2DItem {
   private targetVector: Vector2 | null = null;
 
   draw({ctx}: Scene2d, time: number): void {
-    ctx.save()
     ctx.beginPath()
     for (let i = 0; i < 4; i++) {
       ctx.moveTo(this.position.x, this.position.y);
@@ -44,7 +43,6 @@ export class Arrow extends Circle implements Scene2DItem {
     ctx.strokeStyle = this.isTouched ? "yellow" : this.isMissed ? "rgba(0,0,0,0.5)" : "yellow";
     ctx.stroke();
     ctx.closePath();
-    ctx.restore();
   }
 
   update(scene: Scene2d, time: number): void {

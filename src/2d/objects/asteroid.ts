@@ -1,9 +1,9 @@
-import {Circle} from '../shapes/circle';
+import {Circle2} from '../geometry/circle2';
 import {Scene2d, Scene2DItem} from '../scene2d';
 import {Vector2} from '../geometry/vector2';
 import {Starship} from './starship';
 
-export class Asteroid extends Circle implements Scene2DItem {
+export class Asteroid extends Circle2 implements Scene2DItem {
   constructor(
     x: number,
     y: number,
@@ -17,13 +17,11 @@ export class Asteroid extends Circle implements Scene2DItem {
   }
 
   draw({ctx}: Scene2d, time: number): void {
-    ctx.save();
     ctx.beginPath();
     ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = "rgba(100,100,100,0.5)";
     ctx.fill();
     ctx.closePath();
-    ctx.restore();
   }
 
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {

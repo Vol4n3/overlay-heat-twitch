@@ -4,8 +4,9 @@ import {DartTarget} from '../2d/objects/dart-target';
 import {Arrow} from '../2d/objects/arrow';
 import {UserPoint} from '../types/heat.types';
 import {ReducerObject, ReducerObjectType} from '../utils/react-reducer.utils';
+import {ContainerScene} from '../components/ui/container-scene';
 
-export const Scene1: FC = () => {
+export const FlechetteGame: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
   const [shoots, setShoots] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
@@ -15,7 +16,7 @@ export const Scene1: FC = () => {
       return;
     }
     const scene = new Scene2d(div, 20);
-    const dartTarget = new DartTarget(scene.ctx.canvas.width / 2 , scene.ctx.canvas.height / 2);
+    const dartTarget = new DartTarget(scene.ctx.canvas.width / 2, scene.ctx.canvas.height / 2);
     scene.addItem(dartTarget);
     const addFlechette = (x: number, y: number, name: string) => {
       const flechette = new Arrow(x, y, dartTarget);
@@ -24,7 +25,7 @@ export const Scene1: FC = () => {
       flechette.onTouched().then((result) => {
         setScore({incrementNumber: {key: name, n: result}});
       })
-      const ids = scene.addItem(flechette);
+      const ids = scene.addItem(flechette, 1);
       setTimeout(() => {
         scene.removeItem(ids);
       }, 10000)
@@ -51,9 +52,7 @@ export const Scene1: FC = () => {
     };
   }, [containerRef])
   return <>
-    <div className={"scene"} ref={containerRef}>
-
-    </div>
+    <ContainerScene ref={containerRef}/>
     <div style={{
       position: 'absolute',
       top: 20,
@@ -63,7 +62,7 @@ export const Scene1: FC = () => {
       padding: "10px"
     }}>
       Jeu des fléchettes
-      {Object.keys(scores).sort((a,b)=>(scores[b]/shoots[b] - scores[a]/shoots[a]))
+      {Object.keys(scores).sort((a, b) => (scores[b] / shoots[b] - scores[a] / shoots[a]))
         .map((key,index) => <div key={key} style={{
         padding: "10px 0",
           display: 'flex',

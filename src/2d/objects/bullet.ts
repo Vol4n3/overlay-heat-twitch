@@ -1,13 +1,15 @@
-import {Circle} from '../shapes/circle';
+import {Circle2} from '../geometry/circle2';
 import {Scene2d, Scene2DItem} from '../scene2d';
 
 
-export class Bullet extends Circle implements Scene2DItem {
+export class Bullet extends Circle2 implements Scene2DItem {
   draw({ctx}: Scene2d, time: number): void {
     ctx.beginPath();
     ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = 'yellow';
-    ctx.fill()
+    ctx.shadowColor = 'yellow';
+    ctx.shadowBlur = 20;
+    ctx.fill();
     ctx.closePath();
   }
 

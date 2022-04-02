@@ -11,6 +11,7 @@ export class Ballon implements Scene2DItem {
     ctx.beginPath()
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
+    ctx.closePath();
   }
 
   update(_: Scene2d, time: number): void {

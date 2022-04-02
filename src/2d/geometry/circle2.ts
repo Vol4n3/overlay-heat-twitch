@@ -1,10 +1,10 @@
-import {Vector2} from '../geometry/vector2';
+import {Vector2} from './vector2';
 
 
-export class Circle {
-  public rotation: number = 0;
+export class Circle2 {
   public direction: Vector2 = new Vector2(0, 0);
   public position: Vector2;
+  public rotation: number = 0;
 
   constructor(x: number, y: number, public radius: number) {
     this.position = new Vector2(x, y);

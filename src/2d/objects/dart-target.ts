@@ -1,5 +1,5 @@
 import {Scene2d, Scene2DItem} from '../scene2d';
-import {Circle} from '../shapes/circle';
+import {Circle2} from '../geometry/circle2';
 import {Vector2} from '../geometry/vector2';
 
 const PI2 = Math.PI * 2;
@@ -16,7 +16,7 @@ const extraPointSize = 10;
 const maxRadiusDoublePoint = maxPointsRadius;
 const maxRadiusTriplePoint = targetSize - 100;
 
-export class DartTarget extends Circle implements Scene2DItem {
+export class DartTarget extends Circle2 implements Scene2DItem {
   direction = new Vector2(0, 0);
 
   constructor(x: number, y: number) {

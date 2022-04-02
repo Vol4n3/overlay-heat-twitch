@@ -6,13 +6,11 @@ export class Segment implements Scene2DItem {
   }
 
   draw({ctx}: Scene2d, time: number): void {
-    ctx.save();
     ctx.beginPath();
     ctx.moveTo(this.p1.x, this.p1.y);
     ctx.lineTo(this.p2.x, this.p2.y);
     ctx.stroke();
     ctx.closePath();
-    ctx.restore();
   }
 
   update(scene: Scene2d, time: number): void {
