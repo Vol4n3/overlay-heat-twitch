@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useReducer, useRef} from 'react';
-import {Scene2d} from '../2d/scene2d';
+import {Scene2d} from '../2d/core/scene2d';
 import {DartTarget} from '../2d/objects/dart-target';
 import {Arrow} from '../2d/objects/arrow';
 import {UserPoint} from '../types/heat.types';

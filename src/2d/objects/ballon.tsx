@@ -1,4 +1,4 @@
-import {Scene2d, Scene2DItem} from '../scene2d';
+import {Scene2d, Scene2DItem} from '../core/scene2d';
 
 export class Ballon implements Scene2DItem {
   private radius = 50;

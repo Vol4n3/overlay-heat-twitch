@@ -1,5 +1,5 @@
 import {Circle2} from '../geometry/circle2';
-import {Scene2d, Scene2DItem} from '../scene2d';
+import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {Vector2} from '../geometry/vector2';
 import {DartTarget} from './dart-target';
 

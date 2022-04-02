@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef} from 'react';
-import {Scene2d} from '../2d/scene2d';
+import {Scene2d} from '../2d/core/scene2d';
 import {Starship} from '../2d/objects/starship';
 import {UserPoint} from '../types/heat.types';
 import {Asteroid} from '../2d/objects/asteroid';
@@ -81,7 +81,7 @@ export const AsteroidGame: FC = () => {
           return;
         }
         asteroids.splice(indexAsteroid, 1);
-      }, 30000)
+      }, 60000)
     }
     let refLoopShoot: number;
     const startPlay = (starshipOwner?: string) => {
@@ -105,7 +105,7 @@ export const AsteroidGame: FC = () => {
           }
           bullets.splice(indexBullet, 1);
           // temps pour la disparition
-        }, 1000)
+        }, 2000)
         // fréquence de tir
       }, 800);
     }

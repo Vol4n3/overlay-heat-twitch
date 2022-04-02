@@ -1,4 +1,4 @@
-import {Scene2d, Scene2DItem} from '../scene2d';
+import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {Circle2} from '../geometry/circle2';
 import {Vector2} from '../geometry/vector2';
 

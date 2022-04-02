@@ -1,5 +1,5 @@
 import {Vector2} from '../geometry/vector2';
-import {Scene2d, Scene2DItem} from '../scene2d';
+import {Scene2d, Scene2DItem} from '../core/scene2d';
 
 export class Segment implements Scene2DItem {
   constructor(public p1: Vector2, public p2: Vector2) {
