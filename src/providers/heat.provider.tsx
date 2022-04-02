@@ -1,11 +1,11 @@
 import {createContext, FC, useContext, useEffect, useRef} from 'react';
-import {Point} from '../types/point.types';
+import {IPoint2} from '../types/point.types';
 import {HeatApi, MessageHeat} from '../types/heat.types';
 import {CoordinateRatioToScreen} from '../utils/number.utils';
 import {getUserName} from '../utils/heat.utils';
 
 
-interface UserPoint extends Point {
+interface UserPoint extends IPoint2 {
   userID: string;
 }
 
@@ -26,7 +26,12 @@ const HeatContext = createContext<HeatContextProps>({
   }
 })
 export const useHeat = () => useContext(HeatContext);
-export const HeatProvider: FC = ({children}) => {
+
+interface HeatProviderProps {
+  heatId: string;
+}
+
+export const HeatProvider: FC<HeatProviderProps> = ({heatId, children}) => {
   const listeners = useRef<HeatListener | null>(null);
   const onUserClick = (listener: HeatListener) => {
     listeners.current = listener;
@@ -36,6 +41,9 @@ export const HeatProvider: FC = ({children}) => {
   }
 
   useEffect(() => {
+    if (!heatId) {
+      return;
+    }
     const onLogin = () => {
       console.log('logged to heat');
     }
@@ -54,9 +62,7 @@ export const HeatProvider: FC = ({children}) => {
     }
     let ws: WebSocket;
     const init = () => {
-      const params = new URLSearchParams(window.location.search);
-      const channelId = params.get("heatId") || process.env.REACT_APP_HEAT_CHANNEL;
-      const url = `wss://heat-api.j38.net/channel/${channelId}`;
+      const url = `wss://heat-api.j38.net/channel/${heatId}`;
       ws = new WebSocket(url);
       ws.addEventListener('message', onMessage);
       ws.addEventListener('open', onLogin);
@@ -73,6 +79,6 @@ export const HeatProvider: FC = ({children}) => {
       ws.close();
       listeners.current = null;
     }
-  }, []);
+  }, [heatId]);
   return <HeatContext.Provider value={{onUserClick, removeListenerId}}>{children}</HeatContext.Provider>;
 }

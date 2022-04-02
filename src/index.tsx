@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import App from './App';
-import {HeatProvider} from './providers/heat.provider';
+import {Main} from './components/main/main';
 
 ReactDOM.render(
   <React.StrictMode>
-    <HeatProvider>
-      <App />
-    </HeatProvider>
+    <Main/>
   </React.StrictMode>,
   document.getElementById('root')
 );
