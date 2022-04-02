@@ -9,7 +9,8 @@ allez sur (https://heat.j38.net/) pour plus d'infos
   il faut installer et activer Heat et dans la configuration vous trouverez
   "You channel id is 123456879"
 * ajouter une source navigateur/ web browser
-* mettre dans l'url avec le heatId à la https://vol4n3.github.io/overlay-heat-twitch/?heatId=
+* configurer l'overlay sur (https://vol4n3.github.io/overlay-heat-twitch/) et copier dans le champs text l'uri afin de
+  la mettre dans obs
 * choisissez une bonne résolution pour votre source
 * les viewers ne pourrons pas interagir sur les jeux avec un scoreboard si ils n'autorisent pas l'extension Heat à accéder aux infos de twitch
 
