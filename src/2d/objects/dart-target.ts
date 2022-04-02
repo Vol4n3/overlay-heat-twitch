@@ -40,7 +40,7 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     if (time % 300 < 1) {
       this.direction.x += Math.random() * 6 - 3;
       this.direction.y += Math.random() * 6 - 3;
-      this.direction.setRange(-3, 3, -3, 3);
+      this.direction.b.setRange(-3, 3, -3, 3);
     }
 
   }

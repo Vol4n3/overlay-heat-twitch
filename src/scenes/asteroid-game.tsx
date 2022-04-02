@@ -27,7 +27,7 @@ export const AsteroidGame: FC = () => {
           if (!bullet || !asteroid) {
             return;
           }
-          const distance = bullet.position.createFromVectorDiff(asteroid.position).length;
+          const distance = bullet.position.distanceTo(asteroid.position);
           if (distance < (bullet.radius + asteroid.radius)) {
             scene.removeItem(asteroidId);
             scene.removeItem(bulletId);

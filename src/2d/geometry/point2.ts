@@ -1,28 +1,28 @@
 import {numberRange} from '../../utils/number.utils';
 import {VectorLength} from '../../utils/vector.utils';
-import {DotProductName} from '../../types/point.types';
+import {DotProductName, IPoint2} from '../../types/point.types';
 
-export class Point2 {
-  constructor(public x: number, public y: number) {
+export class Point2 implements IPoint2 {
+  constructor(public x: number = 0, public y: number = 0) {
   }
 
-  angleFrom(p: Point2): number {
-    return Math.atan2(this.y - p.y, this.x - p.y);
+  angleFrom(p: IPoint2): number {
+    return Math.atan2(this.y - p.y, this.x - p.x);
   }
 
-  angleTo(p: Point2): number {
-    return Math.atan2(p.y - this.y, p.y - this.x);
+  angleTo(p: IPoint2): number {
+    return Math.atan2(p.y - this.y, p.x - this.x);
   }
 
   copy(): Point2 {
     return new Point2(this.x, this.y);
   }
 
-  distanceTo(p: Point2): number {
+  distanceTo(p: IPoint2): number {
     return VectorLength([this.x - p.x, this.y - p.y]);
   }
 
-  operation<T extends Point2 | number>(type: DotProductName, p: T, y?: T extends number ? number : undefined) {
+  operation<T extends IPoint2 | number>(type: DotProductName, p: T, y?: T extends number ? number : undefined) {
     if (typeof p === 'number') {
       if (typeof y === 'number') {
         this._operation(type, p, y);

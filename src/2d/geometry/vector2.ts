@@ -1,18 +1,26 @@
-import {VectorLength} from '../../utils/vector.utils';
-import {numberRange} from '../../utils/number.utils';
+import {IPoint2} from '../../types/point.types';
+import {Point2} from './point2';
 
-export class Vector2 {
+export class Vector2 implements IPoint2 {
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public b: Point2 = new Point2();
+  private a: Point2 = new Point2();
+
   get angle(): number {
-    return Math.atan2(this.y, this.x);
+    return this.a.angleTo(this.b);
   }
 
   set angle(angle) {
     const length = this.length;
-    this.translate(Math.cos(angle) * length, Math.sin(angle) * length)
+    this.b.operation('add', Math.cos(angle) * length, Math.sin(angle) * length)
   }
 
   get length(): number {
-    return VectorLength([this.x, this.y]);
+    return this.a.distanceTo(this.b);
   }
 
   set length(len: number) {
@@ -21,35 +29,29 @@ export class Vector2 {
     this.y = Math.sin(angle) * len
   }
 
-  constructor(public x: number, public y: number) {
+  get x(): number {
+    return this.b.x
+  }
+
+  set x(n: number) {
+    this.b.x = n;
   }
 
   static createFromAngle(angle: number, length: number): Vector2 {
     return new Vector2(Math.cos(angle) * length, Math.sin(angle) * length)
   }
 
-  createFromVectorDiff(vector: Vector2) {
-    return new Vector2(this.x - vector.x, this.y - vector.y)
+  createFromDiff(p: IPoint2) {
+    return new Vector2(this.x - p.x, this.y - p.y)
   }
 
-  setRange(xMin: number, xMax: number, yMin: number, yMax: number) {
-    this.x = numberRange(this.x, xMin, xMax);
-    this.y = numberRange(this.y, yMin, yMax);
+
+  set y(n: number) {
+    this.b.y = n;
   }
 
-  teleportBoundary(xMin: number, xMax: number, yMin: number, yMax: number) {
-    this.x = this.x > xMax ? xMin : this.x;
-    this.x = this.x < xMin ? xMax : this.x;
-    this.y = this.y > yMax ? yMin : this.y;
-    this.y = this.y < yMin ? yMax : this.y;
-  }
 
-  translate(x: number, y: number) {
-    this.x += x;
-    this.y += y;
-  }
-
-  translateFrom(vector: Vector2) {
-    this.translate(vector.x, vector.y);
+  get y(): number {
+    return this.b.y
   }
 }

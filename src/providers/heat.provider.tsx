@@ -1,11 +1,11 @@
 import {createContext, FC, useContext, useEffect, useRef} from 'react';
-import {Point} from '../types/point.types';
+import {IPoint2} from '../types/point.types';
 import {HeatApi, MessageHeat} from '../types/heat.types';
 import {CoordinateRatioToScreen} from '../utils/number.utils';
 import {getUserName} from '../utils/heat.utils';
 
 
-interface UserPoint extends Point {
+interface UserPoint extends IPoint2 {
   userID: string;
 }
 

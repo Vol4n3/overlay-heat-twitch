@@ -80,7 +80,7 @@ export class Starship extends Circle2 implements Scene2DItem {
       this.destructionTime++;
       return;
     }
-    this.position.translateFrom(this.direction)
+    this.position.operation("add", this.direction)
     this.position.teleportBoundary(
       0 - this.radius,
       width + this.radius,
@@ -89,7 +89,7 @@ export class Starship extends Circle2 implements Scene2DItem {
     this.direction = Vector2.createFromAngle(this.rotation, 4);
 
     if (this.target) {
-      const vectorDestination = this.target.createFromVectorDiff(this.position);
+      const vectorDestination = this.target.createFromDiff(this.position);
       this.easingRotation = createEasing(
         Easing.easeInOutCubic,
         this.rotation,

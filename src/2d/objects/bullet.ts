@@ -14,7 +14,7 @@ export class Bullet extends Circle2 implements Scene2DItem {
   }
 
   update(scene: Scene2d, time: number): void {
-    this.position.translateFrom(this.direction);
+    this.position.operation("add", this.direction);
     this.position.teleportBoundary(0, scene.ctx.canvas.width, 0, scene.ctx.canvas.height);
   }
 }

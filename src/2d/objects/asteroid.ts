@@ -25,10 +25,10 @@ export class Asteroid extends Circle2 implements Scene2DItem {
   }
 
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {
-    this.position.translateFrom(this.direction);
+    this.position.operation('add', this.direction);
     this.position.teleportBoundary(0, width, 0, height);
-    const vectorCheck = this.position.createFromVectorDiff(this.starship.position);
-    if (vectorCheck.length < (this.radius + this.starship.radius)) {
+    const vectorCheck = this.position.distanceTo(this.starship.position);
+    if (vectorCheck < (this.radius + this.starship.radius)) {
       this.starship.isTouched();
       if (this.touchedListener) {
         this.touchedListener();

@@ -1,14 +1,17 @@
 import {Vector2} from './vector2';
+import {Point2} from './point2';
 
 
 export class Circle2 {
   public direction: Vector2 = new Vector2(0, 0);
-  public position: Vector2;
-  public rotation: number = 0;
 
   constructor(x: number, y: number, public radius: number) {
-    this.position = new Vector2(x, y);
+    this.position = new Point2(x, y);
   }
+
+  public rotation: number = 0;
+
+  public position: Point2;
 
   bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number) {
     if (this.position.x > xMax || this.position.x < xMin) {
