@@ -4,8 +4,9 @@ import {ReducerArray, ReducerArrayType} from '../../utils/react-reducer.utils';
 import {UserPoint} from '../../types/heat.types';
 import {AsteroidGame} from '../../scenes/asteroid-game';
 import {FlechetteGame} from '../../scenes/flechette-game';
+import {ScenesConfig, SceneType} from '../../types/config.types';
 
-
+export const SceneNames: { [key in SceneType]: string } = {dartTarget: "Jeux de fléchette", asteroid: "Astéroïdes"}
 const simulateClick = (x: number, y: number, userID: string, uid: string) => {
   const el = document.elementFromPoint(x, y);
   if (!el) {
@@ -23,9 +24,7 @@ const simulateClick = (x: number, y: number, userID: string, uid: string) => {
   });
   el.dispatchEvent(custom);
 }
-export type ScenesConfig = {
-  sceneType: "asteroid" | "dartTarget"
-}
+
 export const ScenesHeat: FC<{ config: ScenesConfig }> = ({config}) => {
   const [clicks, dispatchClick] = useReducer<ReducerArrayType<UserPoint>>(ReducerArray, []);
   const heat = useHeat();

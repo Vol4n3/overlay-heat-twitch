@@ -14,7 +14,7 @@ img.src = "/overlay-heat-twitch/assets/texture_asteroid.jpg";
 
 export class Asteroid extends Circle2 implements Scene2DItem {
   constructor(x: number, y: number, private starship: Starship, private owner: string, private touchedListener: Function, direction: Vector2) {
-    super(x, y, 100);
+    super(x, y, 80);
     this.direction = direction;
     this.rotation = Math.random() * 2 * Math.PI;
     this.rotationSpeed = (Math.random() * 2 - 1) / 50;
@@ -39,7 +39,7 @@ export class Asteroid extends Circle2 implements Scene2DItem {
     for (let i = 0; i < (Math.PI * 2) * definition; i++) {
       const cerclePerlin = Vector2.createFromAngle(i / definition, 2);
       const bruit = this.perlin.get(cerclePerlin.x, cerclePerlin.y);
-      const vec = Vector2.createFromAngle(i / definition, this.radius + bruit * 100);
+      const vec = Vector2.createFromAngle(i / definition, this.radius + bruit * (this.radius / 2));
       if (i === 0) {
         ctx.moveTo(vec.x, vec.y);
       } else {
@@ -48,6 +48,7 @@ export class Asteroid extends Circle2 implements Scene2DItem {
     }
     if (this.texture) {
       ctx.fillStyle = this.texture;
+      ctx.globalAlpha = 0.75;
     }
     ctx.shadowColor = 'black';
     ctx.shadowBlur = 30;
