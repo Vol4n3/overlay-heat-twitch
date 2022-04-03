@@ -14,7 +14,11 @@ export const createEasing = (
     return startValue + easing(ratio) * endValue;
   }
 }
-export const Easing: { [key in string]: EasingFunction } = {
+export const EasingNames = ["linear", "easeInQuad", "easeOutQuad", "easeInOutQuad", "easeInCubic",
+  "easeOutCubic", "easeInOutCubic", "easeInQuart", "easeOutQuart", "easeInOutQuart",
+  "easeInQuint", "easeOutQuint", "easeInOutQuint"] as const;
+export type EasingNameType = typeof EasingNames[number];
+export const Easing: { [key in EasingNameType]: EasingFunction } = {
   // no easing, no acceleration
   linear: (t: number) => t,
   // accelerating from zero velocity
@@ -41,6 +45,5 @@ export const Easing: { [key in string]: EasingFunction } = {
   easeOutQuint: (t: number) => 1 + (--t) * t * t * t * t,
   // acceleration until halfway, then deceleration
   easeInOutQuint: (t: number) => t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t
-
 
 }

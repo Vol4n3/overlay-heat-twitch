@@ -160,5 +160,4 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     ctx.closePath();
     ctx.restore();
   }
-
 }

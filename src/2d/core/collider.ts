@@ -1,16 +1,17 @@
 import {Scene2d, Scene2DItem} from './scene2d';
+import {IPoint2} from '../../types/point.types';
 
 interface WithId<T> {
   id: number
   item: T,
 }
 
-export interface CanCollide {
-
+export interface CanCollide extends IPoint2 {
+  detection(item: CanCollide): void;
 }
 
 export class Collider implements Scene2DItem {
-  public groups: WithId<WithId<CanCollide>[]>[] = [];
+  private groups: WithId<WithId<CanCollide>[]>[] = [];
   private uid = 0;
 
   addGroup(): number {
@@ -21,6 +22,7 @@ export class Collider implements Scene2DItem {
 
   addItemToGroup(item: CanCollide, groupId: number): number {
     const findGroup = this.groups.findIndex(f => f.id === groupId);
+
     if (findGroup >= 0) {
       this.uid++;
       this.groups[findGroup].item.push({item, id: this.uid});
@@ -32,7 +34,15 @@ export class Collider implements Scene2DItem {
   draw(scene: Scene2d, time: number): void {
   }
 
-  update(scene: Scene2d, time: number): void {
+  removeItemFromGroup(itemIndex: number, groupIndex: number): void {
+    const findGroup = this.groups.findIndex(f => f.id === groupIndex);
+    if (findGroup >= 0) {
+      const group = this.groups[findGroup].item;
+      const findItem = group.findIndex(f => f.id === itemIndex);
+      if (findItem >= 0) {
+        group.splice(findItem, 1);
+      }
+    }
   }
 
   removeGroup(index: number): void {
@@ -42,14 +52,18 @@ export class Collider implements Scene2DItem {
     }
   }
 
-  removeItemFromGroup(itemIndex: number, groupIndex: number): void {
-    const findGroup = this.groups.findIndex(f => f.id === groupIndex);
-    if (findGroup >= 0) {
-      const findItem = this.groups.findIndex(f => f.id === groupIndex);
-      if (findItem >= 0) {
-        this.groups[findGroup].item.splice(findItem, 1);
+  update(scene: Scene2d, time: number): void {
+    this.groups.forEach((group) => {
+      const copy = group.item.map(i => i.item).sort((a, b) => a.x - b.x);
+      for (let i = 0; i < copy.length; i++) {
+        const current = copy[i];
+        const next = copy[i + 1];
+        if (!next) {
+          return;
+        }
+        current.detection(next);
       }
-    }
+    })
   }
 
 }

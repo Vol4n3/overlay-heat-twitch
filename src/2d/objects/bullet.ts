@@ -1,8 +1,20 @@
 import {Circle2} from '../geometry/circle2';
 import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {CanCollide} from '../core/collider';
+import {Asteroid} from './asteroid';
 
 
-export class Bullet extends Circle2 implements Scene2DItem {
+export class Bullet extends Circle2 implements Scene2DItem, CanCollide {
+  constructor(x: number, y: number, public owner: string) {
+    super(x, y, 5);
+  }
+
+  detection(item: CanCollide) {
+    if (item instanceof Asteroid) {
+      item.collideToBullet(this);
+    }
+  }
+
   draw({ctx}: Scene2d, time: number): void {
     ctx.beginPath();
     ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
