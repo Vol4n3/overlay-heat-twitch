@@ -1,9 +1,11 @@
 import {Circle2} from '../geometry/circle2';
 import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {Vector2} from '../geometry/vector2';
-import {Starship} from './starship';
 import {Perlin} from '../../utils/perlin.utils';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
+import {CanCollide} from '../core/collider';
+import {Starship} from './starship';
+import {Bullet} from './bullet';
 
 const img = new Image();
 let loaded = false;
@@ -13,17 +15,51 @@ img.onload = () => {
 img.src = "/overlay-heat-twitch/assets/texture_asteroid.jpg";
 
 
-export class Asteroid extends Circle2 implements Scene2DItem {
-  constructor(x: number, y: number, private starship: Starship, private owner: string, private touchedListener: Function, direction: Vector2) {
+export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
+  constructor(
+    x: number, y: number,
+    public owner: string,
+    direction: Vector2) {
     super(x, y, 1);
     this.direction = direction;
     this.rotation = Math.random() * 2 * Math.PI;
     this.rotationSpeed = (Math.random() * 2 - 1) / 50;
   }
 
+  public onDestroyed: ((starshipOwner: string) => void) | null = null;
+  private destroyerName: string | null = null;
+  private easingDestroy: EasingCallback | null = null;
   private easingGrow: EasingCallback | null = createEasing(Easing.easeInCubic, 1, 60, 30);
   private perlin = new Perlin();
   private texture: null | CanvasPattern = null;
+
+  collideToBullet(bullet: Bullet) {
+    const vectorCheck = this.position.distanceTo(bullet.position);
+    if (vectorCheck < (this.radius + bullet.radius)) {
+      this.destroyBy(bullet.owner);
+    }
+  }
+
+  destroyBy(name: string) {
+    if (this.destroyerName !== null) {
+      return;
+    }
+    this.destroyerName = name;
+    this.easingDestroy = createEasing(Easing.easeOutCubic, 0, 50, 10);
+    if (this.onDestroyed !== null) {
+      this.onDestroyed(this.destroyerName);
+    }
+  }
+
+  detection(item: CanCollide) {
+    if (item instanceof Starship) {
+      item.collideToAsteroid(this);
+      return;
+    }
+    if (item instanceof Bullet) {
+      this.collideToBullet(item)
+    }
+  }
 
   draw({ctx}: Scene2d, time: number): void {
 
@@ -63,7 +99,6 @@ export class Asteroid extends Circle2 implements Scene2DItem {
     ctx.fillText(this.owner, this.radius, this.radius);
   }
 
-
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {
     if (this.easingGrow !== null) {
       const next = this.easingGrow();
@@ -73,15 +108,17 @@ export class Asteroid extends Circle2 implements Scene2DItem {
       }
       this.easingGrow = null;
     }
+    if (this.easingDestroy !== null) {
+      const next = this.easingDestroy();
+      if (next !== null) {
+        this.radius = 60 - next;
+      } else {
+        this.easingDestroy = null;
+      }
+    }
     this.rotation += this.rotationSpeed;
     this.position.operation('add', this.direction);
     this.position.teleportBoundary(0, width, 0, height);
-    const vectorCheck = this.position.distanceTo(this.starship.position);
-    if (vectorCheck < (this.radius + this.starship.radius)) {
-      this.starship.isTouched();
-      if (this.touchedListener) {
-        this.touchedListener();
-      }
-    }
+
   }
 }

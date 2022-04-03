@@ -3,22 +3,44 @@ import {Circle2} from '../geometry/circle2';
 import {Vector2} from '../geometry/vector2';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
 import {AngleKeepRange} from '../../utils/number.utils';
+import {CanCollide} from '../core/collider';
+import {Asteroid} from './asteroid';
 
 const rotationSpeed = 50;
 
-export class Starship extends Circle2 implements Scene2DItem {
+export class Starship extends Circle2 implements Scene2DItem, CanCollide {
 
-  destructionTime: number = 0;
-  isDestroyed: boolean = false;
-  origin: Vector2 | null = null;
-  rotation = 0;
-  target: Vector2 | null = null;
-
-  constructor(x: number, y: number, public owner: string = "") {
+  constructor(x: number, y: number, public owner: string = "",
+              private onDestroyed: (asteroidOwner: string) => void) {
     super(x, y, 25);
   }
 
+  destructionTime: number = 0;
+  origin: Vector2 | null = null;
+  rotation = 0;
+  target: Vector2 | null = null;
   private easingRotation: EasingCallback | null = null;
+  private isDestroyed: boolean = false;
+
+  collideToAsteroid(asteroid: Asteroid) {
+    const vectorCheck = this.position.distanceTo(asteroid.position);
+    if (vectorCheck < (this.radius + asteroid.radius)) {
+      this.destroyBy(asteroid.owner);
+    }
+  }
+
+  destroyBy(name: string) {
+    this.isDestroyed = true;
+    setTimeout(() => {
+      this.onDestroyed(name);
+    }, 1000)
+  }
+
+  detection(item: CanCollide) {
+    if (item instanceof Asteroid) {
+      this.collideToAsteroid(item);
+    }
+  }
 
   draw({ctx}: Scene2d, time: number): void {
     ctx.translate(-this.radius, -this.radius);
