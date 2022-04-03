@@ -73,7 +73,10 @@ export const AsteroidGame: FC = () => {
           }, 1000);
         }, direction)
       );
-      asteroids.push(asteroidRef);
+      setTimeout(() => {
+        asteroids.push(asteroidRef);
+      }, 1000);
+
       setTimeout(() => {
         scene.removeItem(asteroidRef);
         const indexAsteroid = bullets.indexOf(asteroidRef);

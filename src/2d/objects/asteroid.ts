@@ -3,6 +3,7 @@ import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {Vector2} from '../geometry/vector2';
 import {Starship} from './starship';
 import {Perlin} from '../../utils/perlin.utils';
+import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
 
 const img = new Image();
 let loaded = false;
@@ -14,12 +15,13 @@ img.src = "/overlay-heat-twitch/assets/texture_asteroid.jpg";
 
 export class Asteroid extends Circle2 implements Scene2DItem {
   constructor(x: number, y: number, private starship: Starship, private owner: string, private touchedListener: Function, direction: Vector2) {
-    super(x, y, 80);
+    super(x, y, 1);
     this.direction = direction;
     this.rotation = Math.random() * 2 * Math.PI;
     this.rotationSpeed = (Math.random() * 2 - 1) / 50;
   }
 
+  private easingGrow: EasingCallback | null = createEasing(Easing.easeInCubic, 1, 60, 30);
   private perlin = new Perlin();
   private texture: null | CanvasPattern = null;
 
@@ -39,7 +41,7 @@ export class Asteroid extends Circle2 implements Scene2DItem {
     for (let i = 0; i < (Math.PI * 2) * definition; i++) {
       const cerclePerlin = Vector2.createFromAngle(i / definition, 2);
       const bruit = this.perlin.get(cerclePerlin.x, cerclePerlin.y);
-      const vec = Vector2.createFromAngle(i / definition, this.radius + bruit * (this.radius / 2));
+      const vec = Vector2.createFromAngle(i / definition, this.radius + bruit * (this.radius / 3));
       if (i === 0) {
         ctx.moveTo(vec.x, vec.y);
       } else {
@@ -63,6 +65,14 @@ export class Asteroid extends Circle2 implements Scene2DItem {
 
 
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {
+    if (this.easingGrow !== null) {
+      const next = this.easingGrow();
+      if (next !== null) {
+        this.radius = next;
+        return
+      }
+      this.easingGrow = null;
+    }
     this.rotation += this.rotationSpeed;
     this.position.operation('add', this.direction);
     this.position.teleportBoundary(0, width, 0, height);

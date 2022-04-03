@@ -50,39 +50,39 @@ export const Main: FC = () => {
     }
     setConfig({replace: json})
   }, [])
-  return <HeatProvider heatId={getConfig.heatId || process.env.REACT_APP_HEAT_CHANNEL || ""}>
-    {getConfig.active ? <ScenesHeat config={getConfig}/> : <Container>
-      <div><h1>Configurer la scene</h1>
-        <select value={getConfig.sceneType || ''}
-                onChange={v => setConfig({merge: {sceneType: v.target.value as SceneType}})}>
-          <option value={""}>Sélectionner la scene</option>
-          {SCENES_ID.map(s => <option value={s} key={s}>{SceneNames[s]}</option>)}
-        </select>
-        <div>
-          <label>
-            <div>channel id de l'extension Heat</div>
-            <input value={getConfig.heatId || ''} onChange={ev => setConfig({merge: {heatId: ev.target.value}})}/>
-          </label>
-        </div>
-        <div>
-          <label>
-            <div>copié cette url à mettre dans obs</div>
-            <textarea value={getUriConfig} onChange={() => {
-            }}/>
-          </label>
-        </div>
-
+  return getConfig.active ? <HeatProvider heatId={getConfig.heatId || process.env.REACT_APP_HEAT_CHANNEL || ""}>
+    <ScenesHeat config={getConfig}/> </HeatProvider> : <Container>
+    <div><h1>Configurer la scene</h1>
+      <select value={getConfig.sceneType || ''}
+              onChange={v => setConfig({merge: {sceneType: v.target.value as SceneType}})}>
+        <option value={""}>Sélectionner la scene</option>
+        {SCENES_ID.map(s => <option value={s} key={s}>{SceneNames[s]}</option>)}
+      </select>
+      <div>
+        <label>
+          <div>channel id de l'extension Heat</div>
+          <input value={getConfig.heatId || ''} onChange={ev => setConfig({merge: {heatId: ev.target.value}})}/>
+        </label>
       </div>
-      <div style={{position: 'relative', flex: 1}}>
-        <iframe
-          title={"Prévisualisation"}
-          src={getUriConfig}
-          style={{
-            width: "100%",
-            height: "100%",
+      <div>
+        <label>
+          <div>copié cette url à mettre dans obs</div>
+          <textarea value={getUriConfig} onChange={() => {
           }}/>
+        </label>
       </div>
 
-    </Container>}
-  </HeatProvider>
+    </div>
+    <div style={{position: 'relative', flex: 1}}>
+      <iframe
+        title={"Prévisualisation"}
+        src={getUriConfig}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}/>
+    </div>
+
+  </Container>
+
 }

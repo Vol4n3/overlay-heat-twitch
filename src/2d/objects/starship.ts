@@ -13,10 +13,12 @@ export class Starship extends Circle2 implements Scene2DItem {
   origin: Vector2 | null = null;
   rotation = 0;
   target: Vector2 | null = null;
-  easingRotation: EasingCallback | null = null;
+
   constructor(x: number, y: number, public owner: string = "") {
-    super(x, y, 40);
+    super(x, y, 25);
   }
+
+  private easingRotation: EasingCallback | null = null;
 
   draw({ctx}: Scene2d, time: number): void {
     ctx.translate(-this.radius, -this.radius);
