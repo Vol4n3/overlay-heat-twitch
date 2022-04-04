@@ -46,21 +46,18 @@ export const AsteroidGame: FC = () => {
       direction.length = Math.random() * 2 + 1;
 
       const ast = new Asteroid(spawnX, spawnY, userID, direction);
-      const asteroidRef = scene.addItem(ast);
-      let asteroidColliderRef: number;
-
+      scene.addItem(ast);
       setTimeout(() => {
-        asteroidColliderRef = collider.addItemToGroup(ast, collisionGroupId);
+        collider.addItemToGroup(ast, collisionGroupId);
       }, 1000);
       setTimeout(() => {
-        scene.removeItem(asteroidRef);
-        collider.removeItemFromGroup(asteroidColliderRef, collisionGroupId);
+        scene.removeItem(ast);
+        collider.removeItemFromGroup(ast, collisionGroupId);
       }, 60000);
       ast.onDestroyed = (owner) => {
-
-        collider.removeItemFromGroup(asteroidColliderRef, collisionGroupId);
+        collider.removeItemFromGroup(ast, collisionGroupId);
         setTimeout(() => {
-          scene.removeItem(asteroidRef);
+          scene.removeItem(ast);
         }, 200)
       }
     }
@@ -79,11 +76,11 @@ export const AsteroidGame: FC = () => {
         const starshipForward = Vector2.createFromAngle(starship.rotation, starship.radius);
         const bullet = new Bullet(starship.position.x + starshipForward.x, starship.position.y + starshipForward.y, starship.owner);
         bullet.direction = new Vector2(starship.direction.x * 3, starship.direction.y * 3);
-        const refBullet = scene.addItem(bullet);
-        const refColliderBullet = collider.addItemToGroup(bullet, collisionGroupId);
+        scene.addItem(bullet);
+        collider.addItemToGroup(bullet, collisionGroupId);
         setTimeout(() => {
-          scene.removeItem(refBullet);
-          collider.removeItemFromGroup(refColliderBullet, collisionGroupId)
+          scene.removeItem(bullet);
+          collider.removeItemFromGroup(bullet, collisionGroupId)
           // temps pour la disparition
         }, 2000)
         // fréquence de tir

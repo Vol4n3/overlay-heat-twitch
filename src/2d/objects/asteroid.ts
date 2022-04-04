@@ -26,30 +26,9 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     this.rotationSpeed = (Math.random() * 2 - 1) / 50;
   }
 
+  collisionId: number = 0;
+
   public onDestroyed: ((starshipOwner: string) => void) | null = null;
-  private destroyerName: string | null = null;
-  private easingDestroy: EasingCallback | null = null;
-  private easingGrow: EasingCallback | null = createEasing(Easing.easeInCubic, 1, 60, 30);
-  private perlin = new Perlin();
-  private texture: null | CanvasPattern = null;
-
-  collideToBullet(bullet: Bullet) {
-    const vectorCheck = this.position.distanceTo(bullet.position);
-    if (vectorCheck < (this.radius + bullet.radius)) {
-      this.destroyBy(bullet.owner);
-    }
-  }
-
-  destroyBy(name: string) {
-    if (this.destroyerName !== null) {
-      return;
-    }
-    this.destroyerName = name;
-    this.easingDestroy = createEasing(Easing.easeOutCubic, 0, 50, 10);
-    if (this.onDestroyed !== null) {
-      this.onDestroyed(this.destroyerName);
-    }
-  }
 
   detection(item: CanCollide) {
     if (item instanceof Starship) {
@@ -60,6 +39,8 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
       this.collideToBullet(item)
     }
   }
+
+  sceneId: number = 0;
 
   draw({ctx}: Scene2d, time: number): void {
 
@@ -99,6 +80,8 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     ctx.fillText(this.owner, this.radius, this.radius);
   }
 
+  scenePriority: number = 0;
+
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {
     if (this.easingGrow !== null) {
       const next = this.easingGrow();
@@ -120,5 +103,29 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     this.position.operation('add', this.direction);
     this.position.teleportBoundary(0, width, 0, height);
 
+  }
+
+  private destroyerName: string | null = null;
+  private easingDestroy: EasingCallback | null = null;
+  private easingGrow: EasingCallback | null = createEasing(Easing.easeInCubic, 1, 60, 30);
+  private perlin = new Perlin();
+  private texture: null | CanvasPattern = null;
+
+  collideToBullet(bullet: Bullet) {
+    const vectorCheck = this.position.distanceTo(bullet.position);
+    if (vectorCheck < (this.radius + bullet.radius)) {
+      this.destroyBy(bullet.owner);
+    }
+  }
+
+  destroyBy(name: string) {
+    if (this.destroyerName !== null) {
+      return;
+    }
+    this.destroyerName = name;
+    this.easingDestroy = createEasing(Easing.easeOutCubic, 0, 50, 10);
+    if (this.onDestroyed !== null) {
+      this.onDestroyed(this.destroyerName);
+    }
   }
 }

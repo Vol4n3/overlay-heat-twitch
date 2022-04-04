@@ -16,7 +16,7 @@ export class Arrow extends Circle2 implements Scene2DItem {
           return;
         }
         if (this.isTouched) {
-          if(!this.targetVector){
+          if (!this.targetVector) {
             clearInterval(refInterval);
             return
           }
@@ -26,9 +26,8 @@ export class Arrow extends Circle2 implements Scene2DItem {
       }, 200)
     })
   };
-  private isMissed: boolean = false;
-  private isTouched: boolean = false;
-  private targetVector: Vector2 | null = null;
+  sceneId: number = 0;
+  scenePriority: number = 0;
 
   draw({ctx}: Scene2d, time: number): void {
     ctx.beginPath()
@@ -46,7 +45,7 @@ export class Arrow extends Circle2 implements Scene2DItem {
   }
 
   update(scene: Scene2d, time: number): void {
-    if ( this.isMissed) {
+    if (this.isMissed) {
       return;
     }
     if (this.isTouched && this.targetVector) {
@@ -66,5 +65,9 @@ export class Arrow extends Circle2 implements Scene2DItem {
       }
     }
   }
+
+  private isMissed: boolean = false;
+  private isTouched: boolean = false;
+  private targetVector: Vector2 | null = null;
 
 }

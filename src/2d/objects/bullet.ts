@@ -9,6 +9,11 @@ export class Bullet extends Circle2 implements Scene2DItem, CanCollide {
     super(x, y, 5);
   }
 
+  collisionId: number = 0;
+
+  sceneId: number = 0;
+  scenePriority: number = 0;
+
   detection(item: CanCollide) {
     if (item instanceof Asteroid) {
       item.collideToBullet(this);

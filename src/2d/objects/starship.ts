@@ -15,32 +15,19 @@ export class Starship extends Circle2 implements Scene2DItem, CanCollide {
     super(x, y, 25);
   }
 
+  collisionId: number = 0;
+
   destructionTime: number = 0;
   origin: Vector2 | null = null;
   rotation = 0;
-  target: Vector2 | null = null;
-  private easingRotation: EasingCallback | null = null;
-  private isDestroyed: boolean = false;
-
-  collideToAsteroid(asteroid: Asteroid) {
-    const vectorCheck = this.position.distanceTo(asteroid.position);
-    if (vectorCheck < (this.radius + asteroid.radius)) {
-      this.destroyBy(asteroid.owner);
-    }
-  }
-
-  destroyBy(name: string) {
-    this.isDestroyed = true;
-    setTimeout(() => {
-      this.onDestroyed(name);
-    }, 1000)
-  }
 
   detection(item: CanCollide) {
     if (item instanceof Asteroid) {
       this.collideToAsteroid(item);
     }
   }
+
+  sceneId: number = 0;
 
   draw({ctx}: Scene2d, time: number): void {
     ctx.translate(-this.radius, -this.radius);
@@ -129,6 +116,25 @@ export class Starship extends Circle2 implements Scene2DItem, CanCollide {
       }
       this.rotation = nextRotation;
     }
+  }
+
+  scenePriority: number = 0;
+  target: Vector2 | null = null;
+  private easingRotation: EasingCallback | null = null;
+  private isDestroyed: boolean = false;
+
+  collideToAsteroid(asteroid: Asteroid) {
+    const vectorCheck = this.position.distanceTo(asteroid.position);
+    if (vectorCheck < (this.radius + asteroid.radius)) {
+      this.destroyBy(asteroid.owner);
+    }
+  }
+
+  destroyBy(name: string) {
+    this.isDestroyed = true;
+    setTimeout(() => {
+      this.onDestroyed(name);
+    }, 1000)
   }
 
   isTouched(): void {
