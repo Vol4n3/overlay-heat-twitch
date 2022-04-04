@@ -83,40 +83,9 @@ export class Starship extends Circle2 implements Scene2DItem, CanCollide {
     ctx.fillText(this.owner, this.radius, this.radius);
   }
 
-  update(scene: Scene2d, time: number): void {
-    const {ctx} = scene;
-    const {width, height} = ctx.canvas;
-    if (this.isDestroyed) {
-      this.destructionTime++;
-      return;
-    }
-    this.position.operation("add", this.direction)
-    this.position.teleportBoundary(
-      0 - this.radius,
-      width + this.radius,
-      0 - this.radius,
-      height + this.radius);
-    this.direction = Vector2.createFromAngle(this.rotation, 4);
-
-    if (this.target) {
-      const destination = this.position.angleTo(this.target);
-      const travel = destination - this.rotation;
-      this.easingRotation = createEasing(
-        Easing.easeInOutCubic,
-        this.rotation,
-        Math.abs(travel) >= Math.PI ? AngleFlip(destination) : destination,
-        rotationSpeed
-      )
-      this.target = null;
-    }
-    if (this.easingRotation !== null) {
-      const nextRotation = this.easingRotation();
-      if (nextRotation === null) {
-        this.easingRotation = null;
-        return;
-      }
-      this.rotation = AngleKeepRange(nextRotation);
-    }
+  isTouched(): void {
+    this.owner = "";
+    this.velocity = new Vector2(0, 0);
   }
 
   scenePriority: number = 0;
@@ -138,9 +107,40 @@ export class Starship extends Circle2 implements Scene2DItem, CanCollide {
     }, 1000)
   }
 
-  isTouched(): void {
-    this.owner = "";
-    this.direction = new Vector2(0, 0);
+  update(scene: Scene2d, time: number): void {
+    const {ctx} = scene;
+    const {width, height} = ctx.canvas;
+    if (this.isDestroyed) {
+      this.destructionTime++;
+      return;
+    }
+    this.position.operation("add", this.velocity)
+    this.position.teleportBoundary(
+      0 - this.radius,
+      width + this.radius,
+      0 - this.radius,
+      height + this.radius);
+    this.velocity = Vector2.createFromAngle(this.rotation, 4);
+
+    if (this.target) {
+      const destination = this.position.angleTo(this.target);
+      const travel = destination - this.rotation;
+      this.easingRotation = createEasing(
+        Easing.easeInOutCubic,
+        this.rotation,
+        Math.abs(travel) >= Math.PI ? AngleFlip(destination) : destination,
+        rotationSpeed
+      )
+      this.target = null;
+    }
+    if (this.easingRotation !== null) {
+      const nextRotation = this.easingRotation();
+      if (nextRotation === null) {
+        this.easingRotation = null;
+        return;
+      }
+      this.rotation = AngleKeepRange(nextRotation);
+    }
   }
 
 }

@@ -5,11 +5,30 @@ import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
 import {AngleFlip, AngleKeepRange} from '../../utils/number.utils';
 import {Vector2} from '../geometry/vector2';
 import {Point2} from '../geometry/point2';
+import {Ballon} from './ballon';
 
 export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
   collisionId: number = 0;
 
   detection(item: CanCollide): void {
+    if (item instanceof PlayerSoccer) {
+
+
+      return;
+    }
+    if (item instanceof Ballon) {
+      const collision = this.isCollisionToCircle(item);
+      if (collision) {
+        const directionBall = new Vector2(item.x - this.x, item.y - this.y);
+        if (this.target) {
+          directionBall.length = 5 + (this.target.length / 100);
+        } else {
+          directionBall.length = 2;
+        }
+        item.velocity = directionBall;
+      }
+      return;
+    }
   }
 
   easingMovement: EasingCallback | null = null;
@@ -25,7 +44,7 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
     ctx.rotate(this.rotation);
     ctx.globalAlpha = 0.75;
     ctx.beginPath();
-    ctx.ellipse(0, 0, this.radius + 20, this.radius - 20, Math.PI / 2, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, this.radius + 10, this.radius - 10, Math.PI / 2, 0, Math.PI * 2);
     ctx.fillStyle = this.team;
     ctx.fill();
     ctx.closePath();
@@ -55,6 +74,7 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
         const nextPosition = this.easingMovement();
         if (nextPosition === null) {
           this.easingMovement = null;
+          this.target = null;
           return;
         }
         if (this.target) {
@@ -80,10 +100,11 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
       Math.abs(travel) >= Math.PI ? AngleFlip(destination) : destination,
       20
     );
+    const length = this.target.length
     this.easingMovement = createEasing(
       Easing.easeInOutCubic,
-      0, this.target.length,
-      60
+      0, length,
+      (Math.sqrt(length) * 4)
     );
   }
 }

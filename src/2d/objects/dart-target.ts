@@ -17,7 +17,7 @@ const maxRadiusDoublePoint = maxPointsRadius;
 const maxRadiusTriplePoint = targetSize - 100;
 
 export class DartTarget extends Circle2 implements Scene2DItem {
-  direction = new Vector2(0, 0);
+  velocity = new Vector2(0, 0);
 
   constructor(x: number, y: number) {
     super(x, y, targetSize);
@@ -37,13 +37,13 @@ export class DartTarget extends Circle2 implements Scene2DItem {
   }
 
   update(scene: Scene2d, time: number): void {
-    this.position.x += this.direction.x;
-    this.position.y += this.direction.y;
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
     this.bounceBoundary(targetSize, scene.ctx.canvas.width - targetSize, targetSize, scene.ctx.canvas.height - targetSize);
     if (time % 300 < 1) {
-      this.direction.x += Math.random() * 6 - 3;
-      this.direction.y += Math.random() * 6 - 3;
-      this.direction.b.setRange(-3, 3, -3, 3);
+      this.velocity.x += Math.random() * 6 - 3;
+      this.velocity.y += Math.random() * 6 - 3;
+      this.velocity.b.setRange(-3, 3, -3, 3);
     }
 
   }

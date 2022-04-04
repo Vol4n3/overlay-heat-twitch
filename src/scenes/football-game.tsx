@@ -15,7 +15,8 @@ export const FootballGame: FC = () => {
       return
     }
     const collider = new Collider();
-    const group = collider.addGroup();
+    const groupId = collider.addGroup();
+
 
     const scene = new Scene2d(container, 1000 / 60);
 
@@ -23,12 +24,11 @@ export const FootballGame: FC = () => {
     const startPlay = () => {
       scene.cleanItems();
       bddPlayers = {};
-
-      scene.addItem(collider);
+      collider.cleanGroup(groupId);
       const ballon = new Ballon(scene.canvas.width / 2, scene.canvas.height / 2, 50);
-      ballon.direction.x = 0;
-      ballon.direction.y = 0;
+      scene.addItem(collider);
       scene.addItem(ballon);
+      collider.addItemToGroup(ballon, groupId);
     }
 
     startPlay();
@@ -38,7 +38,7 @@ export const FootballGame: FC = () => {
         bddPlayers[name].setTarget(new Point2(x, y));
         return
       }
-      const player = new PlayerSoccer(x, y, 50);
+      const player = new PlayerSoccer(x, y, 30);
       if (x > scene.canvas.width / 2) {
         player.team = "blue";
         player.rotation = Math.PI;
@@ -47,6 +47,7 @@ export const FootballGame: FC = () => {
       }
       player.owner = name;
       bddPlayers[name] = player;
+      collider.addItemToGroup(player, groupId);
       scene.addItem(player);
     }
     const onUserClick = (event: CustomEvent<UserPoint>) => {
