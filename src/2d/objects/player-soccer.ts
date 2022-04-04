@@ -80,10 +80,11 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
       Math.abs(travel) >= Math.PI ? AngleFlip(destination) : destination,
       20
     );
+    const length = this.target.length
     this.easingMovement = createEasing(
       Easing.easeInOutCubic,
-      0, this.target.length,
-      60
+      0, length,
+      (Math.sqrt(length) * 4)
     );
   }
 }
