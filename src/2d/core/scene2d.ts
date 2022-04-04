@@ -18,7 +18,7 @@ export type canvasWriteTextConfig = {
   font?: string;
   x: number;
   y: number;
-  lineWidth: number;
+  lineWidth?: number;
 }
 
 export class Scene2d {
