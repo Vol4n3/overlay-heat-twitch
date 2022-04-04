@@ -15,8 +15,11 @@ export const CoordinateRatioToScreen = (
     y: Math.round(height * y)
   }
 }
+export const AngleFlip = (angle: number): number => {
+  return angle > 0 ? angle - Math.PI * 2 : angle + Math.PI * 2;
+}
 export const AngleKeepRange = (angle: number): number => {
-  return Math.abs(angle) >= Math.PI ? angle > 0 ? angle - Math.PI * 2 : angle + Math.PI * 2 : angle;
+  return Math.abs(angle) >= Math.PI ? AngleFlip(angle) : angle;
 }
 export const numberRange = (n: number, min: number, max: number): number => {
   return numberMax(numberMin(n, min), max);

@@ -58,7 +58,7 @@ export const AsteroidGame: FC = () => {
         collider.removeItemFromGroup(ast, collisionGroupId);
         setTimeout(() => {
           scene.removeItem(ast);
-        }, 200)
+        }, 300)
       }
     }
     let refLoopShoot: number;

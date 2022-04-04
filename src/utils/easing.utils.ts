@@ -11,7 +11,7 @@ export const createEasing = (
     if (ratio > 1) {
       return null
     }
-    return startValue + easing(ratio) * endValue;
+    return startValue + easing(ratio) * (endValue - startValue);
   }
 }
 export const EasingNames = ["linear", "easeInQuad", "easeOutQuad", "easeInOutQuad", "easeInCubic",
