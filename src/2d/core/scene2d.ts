@@ -1,14 +1,12 @@
 export interface Scene2DItem {
+  sceneId: number;
+  scenePriority: number;
+
   draw(scene: Scene2d, time: number): void;
 
   update(scene: Scene2d, time: number): void;
 }
 
-interface WithId<T> {
-  id: number
-  item: T,
-  priority: number;
-}
 
 export type canvasWriteTextConfig = {
   fillStyle?: string | CanvasGradient | CanvasPattern;
@@ -41,25 +39,26 @@ export class Scene2d {
   public readonly canvas: HTMLCanvasElement;
   public readonly ctx: CanvasRenderingContext2D;
   private drawTime: number = 0;
-  private items: (WithId<Scene2DItem>)[] = [];
+  private items: Scene2DItem[] = [];
   private refResize = this.resize.bind(this)
   private tickAnimation: number = 0;
   private readonly tickInterval: number = 0;
   private uid: number = 100;
   private updateTime: number = 0;
 
-  addItem(item: Scene2DItem, order?: number): number {
+  addItem(item: Scene2DItem, order?: number) {
     const id = this.uid++;
-    this.items.push({item, id, priority: order || id});
-    this.items = this.items.sort((a, b) => b.priority - a.priority);
-    return id;
+    item.sceneId = id;
+    item.scenePriority = order || id;
+    this.items.push(item);
+    this.items = this.items.sort((a, b) => b.scenePriority - a.scenePriority);
   }
 
   animate() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.items.forEach(d => {
       this.ctx.save();
-      d.item.draw(this, this.drawTime);
+      d.draw(this, this.drawTime);
       this.ctx.restore();
     });
     this.drawTime++;
@@ -93,11 +92,11 @@ export class Scene2d {
   }
 
   getItem(id: number): Scene2DItem | undefined {
-    return this.items.find(f => f.id === id)?.item;
+    return this.items.find(f => f.sceneId === id);
   }
 
-  removeItem(index: number): void {
-    const findDrawIndex = this.items.findIndex(f => f.id === index);
+  removeItem(item: Scene2DItem): void {
+    const findDrawIndex = this.items.findIndex(f => f.sceneId === item.sceneId);
     if (findDrawIndex >= 0) {
       this.items.splice(findDrawIndex, 1);
     }
@@ -110,7 +109,7 @@ export class Scene2d {
 
   update() {
     this.items.forEach(d => {
-      d.item.update(this, this.updateTime)
+      d.update(this, this.updateTime)
     });
     this.updateTime++;
   }

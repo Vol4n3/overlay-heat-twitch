@@ -25,9 +25,9 @@ export const FlechetteGame: FC = () => {
       flechette.onTouched().then((result) => {
         setScore({incrementNumber: {key: name, n: result}});
       })
-      const ids = scene.addItem(flechette, 1);
+      scene.addItem(flechette, 1);
       setTimeout(() => {
-        scene.removeItem(ids);
+        scene.removeItem(flechette);
       }, 10000)
     }
     const onUserClick = (event: CustomEvent<UserPoint>) => {

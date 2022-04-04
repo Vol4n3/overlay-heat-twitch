@@ -23,6 +23,9 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     super(x, y, targetSize);
   }
 
+  sceneId: number = 0;
+  scenePriority: number = 0;
+
   draw({ctx}: Scene2d, time: number): void {
     this.drawCircle(ctx);
     this.writeNumbers(ctx);

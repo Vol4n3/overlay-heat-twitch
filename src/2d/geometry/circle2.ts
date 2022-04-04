@@ -31,21 +31,13 @@ export class Circle2 {
 
   bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number) {
     if (this.position.x > xMax || this.position.x < xMin) {
-      this.direction.x *= -1
-      if (this.position.x > xMax) {
-        this.position.x = xMax
-      }
-      if (this.position.x < xMin) {
-        this.position.x = xMin
+      if ((this.position.x > xMax && this.direction.x > 0) || (this.position.x < xMin && this.direction.x < 0)) {
+        this.direction.x *= -1
       }
     }
     if (this.position.y > yMax || this.position.y < yMin) {
-      this.direction.y *= -1
-      if (this.position.y > yMax) {
-        this.position.y = yMax
-      }
-      if (this.position.y < yMin) {
-        this.position.y = yMin
+      if ((this.position.y > yMax && this.direction.y > 0) || (this.position.y < yMin && this.direction.y < 0)) {
+        this.direction.y *= -1
       }
     }
   }

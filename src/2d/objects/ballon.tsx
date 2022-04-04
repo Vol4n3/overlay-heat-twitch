@@ -1,6 +1,6 @@
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Scene2d} from '../core/scene2d';
 
-export class Ballon implements Scene2DItem {
+export class Ballon {
   private radius = 50;
   private rand = Math.round(Math.random() * 100000);
 
