@@ -5,8 +5,13 @@ import {UserPoint} from '../../types/heat.types';
 import {AsteroidGame} from '../../scenes/asteroid-game';
 import {FlechetteGame} from '../../scenes/flechette-game';
 import {ScenesConfig, SceneType} from '../../types/config.types';
+import {FootballGame} from '../../scenes/football-game';
 
-export const SceneNames: { [key in SceneType]: string } = {dartTarget: "Jeux de fléchette", asteroid: "Astéroïdes"}
+export const SceneNames: { [key in SceneType]: string } = {
+  dartTarget: "Jeux de fléchette",
+  asteroid: "Astéroïdes",
+  soccer: "Football"
+}
 const simulateClick = (x: number, y: number, userID: string, uid: string) => {
   const el = document.elementFromPoint(x, y);
   if (!el) {
@@ -55,6 +60,8 @@ export const ScenesHeat: FC<{ config: ScenesConfig }> = ({config}) => {
         return <AsteroidGame/>
       case 'dartTarget':
         return <FlechetteGame/>
+      case 'soccer':
+        return <FootballGame/>
       default:
         return null
     }

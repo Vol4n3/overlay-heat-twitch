@@ -1,21 +1,49 @@
-import {Scene2d} from '../core/scene2d';
+import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Circle2} from '../geometry/circle2';
+import {CanCollide} from '../core/collider';
 
-export class Ballon {
-  private radius = 50;
-  private rand = Math.round(Math.random() * 100000);
+const img = new Image();
+let loaded = false;
+img.onload = () => {
+  loaded = true;
+}
+img.src = "/overlay-heat-twitch/assets/texture_ballon.jpg";
 
-  constructor(public x: number, public y: number) {
+export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
+
+
+  collisionId: number = 0;
+
+  detection(item: CanCollide): void {
   }
 
+  sceneId: number = 0;
+  scenePriority: number = 0;
+
   draw({ctx}: Scene2d, time: number) {
-    ctx.beginPath()
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    if (this.texture === null) {
+      if (loaded) {
+        this.texture = ctx.createPattern(img, "repeat");
+        this.texture?.setTransform(new DOMMatrix().scale(0.4, 0.4));
+      }
+    }
+    ctx.translate(this.position.x, this.position.y)
+    ctx.rotate(this.rotation);
+    ctx.beginPath();
+    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+    if (this.texture) {
+      ctx.fillStyle = this.texture;
+      ctx.globalAlpha = 0.75;
+    }
     ctx.fill();
     ctx.closePath();
   }
 
-  update(_: Scene2d, time: number): void {
-    this.x += (Math.cos((time + this.rand) / 1000) * 10)
-    this.y += 5;
+  update(scene: Scene2d, time: number): void {
+    this.position.operation('add', this.direction);
+    this.direction.b.operation("multiply", 0.98);
+    this.bounceBoundary(0, scene.canvas.width, 0, scene.canvas.height)
   }
+
+  private texture: null | CanvasPattern = null
 }

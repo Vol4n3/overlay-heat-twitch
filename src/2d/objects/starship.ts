@@ -99,7 +99,6 @@ export class Starship extends Circle2 implements Scene2DItem, CanCollide {
     this.direction = Vector2.createFromAngle(this.rotation, 4);
 
     if (this.target) {
-      //const vectorDestination = this.target.createFromDiff(this.position);
       const destination = this.position.angleTo(this.target);
       const travel = destination - this.rotation;
       this.easingRotation = createEasing(

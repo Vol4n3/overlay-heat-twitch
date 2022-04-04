@@ -14,6 +14,11 @@ export class Point2 implements IPoint2 {
     return Math.atan2(p.y - this.y, p.x - this.x);
   }
 
+  moveDirectionTo(angle: number, length: number): void {
+    this.x += Math.cos(angle) * length;
+    this.y += Math.sin(angle) * length;
+  }
+
   copy(): Point2 {
     return new Point2(this.x, this.y);
   }
