@@ -28,8 +28,6 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
 
   collisionId: number = 0;
 
-  public onDestroyed: ((starshipOwner: string) => void) | null = null;
-
   detection(item: CanCollide) {
     if (item instanceof Starship) {
       item.collideToAsteroid(this);
@@ -40,7 +38,9 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     }
   }
 
+  public onDestroyed: ((starshipOwner: string) => void) | null = null;
   sceneId: number = 0;
+  scenePriority: number = 0;
 
   draw({ctx}: Scene2d, time: number): void {
 
@@ -80,8 +80,6 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     ctx.fillText(this.owner, this.radius, this.radius);
   }
 
-  scenePriority: number = 0;
-
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {
     if (this.easingGrow !== null) {
       const next = this.easingGrow();
@@ -94,7 +92,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     if (this.easingDestroy !== null) {
       const next = this.easingDestroy();
       if (next !== null) {
-        this.radius = 60 - next;
+        this.radius = next;
       } else {
         this.easingDestroy = null;
       }
@@ -107,7 +105,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
 
   private destroyerName: string | null = null;
   private easingDestroy: EasingCallback | null = null;
-  private easingGrow: EasingCallback | null = createEasing(Easing.easeInCubic, 1, 60, 30);
+  private easingGrow: EasingCallback | null = createEasing(Easing.easeInCubic, 10, 60, 30);
   private perlin = new Perlin();
   private texture: null | CanvasPattern = null;
 
@@ -123,7 +121,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
       return;
     }
     this.destroyerName = name;
-    this.easingDestroy = createEasing(Easing.easeOutCubic, 0, 50, 10);
+    this.easingDestroy = createEasing(Easing.easeOutCubic, 60, 10, 30);
     if (this.onDestroyed !== null) {
       this.onDestroyed(this.destroyerName);
     }

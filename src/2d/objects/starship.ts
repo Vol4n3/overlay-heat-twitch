@@ -2,7 +2,7 @@ import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {Circle2} from '../geometry/circle2';
 import {Vector2} from '../geometry/vector2';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
-import {AngleKeepRange} from '../../utils/number.utils';
+import {AngleFlip, AngleKeepRange} from '../../utils/number.utils';
 import {CanCollide} from '../core/collider';
 import {Asteroid} from './asteroid';
 
@@ -99,11 +99,13 @@ export class Starship extends Circle2 implements Scene2DItem, CanCollide {
     this.direction = Vector2.createFromAngle(this.rotation, 4);
 
     if (this.target) {
-      const vectorDestination = this.target.createFromDiff(this.position);
+      //const vectorDestination = this.target.createFromDiff(this.position);
+      const destination = this.position.angleTo(this.target);
+      const travel = destination - this.rotation;
       this.easingRotation = createEasing(
         Easing.easeInOutCubic,
         this.rotation,
-        AngleKeepRange(vectorDestination.angle - this.rotation),
+        Math.abs(travel) >= Math.PI ? AngleFlip(destination) : destination,
         rotationSpeed
       )
       this.target = null;
@@ -114,7 +116,7 @@ export class Starship extends Circle2 implements Scene2DItem, CanCollide {
         this.easingRotation = null;
         return;
       }
-      this.rotation = nextRotation;
+      this.rotation = AngleKeepRange(nextRotation);
     }
   }
 
