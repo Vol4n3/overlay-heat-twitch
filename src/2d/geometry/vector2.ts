@@ -2,11 +2,11 @@ import {IPoint2} from '../../types/point.types';
 import {Point2} from './point2';
 
 export class Vector2 implements IPoint2 {
+
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
   }
-
   public b: Point2 = new Point2();
   private a: Point2 = new Point2();
 
@@ -38,7 +38,7 @@ export class Vector2 implements IPoint2 {
   }
 
   static createFromAngle(angle: number, length: number): Vector2 {
-    return new Vector2(Math.cos(angle) * length, Math.sin(angle) * length)
+    return new Vector2(Math.cos(angle) * length, Math.sin(angle) * length);
   }
 
   createFromDiff(p: IPoint2) {

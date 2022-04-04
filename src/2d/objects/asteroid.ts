@@ -21,7 +21,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     public owner: string,
     direction: Vector2) {
     super(x, y, 1);
-    this.direction = direction;
+    this.velocity = direction;
     this.rotation = Math.random() * 2 * Math.PI;
     this.rotationSpeed = (Math.random() * 2 - 1) / 50;
   }
@@ -98,7 +98,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
       }
     }
     this.rotation += this.rotationSpeed;
-    this.position.operation('add', this.direction);
+    this.position.operation('add', this.velocity);
     this.position.teleportBoundary(0, width, 0, height);
 
   }

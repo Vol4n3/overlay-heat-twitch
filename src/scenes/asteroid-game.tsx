@@ -75,7 +75,7 @@ export const AsteroidGame: FC = () => {
       refLoopShoot = window.setInterval(() => {
         const starshipForward = Vector2.createFromAngle(starship.rotation, starship.radius);
         const bullet = new Bullet(starship.position.x + starshipForward.x, starship.position.y + starshipForward.y, starship.owner);
-        bullet.direction = new Vector2(starship.direction.x * 3, starship.direction.y * 3);
+        bullet.velocity = new Vector2(starship.velocity.x * 3, starship.velocity.y * 3);
         scene.addItem(bullet);
         collider.addItemToGroup(bullet, collisionGroupId);
         setTimeout(() => {

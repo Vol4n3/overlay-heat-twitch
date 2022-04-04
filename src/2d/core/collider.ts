@@ -8,12 +8,15 @@ interface WithId<T> {
 
 export interface CanCollide extends IPoint2 {
   collisionId: number
+
   detection(item: CanCollide): void;
 }
 
 export class Collider implements Scene2DItem {
   sceneId: number = 0;
   scenePriority: number = 0;
+
+  private groups: WithId<CanCollide[]>[] = [];
 
   update(scene: Scene2d, time: number): void {
     this.groups.forEach((group) => {
@@ -29,17 +32,19 @@ export class Collider implements Scene2DItem {
     })
   }
 
+  cleanGroup(groupId: number): void {
+    const findGroup = this.groups.findIndex(f => f.id === groupId);
+    if (findGroup >= 0) {
+      this.groups[findGroup].item = [];
+    }
+  }
+
   private uid = 0;
 
   addGroup(): number {
     this.uid++;
     this.groups.push({item: [], id: this.uid});
     return this.uid;
-  }
-
-  private groups: WithId<CanCollide[]>[] = [];
-
-  draw(scene: Scene2d, time: number): void {
   }
 
   addItemToGroup(item: CanCollide, groupId: number) {
@@ -51,6 +56,9 @@ export class Collider implements Scene2DItem {
       return
     }
     throw new Error('impossible de trouver le groupe pour ajouter un item');
+  }
+
+  draw(scene: Scene2d, time: number): void {
   }
 
   removeGroup(index: number): void {
