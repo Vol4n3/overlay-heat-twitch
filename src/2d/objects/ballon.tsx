@@ -23,13 +23,7 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
     if (item instanceof PlayerSoccer) {
       const collision = this.isCollisionToCircle(item);
       if (collision) {
-        const directionBall = new Vector2(this.x - item.x, this.y - item.y);
-        if (item.target) {
-          directionBall.length = 5 + (item.target.length / 100);
-        } else {
-          directionBall.length = 2;
-        }
-        this.velocity = directionBall;
+        this.playerShoot(item)
       }
       return;
     }
@@ -42,7 +36,7 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
     if (this.texture === null) {
       if (loaded) {
         this.texture = ctx.createPattern(img, "repeat");
-        this.texture?.setTransform(new DOMMatrix().scale(0.4, 0.4));
+        this.texture?.setTransform(new DOMMatrix().scale(0.25, 0.25));
       }
     }
     ctx.translate(this.position.x, this.position.y)
@@ -62,9 +56,16 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
 
     this.velocity.b.operation("multiply", 0.98);
 
-    const padding = 150;
-    this.bounceBoundary(padding, scene.canvas.width - padding, padding, scene.canvas.height - padding)
+    const padding = 50;
+    this.bounceBoundary(padding, scene.canvas.width - padding, padding, scene.canvas.height - padding, 0.9)
   }
 
   private texture: null | CanvasPattern = null
+
+  playerShoot(player: PlayerSoccer): void {
+    const directionBall = new Vector2(this.x - player.x, this.y - player.y);
+    const velocityDiff = new Vector2(this.velocity.x - player.calculatedVelocity.x, this.velocity.y - player.calculatedVelocity.y);
+    directionBall.length = velocityDiff.length;
+    this.velocity = directionBall;
+  }
 }
