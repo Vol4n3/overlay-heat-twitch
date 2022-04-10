@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/overlay-heat-twitch/static/css/main.519487b7.css",
-    "main.js": "/overlay-heat-twitch/static/js/main.9d9a2088.js",
+    "main.js": "/overlay-heat-twitch/static/js/main.02a1a11f.js",
     "index.html": "/overlay-heat-twitch/index.html",
     "main.519487b7.css.map": "/overlay-heat-twitch/static/css/main.519487b7.css.map",
-    "main.9d9a2088.js.map": "/overlay-heat-twitch/static/js/main.9d9a2088.js.map"
+    "main.02a1a11f.js.map": "/overlay-heat-twitch/static/js/main.02a1a11f.js.map"
   },
   "entrypoints": [
     "static/css/main.519487b7.css",
-    "static/js/main.9d9a2088.js"
+    "static/js/main.02a1a11f.js"
   ]
 }
