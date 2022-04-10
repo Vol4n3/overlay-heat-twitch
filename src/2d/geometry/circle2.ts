@@ -29,15 +29,15 @@ export class Circle2 {
     this.position.y = n;
   }
 
-  bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number) {
+  bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number, bounceStrength: number = 1) {
     if (this.position.x > xMax || this.position.x < xMin) {
       if ((this.position.x > xMax && this.velocity.x > 0) || (this.position.x < xMin && this.velocity.x < 0)) {
-        this.velocity.x *= -1
+        this.velocity.x *= -bounceStrength
       }
     }
     if (this.position.y > yMax || this.position.y < yMin) {
       if ((this.position.y > yMax && this.velocity.y > 0) || (this.position.y < yMin && this.velocity.y < 0)) {
-        this.velocity.y *= -1
+        this.velocity.y *= -bounceStrength
       }
     }
   }

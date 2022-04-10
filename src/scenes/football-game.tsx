@@ -25,7 +25,7 @@ export const FootballGame: FC = () => {
       scene.cleanItems();
       bddPlayers = {};
       collider.cleanGroup(groupId);
-      const ballon = new Ballon(scene.canvas.width / 2, scene.canvas.height / 2, 50);
+      const ballon = new Ballon(scene.canvas.width / 2, scene.canvas.height / 2, 30);
       scene.addItem(collider);
       scene.addItem(ballon);
       collider.addItemToGroup(ballon, groupId);

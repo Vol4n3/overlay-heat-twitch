@@ -10,26 +10,7 @@ import {Ballon} from './ballon';
 export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
   collisionId: number = 0;
 
-  detection(item: CanCollide): void {
-    if (item instanceof PlayerSoccer) {
-
-
-      return;
-    }
-    if (item instanceof Ballon) {
-      const collision = this.isCollisionToCircle(item);
-      if (collision) {
-        const directionBall = new Vector2(item.x - this.x, item.y - this.y);
-        if (this.target) {
-          directionBall.length = 5 + (this.target.length / 100);
-        } else {
-          directionBall.length = 2;
-        }
-        item.velocity = directionBall;
-      }
-      return;
-    }
-  }
+  private _movement: Vector2 | null = null;
 
   easingMovement: EasingCallback | null = null;
   easingRotation: EasingCallback | null = null;
@@ -61,6 +42,32 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
     })
   }
 
+  get calculatedVelocity(): Vector2 {
+
+    if (this._movement === null) {
+      return this.velocity;
+    }
+    return this._movement;
+  }
+
+  detection(item: CanCollide): void {
+    if (item instanceof PlayerSoccer) {
+
+
+      return;
+    }
+    if (item instanceof Ballon) {
+      const collision = this.isCollisionToCircle(item);
+      if (collision) {
+        item.playerShoot(this);
+      }
+      return;
+    }
+  }
+
+  target: null | Vector2 = null;
+  team: string = "";
+
   update(scene: Scene2d, time: number): void {
     if (this.easingRotation !== null) {
       const nextRotation = this.easingRotation();
@@ -75,20 +82,18 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
         if (nextPosition === null) {
           this.easingMovement = null;
           this.target = null;
+          this._movement = null;
           return;
         }
         if (this.target) {
           const copy = this.originalPosition.copy();
           copy.moveDirectionTo(this.target.angle, nextPosition);
+          this._movement = new Vector2(this.position.x - copy.x, this.position.y - copy.y);
           this.position = copy;
         }
       }
     }
   }
-
-  target: null | Vector2 = null;
-  team: string = "";
-
   setTarget(point: Point2) {
     this.target = new Vector2(point.x - this.position.x, point.y - this.position.y);
     this.originalPosition = this.position;
