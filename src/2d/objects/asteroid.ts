@@ -57,7 +57,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     const definition = 10;
     for (let i = 0; i < (Math.PI * 2) * definition; i++) {
       const cerclePerlin = Vector2.createFromAngle(i / definition, 2);
-      const bruit = this.perlin.get(cerclePerlin.x, cerclePerlin.y);
+      const bruit = this.perlin.noise(cerclePerlin.x, cerclePerlin.y);
       const vec = Vector2.createFromAngle(i / definition, this.radius + bruit * (this.radius / 3));
       if (i === 0) {
         ctx.moveTo(vec.x, vec.y);
