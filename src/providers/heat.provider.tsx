@@ -1,4 +1,4 @@
-import {createContext, FC, useContext, useEffect, useRef} from 'react';
+import {createContext, FC, PropsWithChildren, useContext, useEffect, useRef} from 'react';
 import {IPoint2} from '../types/point.types';
 import {HeatApi, MessageHeat} from '../types/heat.types';
 import {CoordinateRatioToScreen} from '../utils/number.utils';
@@ -31,7 +31,7 @@ interface HeatProviderProps {
   heatId: string;
 }
 
-export const HeatProvider: FC<HeatProviderProps> = ({heatId, children}) => {
+export const HeatProvider: FC<PropsWithChildren<HeatProviderProps>> = ({heatId, children}) => {
   const listeners = useRef<HeatListener | null>(null);
   const onUserClick = (listener: HeatListener) => {
     listeners.current = listener;
