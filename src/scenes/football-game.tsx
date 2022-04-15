@@ -6,6 +6,7 @@ import {PlayerSoccer} from '../2d/objects/player-soccer';
 import {UserPoint} from '../types/heat.types';
 import {Collider} from '../2d/core/collider';
 import {Point2} from '../2d/geometry/point2';
+import {PI} from '../utils/number.utils';
 
 export const FootballGame: FC = () => {
   const containerRef = useRef(null);
@@ -41,7 +42,7 @@ export const FootballGame: FC = () => {
       const player = new PlayerSoccer(x, y, 30);
       if (x > scene.canvas.width / 2) {
         player.team = "blue";
-        player.rotation = Math.PI;
+        player.rotation = PI;
       } else {
         player.team = "red";
       }

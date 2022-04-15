@@ -1,8 +1,8 @@
 import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {Circle2} from '../geometry/circle2';
 import {Vector2} from '../geometry/vector2';
+import {HALF_PI, PI, PI2, QUART_PI, TENTH_PI, TWENTIETH_PI} from '../../utils/number.utils';
 
-const PI2 = Math.PI * 2;
 const parts: number[] = [6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20, 1, 18, 4, 13];
 const vectorToPoint: number[] = [11, 14, 9, 12, 5, 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11]
 const greenCell = "rgba(5,124,46,0.74)";
@@ -78,11 +78,10 @@ export class DartTarget extends Circle2 implements Scene2DItem {
       ctx.beginPath();
       ctx.fillStyle = index % 2 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)";
       ctx.moveTo(0, 0);
-      const offset = Math.PI / 4;
       ctx.arc(0, 0,
         maxPointsRadius,
-        (Math.PI / 10) * index + offset,
-        offset + (Math.PI / 10) * (index + 1));
+        TENTH_PI * index + QUART_PI,
+        QUART_PI + TENTH_PI * (index + 1));
       ctx.fill();
       ctx.closePath();
     });
@@ -93,10 +92,8 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     parts.forEach((_, index) => {
       ctx.save();
       ctx.beginPath();
-      const offset = Math.PI / 20;
-      const counter = Math.PI / 10;
-      const min = (counter * index - offset);
-      const max = (counter * (index + 1) - offset);
+      const min = (TENTH_PI * index - TWENTIETH_PI);
+      const max = (TENTH_PI * (index + 1) - TWENTIETH_PI);
       ctx.fillStyle = index % 2 ? redCell : greenCell;
       ctx.arc(0, 0,
         position,
@@ -139,7 +136,7 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     if (length < greenCenterRadius) {
       return 25
     }
-    const indexPoint = Math.round((vector.angle + Math.PI + (Math.PI / 2)) / (Math.PI / 10) - 5);
+    const indexPoint = Math.round((vector.angle + PI + HALF_PI) / TENTH_PI - 5);
     const score = vectorToPoint[indexPoint];
     if (length < maxRadiusDoublePoint && length > (maxRadiusDoublePoint - extraPointSize)) {
       return score * 2;
@@ -158,8 +155,8 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     ctx.textBaseline = "middle";
     ctx.font = "20px Arial";
     parts.forEach((num, index) => {
-      const x = Math.cos((Math.PI / 10) * index) * (this.radius - 20);
-      const y = Math.sin((Math.PI / 10) * index) * (this.radius - 20);
+      const x = Math.cos(TENTH_PI * index) * (this.radius - 20);
+      const y = Math.sin(TENTH_PI * index) * (this.radius - 20);
       ctx.fillText(num.toString(10), x, y);
     })
     ctx.closePath();

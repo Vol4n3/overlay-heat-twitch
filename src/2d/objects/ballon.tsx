@@ -3,7 +3,7 @@ import {Circle2} from '../geometry/circle2';
 import {CanCollide} from '../core/collider';
 import {PlayerSoccer} from './player-soccer';
 import {Vector2} from '../geometry/vector2';
-import {AngleKeepRange} from '../../utils/number.utils';
+import {AngleKeepRange, PI2} from '../../utils/number.utils';
 
 const img = new Image();
 let loaded = false;
@@ -43,7 +43,7 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
     ctx.translate(this.position.x, this.position.y)
     ctx.rotate(this.rotation);
     ctx.beginPath();
-    ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+    ctx.arc(0, 0, this.radius, 0, PI2);
     if (this.texture) {
       ctx.fillStyle = this.texture;
       ctx.globalAlpha = 0.75;
@@ -55,7 +55,7 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
   playerShoot(player: PlayerSoccer): void {
     const directionBall = new Vector2(this.x - player.x, this.y - player.y);
     const velocityDiff = new Vector2(player.calculatedVelocity.x + this.velocity.x, player.calculatedVelocity.y + this.velocity.y);
-    directionBall.length = velocityDiff.length;
+    directionBall.length = velocityDiff.length * 0.95;
     this.velocity = directionBall;
   }
 

@@ -6,6 +6,7 @@ import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
 import {CanCollide} from '../core/collider';
 import {Starship} from './starship';
 import {Bullet} from './bullet';
+import {PI2} from '../../utils/number.utils';
 
 const img = new Image();
 let loaded = false;
@@ -22,7 +23,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
     direction: Vector2) {
     super(x, y, 1);
     this.velocity = direction;
-    this.rotation = Math.random() * 2 * Math.PI;
+    this.rotation = Math.random() * PI2;
     this.rotationSpeed = (Math.random() * 2 - 1) / 50;
   }
 
@@ -55,7 +56,7 @@ export class Asteroid extends Circle2 implements Scene2DItem, CanCollide {
 
     ctx.beginPath();
     const definition = 10;
-    for (let i = 0; i < (Math.PI * 2) * definition; i++) {
+    for (let i = 0; i < PI2 * definition; i++) {
       const cerclePerlin = Vector2.createFromAngle(i / definition, 2);
       const bruit = this.perlin.noise(cerclePerlin.x, cerclePerlin.y);
       const vec = Vector2.createFromAngle(i / definition, this.radius + bruit * (this.radius / 3));
