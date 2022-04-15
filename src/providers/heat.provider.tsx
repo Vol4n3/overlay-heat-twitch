@@ -66,7 +66,11 @@ export const HeatProvider: FC<HeatProviderProps> = ({heatId, children}) => {
       ws = new WebSocket(url);
       ws.addEventListener('message', onMessage);
       ws.addEventListener('open', onLogin);
-      ws.addEventListener('close', init, {once: true});
+      ws.addEventListener('close', () => {
+        ws.removeEventListener('message', onMessage);
+        ws.removeEventListener('open', onLogin);
+        init()
+      }, {once: true});
     }
     init();
     return () => {

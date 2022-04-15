@@ -27,6 +27,8 @@ export class DartTarget extends Circle2 implements Scene2DItem {
   scenePriority: number = 0;
 
   draw({ctx}: Scene2d, time: number): void {
+    ctx.translate(this.position.x, this.position.y)
+    ctx.rotate(this.rotation);
     this.drawCircle(ctx);
     this.writeNumbers(ctx);
     this.drawCones(ctx);
@@ -52,7 +54,7 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     ctx.save();
     ctx.beginPath();
     ctx.fillStyle = redCell;
-    ctx.arc(this.position.x, this.position.y, redCenterRadius, 0, PI2)
+    ctx.arc(0, 0, redCenterRadius, 0, PI2)
     ctx.fill();
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -63,7 +65,7 @@ export class DartTarget extends Circle2 implements Scene2DItem {
   drawCircle(ctx: CanvasRenderingContext2D): void {
     ctx.save();
     ctx.beginPath();
-    ctx.arc(this.position.x, this.position.y, this.radius, 0, PI2);
+    ctx.arc(0, 0, this.radius, 0, PI2);
     ctx.fillStyle = "rgba(0,0,0,0.6)";
     ctx.fill();
     ctx.closePath();
@@ -75,9 +77,9 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     parts.forEach((_, index) => {
       ctx.beginPath();
       ctx.fillStyle = index % 2 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)";
-      ctx.moveTo(this.position.x, this.position.y);
+      ctx.moveTo(0, 0);
       const offset = Math.PI / 4;
-      ctx.arc(this.position.x, this.position.y,
+      ctx.arc(0, 0,
         maxPointsRadius,
         (Math.PI / 10) * index + offset,
         offset + (Math.PI / 10) * (index + 1));
@@ -96,11 +98,11 @@ export class DartTarget extends Circle2 implements Scene2DItem {
       const min = (counter * index - offset);
       const max = (counter * (index + 1) - offset);
       ctx.fillStyle = index % 2 ? redCell : greenCell;
-      ctx.arc(this.position.x, this.position.y,
+      ctx.arc(0, 0,
         position,
         min, max
       );
-      ctx.arc(this.position.x, this.position.y,
+      ctx.arc(0, 0,
         position - extraPointSize,
         max,
         min,
@@ -118,7 +120,7 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     ctx.save();
     ctx.beginPath();
     ctx.fillStyle = greenCell;
-    ctx.arc(this.position.x, this.position.y, greenCenterRadius, 0, PI2)
+    ctx.arc(0, 0, greenCenterRadius, 0, PI2)
     ctx.fill();
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -156,8 +158,8 @@ export class DartTarget extends Circle2 implements Scene2DItem {
     ctx.textBaseline = "middle";
     ctx.font = "20px Arial";
     parts.forEach((num, index) => {
-      const x = this.position.x + Math.cos((Math.PI / 10) * index) * (this.radius - 20);
-      const y = this.position.y + Math.sin((Math.PI / 10) * index) * (this.radius - 20);
+      const x = Math.cos((Math.PI / 10) * index) * (this.radius - 20);
+      const y = Math.sin((Math.PI / 10) * index) * (this.radius - 20);
       ctx.fillText(num.toString(10), x, y);
     })
     ctx.closePath();

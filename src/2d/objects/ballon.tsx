@@ -3,6 +3,7 @@ import {Circle2} from '../geometry/circle2';
 import {CanCollide} from '../core/collider';
 import {PlayerSoccer} from './player-soccer';
 import {Vector2} from '../geometry/vector2';
+import {AngleKeepRange} from '../../utils/number.utils';
 
 const img = new Image();
 let loaded = false;
@@ -51,21 +52,23 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
     ctx.closePath();
   }
 
-  update(scene: Scene2d, time: number): void {
-    this.position.operation('add', this.velocity);
-
-    this.velocity.b.operation("multiply", 0.98);
-
-    const padding = 50;
-    this.bounceBoundary(padding, scene.canvas.width - padding, padding, scene.canvas.height - padding, 0.9)
+  playerShoot(player: PlayerSoccer): void {
+    const directionBall = new Vector2(this.x - player.x, this.y - player.y);
+    const velocityDiff = new Vector2(player.calculatedVelocity.x + this.velocity.x, player.calculatedVelocity.y + this.velocity.y);
+    directionBall.length = velocityDiff.length;
+    this.velocity = directionBall;
   }
 
   private texture: null | CanvasPattern = null
 
-  playerShoot(player: PlayerSoccer): void {
-    const directionBall = new Vector2(this.x - player.x, this.y - player.y);
-    const velocityDiff = new Vector2(this.velocity.x - player.calculatedVelocity.x, this.velocity.y - player.calculatedVelocity.y);
-    directionBall.length = velocityDiff.length;
-    this.velocity = directionBall;
+  update(scene: Scene2d, time: number): void {
+    const padding = 50;
+    this.bounceBoundary(padding, scene.canvas.width - padding, padding, scene.canvas.height - padding, 0.9);
+    this.position.operation('add', this.velocity);
+    const roundedX = Math.round(this.velocity.x * 100) / 100;
+    this.rotation += AngleKeepRange(((roundedX) / 200));
+
+    this.velocity.b.operation("multiply", 0.99);
+
   }
 }

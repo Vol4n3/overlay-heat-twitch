@@ -7,8 +7,13 @@ export class Vector2 implements IPoint2 {
     this.x = x;
     this.y = y;
   }
+
   public b: Point2 = new Point2();
   private a: Point2 = new Point2();
+
+  copy(): Vector2 {
+    return new Vector2(this.x, this.y);
+  }
 
   get angle(): number {
     return this.a.angleTo(this.b);

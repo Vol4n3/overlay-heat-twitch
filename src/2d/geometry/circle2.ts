@@ -29,17 +29,21 @@ export class Circle2 {
     this.position.y = n;
   }
 
-  bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number, bounceStrength: number = 1) {
+  bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number, bounceStrength: number = 1): boolean {
+    let isBounce = false;
     if (this.position.x > xMax || this.position.x < xMin) {
       if ((this.position.x > xMax && this.velocity.x > 0) || (this.position.x < xMin && this.velocity.x < 0)) {
         this.velocity.x *= -bounceStrength
+        isBounce = true;
       }
     }
     if (this.position.y > yMax || this.position.y < yMin) {
       if ((this.position.y > yMax && this.velocity.y > 0) || (this.position.y < yMin && this.velocity.y < 0)) {
-        this.velocity.y *= -bounceStrength
+        this.velocity.y *= -bounceStrength;
+        isBounce = true;
       }
     }
+    return isBounce
   }
 
   isCollisionToCircle(circle: Circle2): null | Point2 {

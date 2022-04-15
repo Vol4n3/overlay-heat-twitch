@@ -69,6 +69,8 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
   team: string = "";
 
   update(scene: Scene2d, time: number): void {
+    this.position.operation('add', this.velocity);
+    this.velocity.b.operation("multiply", 0.8);
     if (this.easingRotation !== null) {
       const nextRotation = this.easingRotation();
       if (nextRotation === null) {
@@ -88,7 +90,7 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
         if (this.target) {
           const copy = this.originalPosition.copy();
           copy.moveDirectionTo(this.target.angle, nextPosition);
-          this._movement = new Vector2(this.position.x - copy.x, this.position.y - copy.y);
+          this._movement = new Vector2(copy.x - this.position.x, copy.y - this.position.y);
           this.position = copy;
         }
       }
