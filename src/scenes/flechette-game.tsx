@@ -15,7 +15,7 @@ export const FlechetteGame: FC = () => {
     if (!div) {
       return;
     }
-    const scene = new Scene2d(div, 20);
+    const scene = new Scene2d(div);
     const dartTarget = new DartTarget(scene.ctx.canvas.width / 2, scene.ctx.canvas.height / 2);
     scene.addItem(dartTarget);
     const addFlechette = (x: number, y: number, name: string) => {

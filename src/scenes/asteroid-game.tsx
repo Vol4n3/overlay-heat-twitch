@@ -16,7 +16,7 @@ export const AsteroidGame: FC = () => {
     if (!container) {
       return;
     }
-    const scene = new Scene2d(container, 30);
+    const scene = new Scene2d(container);
     let starship: Starship;
     let collider: Collider;
     let collisionGroupId: number;
