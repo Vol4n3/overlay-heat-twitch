@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/overlay-heat-twitch/static/css/main.519487b7.css",
-    "main.js": "/overlay-heat-twitch/static/js/main.02a1a11f.js",
+    "main.css": "/overlay-heat-twitch/static/css/main.bed880ba.css",
+    "main.js": "/overlay-heat-twitch/static/js/main.2f7cd7d7.js",
     "index.html": "/overlay-heat-twitch/index.html",
-    "main.519487b7.css.map": "/overlay-heat-twitch/static/css/main.519487b7.css.map",
-    "main.02a1a11f.js.map": "/overlay-heat-twitch/static/js/main.02a1a11f.js.map"
+    "main.bed880ba.css.map": "/overlay-heat-twitch/static/css/main.bed880ba.css.map",
+    "main.2f7cd7d7.js.map": "/overlay-heat-twitch/static/js/main.2f7cd7d7.js.map"
   },
   "entrypoints": [
-    "static/css/main.519487b7.css",
-    "static/js/main.02a1a11f.js"
+    "static/css/main.bed880ba.css",
+    "static/js/main.2f7cd7d7.js"
   ]
 }
