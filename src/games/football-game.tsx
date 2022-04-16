@@ -10,6 +10,7 @@ import {PI} from '../utils/number.utils';
 import {useHeat} from '../providers/heat.provider';
 import {Terrain} from '../2d/objects/terrain';
 import {Cage} from '../2d/objects/cage';
+import {useTmi} from '../providers/tmi.provider';
 
 const cageWidth = 50;
 const cageHeight = 250;
@@ -17,6 +18,8 @@ const padding = 50;
 export const FootballGame: FC = () => {
   const containerRef = useRef(null);
   const {addListener, removeListener} = useHeat();
+  const {sendTmiMessage} = useTmi();
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) {
@@ -31,11 +34,11 @@ export const FootballGame: FC = () => {
     const cageRouge = new Cage(
       padding - cageWidth / 2,
       scene.canvas.height / 2 - cageHeight / 2,
-      cageWidth, cageHeight);
+      cageWidth, cageHeight, "red");
     const cageBleu = new Cage(
       scene.canvas.width - padding - cageWidth / 2,
       scene.canvas.height / 2 - cageHeight / 2,
-      cageWidth, cageHeight);
+      cageWidth, cageHeight, "blue");
     const terrain = new Terrain();
     let bddPlayers: { [key: string]: PlayerSoccer } = {};
     const startPlay = () => {
@@ -43,7 +46,7 @@ export const FootballGame: FC = () => {
       bddPlayers = {};
       collider.cleanGroup(mainGroup);
       collider.cleanGroup(cageGroup);
-      const ballon = new Ballon(scene.canvas.width / 2, scene.canvas.height / 2);
+      const ballon = new Ballon(scene.canvas.width / 2, scene.canvas.height / 2, sendTmiMessage);
       scene.addItem(terrain);
       scene.addItem(cageBleu);
       scene.addItem(cageRouge);
@@ -80,7 +83,6 @@ export const FootballGame: FC = () => {
     }
 
     const onClick = (event: MouseEvent) => {
-      //debug
       createPlayer(event.x, event.y, "test")
     }
     const idEvent = addListener(onUserClick);
@@ -90,7 +92,7 @@ export const FootballGame: FC = () => {
       removeListener(idEvent);
       window.removeEventListener('click', onClick);
     };
-  }, [removeListener, addListener]);
+  }, [removeListener, addListener, sendTmiMessage]);
 
   return <ContainerScene ref={containerRef}>
   </ContainerScene>

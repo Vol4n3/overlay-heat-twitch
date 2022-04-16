@@ -4,9 +4,10 @@ import {Ballon} from './ballon';
 import {CanCollide} from '../core/collider';
 
 export class Cage extends Rectangle2 implements Scene2DItem, CanCollide {
-
+constructor(x: number, y: number, w: number, h: number, public team: string) {
+  super(x, y, w, h);
+}
   collisionId: number = 0;
-
   detection(item: CanCollide): void {
     if (item instanceof Ballon) {
       item.detectGoal(this)
@@ -18,7 +19,8 @@ export class Cage extends Rectangle2 implements Scene2DItem, CanCollide {
   scenePriority: number = 0;
 
   draw({ctx}: Scene2d) {
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = this.team;
+    ctx.globalAlpha = 0.5
     ctx.lineWidth = 5;
     ctx.beginPath();
     ctx.rect(this.x, this.y, this.w, this.h);

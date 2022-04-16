@@ -1,19 +1,22 @@
 import {FC, useEffect, useReducer, useState} from 'react';
-import {SceneNames, SwitchScenes} from './switch-scenes';
+import {SwitchScenes} from './switch-scenes';
 import {HeatProvider} from '../../providers/heat.provider';
 import styled from 'styled-components';
 import {ReducerObject, ReducerObjectType} from '../../utils/react-reducer.utils';
-import {SCENES_ID, ScenesConfig, SceneType} from '../../types/config.types';
+import {ScenesConfig} from '../../types/config.types';
 import pkg from '../../../package.json';
+import {TmiProvider} from '../../providers/tmi.provider';
+import {FormConfig} from './form-config';
 
 export const Container = styled.div`
-  max-width: 1200px;
   margin: 0 auto;
-  padding: 12px;
+  padding: 60px;
   position: relative;
   width: 100%;
   height: 100vh;
   display: flex;
+  background-color: #263238;
+  color: white;
 `;
 export const Main: FC = () => {
   const [getConfig, setConfig] = useReducer<ReducerObjectType<ScenesConfig>>(ReducerObject, {isLoading: true});
@@ -29,7 +32,8 @@ export const Main: FC = () => {
         )
       ))}
     `)
-  }, [getConfig])
+  }, [getConfig]);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const uriConfig = params.get("config");
@@ -52,28 +56,21 @@ export const Main: FC = () => {
     setConfig({replace: json})
   }, [])
   return getConfig.isLoading ? null : getConfig.active ? <HeatProvider heatId={getConfig.heatId || ""}>
-    <SwitchScenes config={getConfig}/> </HeatProvider> : <Container>
-    <div><h1>Configurer la scene</h1>
-      <select value={getConfig.sceneType || ''}
-              onChange={v => setConfig({merge: {sceneType: v.target.value as SceneType}})}>
-        <option value={""}>Sélectionner la scene</option>
-        {SCENES_ID.map(s => <option value={s} key={s}>{SceneNames[s]}</option>)}
-      </select>
-      <div>
-        <label>
-          <div>channel id de l'extension Heat</div>
-          <input value={getConfig.heatId || ''} onChange={ev => setConfig({merge: {heatId: ev.target.value}})}/>
-        </label>
-      </div>
+    <TmiProvider channelId={getConfig.channelId} username={getConfig.username} password={getConfig.password}>
+      <SwitchScenes config={getConfig}/>
+    </TmiProvider>
+  </HeatProvider> : <Container>
+    <div>
+      <FormConfig config={getConfig} onChange={v => setConfig({replace: v})}></FormConfig>
       <div>
         <label>
           <div>copié cette url à mettre dans obs</div>
-          <textarea value={getUriConfig} onChange={() => {
+          <textarea readOnly={true} value={getUriConfig.trim()} onChange={() => {
           }}/>
         </label>
       </div>
-
     </div>
+
     <div style={{position: 'relative', flex: 1}}>
       <iframe
         title={"Prévisualisation"}
@@ -83,7 +80,5 @@ export const Main: FC = () => {
           height: "100%",
         }}/>
     </div>
-
   </Container>
-
 }

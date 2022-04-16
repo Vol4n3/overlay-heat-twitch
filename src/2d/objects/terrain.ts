@@ -13,6 +13,7 @@ export class Terrain implements Scene2DItem {
     const h = height - padding;
     ctx.strokeStyle = "white";
     ctx.lineWidth = 5;
+    ctx.globalAlpha = 0.5
     ctx.beginPath();
     ctx.moveTo(padding, padding);
     ctx.lineTo(w, padding);

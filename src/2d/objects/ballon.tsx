@@ -15,20 +15,27 @@ img.onload = () => {
 img.src = "/overlay-heat-twitch/assets/texture_ballon.jpg";
 
 export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
-  constructor(x: number, y: number) {
+  constructor(x: number, y: number, private messager: (m: string) => void) {
     super(x, y, 30);
     this.initialPosition = {x, y}
   }
 
   initialPosition: IPoint2
-
   collisionId: number = 0;
-  lastShooter: string = "";
+  lastShooter: PlayerSoccer | null = null;
 
   detectGoal(cage: Cage) {
     if (cage.isInside(this)) {
       this.position.operation('equal', this.initialPosition);
       this.velocity = new Vector2(0, 0);
+      if (this.lastShooter === null) {
+        return
+      }
+      if (this.lastShooter.team === cage.team) {
+        this.messager(`${this.lastShooter.owner} à marqué contre son prope camp ! le/la boloss`)
+      } else {
+        this.messager(`FootBall FootGoal GOOAAAL du joueur ${this.lastShooter.owner} FootGoal`)
+      }
     }
   }
 
@@ -72,7 +79,7 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
   }
 
   playerShoot(player: PlayerSoccer): void {
-    this.lastShooter = player.owner;
+    this.lastShooter = player;
     const directionBall = new Vector2(this.x - player.x, this.y - player.y);
     const velocityDiff = new Vector2(player.calculatedVelocity.x + this.velocity.x, player.calculatedVelocity.y + this.velocity.y);
     directionBall.length = velocityDiff.length * 0.95;

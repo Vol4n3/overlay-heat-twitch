@@ -13,13 +13,12 @@ interface HeatContextProps {
   removeListener(uid: number): void;
 }
 
+const notInit = () => {
+  throw new Error('not init')
+};
 const HeatContext = createContext<HeatContextProps>({
-  addListener() {
-    throw new Error('not init')
-  },
-  removeListener() {
-    throw new Error('not init')
-  }
+  addListener: notInit,
+  removeListener: notInit
 })
 export const useHeat = () => useContext(HeatContext);
 
