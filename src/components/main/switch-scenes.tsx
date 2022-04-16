@@ -1,8 +1,8 @@
 import React, {FC, useMemo} from 'react';
-import {AsteroidGame} from '../../scenes/asteroid-game';
-import {FlechetteGame} from '../../scenes/flechette-game';
+import {AsteroidGame} from '../../games/asteroid-game';
+import {FlechetteGame} from '../../games/flechette-game';
 import {ScenesConfig, SceneType} from '../../types/config.types';
-import {FootballGame} from '../../scenes/football-game';
+import {FootballGame} from '../../games/football-game';
 
 export const SceneNames: { [key in SceneType]: string } = {
   dartTarget: "Jeux de fléchette",

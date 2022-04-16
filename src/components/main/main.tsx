@@ -1,5 +1,5 @@
 import {FC, useEffect, useReducer, useState} from 'react';
-import {SceneNames, SwitchScenes} from '../heat/switch-scenes';
+import {SceneNames, SwitchScenes} from './switch-scenes';
 import {HeatProvider} from '../../providers/heat.provider';
 import styled from 'styled-components';
 import {ReducerObject, ReducerObjectType} from '../../utils/react-reducer.utils';
