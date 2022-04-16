@@ -1,8 +1,11 @@
 import {Scene2d, Scene2DItem} from './scene2d';
 import {IPoint2} from '../../types/point.types';
 
-interface WithId<T> {
-  id: number
+export type AlgorithmType = 'sorted' | 'all' | 'binaryTree' | 'quadricTree';
+
+interface ColliderGroup<T> {
+  algorithmType: AlgorithmType,
+  id: number,
   item: T,
 }
 
@@ -16,20 +19,12 @@ export class Collider implements Scene2DItem {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  private groups: WithId<CanCollide[]>[] = [];
+  private groups: ColliderGroup<CanCollide[]>[] = [];
 
-  update(scene: Scene2d, time: number): void {
-    this.groups.forEach((group) => {
-      const copy = group.item.sort((a, b) => a.x - b.x);
-      for (let i = 0; i < copy.length; i++) {
-        const current = copy[i];
-        const next = copy[i + 1];
-        if (!next) {
-          return;
-        }
-        current.detection(next);
-      }
-    })
+  addGroup(algorithmType: AlgorithmType): number {
+    this.uid++;
+    this.groups.push({item: [], id: this.uid, algorithmType});
+    return this.uid;
   }
 
   cleanGroup(groupId: number): void {
@@ -41,10 +36,7 @@ export class Collider implements Scene2DItem {
 
   private uid = 0;
 
-  addGroup(): number {
-    this.uid++;
-    this.groups.push({item: [], id: this.uid});
-    return this.uid;
+  draw(scene: Scene2d, time: number): void {
   }
 
   addItemToGroup(item: CanCollide, groupId: number) {
@@ -58,7 +50,32 @@ export class Collider implements Scene2DItem {
     throw new Error('impossible de trouver le groupe pour ajouter un item');
   }
 
-  draw(scene: Scene2d, time: number): void {
+  update(scene: Scene2d, time: number): void {
+    this.groups.forEach((group) => {
+      switch (group.algorithmType) {
+        case 'sorted':
+          const copy = group.item.sort((a, b) => a.x - b.x);
+          for (let i = 0; i < copy.length; i++) {
+            const current = copy[i];
+            const next = copy[i + 1];
+            if (!next) {
+              return;
+            }
+            current.detection(next);
+          }
+          break;
+        case 'all':
+          for (let i = 0; i < group.item.length; i++) {
+            const item1 = group.item[i];
+            for (let j = i + 1; j < group.item.length; j++) {
+              const item2 = group.item[j];
+              item1.detection(item2);
+            }
+          }
+      }
+
+
+    })
   }
 
   removeGroup(index: number): void {

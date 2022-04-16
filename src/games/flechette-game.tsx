@@ -5,17 +5,19 @@ import {Arrow} from '../2d/objects/arrow';
 import {UserPoint} from '../types/heat.types';
 import {ReducerObject, ReducerObjectType} from '../utils/react-reducer.utils';
 import {ContainerScene} from '../components/ui/container-scene';
+import {useHeat} from '../providers/heat.provider';
 
 export const FlechetteGame: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
   const [shoots, setShoots] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
+  const {addListener, removeListener} = useHeat();
   useEffect(() => {
     const div = containerRef.current;
     if (!div) {
       return;
     }
-    const scene = new Scene2d(div, 20);
+    const scene = new Scene2d(div);
     const dartTarget = new DartTarget(scene.ctx.canvas.width / 2, scene.ctx.canvas.height / 2);
     scene.addItem(dartTarget);
     const addFlechette = (x: number, y: number, name: string) => {
@@ -30,27 +32,25 @@ export const FlechetteGame: FC = () => {
         scene.removeItem(flechette);
       }, 10000)
     }
-    const onUserClick = (event: CustomEvent<UserPoint>) => {
-      if (event.detail) {
-        addFlechette(event.detail.x, event.detail.y, event.detail.userID);
-      }
+    const onUserClick = (event: UserPoint) => {
+
+      addFlechette(event.x, event.y, event.userID);
+
     }
     const onClick = (event: MouseEvent) => {
       addFlechette(event.x, event.y, "test");
     }
-    // @ts-ignore
-    window.addEventListener<CustomEvent<UserPoint>>("heatclick", onUserClick)
+    const idEvent = addListener(onUserClick);
     window.addEventListener("click", onClick)
     return () => {
       scene.destroy();
       if (!div) {
         return;
       }
-      // @ts-ignore
-      window.removeEventListener<CustomEvent<UserPoint>>("heatclick", onClick)
+      removeListener(idEvent);
       window.removeEventListener("click", onClick)
     };
-  }, [containerRef])
+  }, [addListener, containerRef, removeListener])
   return <>
     <ContainerScene ref={containerRef}/>
     <div style={{

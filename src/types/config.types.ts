@@ -7,5 +7,9 @@ export interface ScenesConfig {
   soccerConfig?: any;
   dartTargetConfig?: any;
   heatId?: string;
+  channelId?: string;
+  password?: string;
+  username?: string;
   sceneType?: SceneType;
+  isLoading?: boolean;
 }

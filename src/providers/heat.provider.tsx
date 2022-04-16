@@ -1,29 +1,24 @@
-import {createContext, FC, useContext, useEffect, useRef} from 'react';
-import {IPoint2} from '../types/point.types';
-import {HeatApi, MessageHeat} from '../types/heat.types';
+import {createContext, FC, PropsWithChildren, useContext, useEffect, useRef} from 'react';
+import {HeatApi, MessageHeat, UserPoint} from '../types/heat.types';
 import {CoordinateRatioToScreen} from '../utils/number.utils';
 import {getUserName} from '../utils/heat.utils';
+import {RemoveItemInArray} from '../utils/deep-object.utils';
 
-
-interface UserPoint extends IPoint2 {
-  userID: string;
-}
 
 type HeatListener = (event: UserPoint) => void;
 
 interface HeatContextProps {
-  onUserClick(listener: HeatListener): void;
+  addListener(listener: HeatListener): number;
 
-  removeListenerId(): void;
+  removeListener(uid: number): void;
 }
 
+const notInit = () => {
+  throw new Error('not init')
+};
 const HeatContext = createContext<HeatContextProps>({
-  onUserClick() {
-    throw new Error('not init')
-  },
-  removeListenerId() {
-    throw new Error('not init')
-  }
+  addListener: notInit,
+  removeListener: notInit
 })
 export const useHeat = () => useContext(HeatContext);
 
@@ -31,15 +26,17 @@ interface HeatProviderProps {
   heatId: string;
 }
 
-export const HeatProvider: FC<HeatProviderProps> = ({heatId, children}) => {
-  const listeners = useRef<HeatListener | null>(null);
-  const onUserClick = (listener: HeatListener) => {
-    listeners.current = listener;
+export const HeatProvider: FC<PropsWithChildren<HeatProviderProps>> = ({heatId, children}) => {
+  const listeners = useRef<{ uid: number, callback: HeatListener }[]>([]);
+  const listenersIdRef = useRef<number>(0);
+  const addListener = (listener: HeatListener) => {
+    const uid = listenersIdRef.current++;
+    listeners.current = [...listeners.current, {callback: listener, uid}];
+    return uid
   }
-  const removeListenerId = (): void => {
-    listeners.current = null;
+  const removeListener = (uid: number): void => {
+    listeners.current = RemoveItemInArray(listeners.current, uid);
   }
-
   useEffect(() => {
     if (!heatId) {
       return;
@@ -56,8 +53,10 @@ export const HeatProvider: FC<HeatProviderProps> = ({heatId, children}) => {
       else if (data.id.startsWith("U")) return;
       const screen = CoordinateRatioToScreen(parseFloat(data.x), parseFloat(data.y), document.body.clientWidth, document.body.clientHeight);
       getUserName(data.id).then(user => {
-        if (listeners.current === null) return;
-        listeners.current({...screen, userID: typeof user === 'string' ? user : user.display_name});
+        listeners.current.forEach(listener => listener.callback({
+          ...screen,
+          userID: typeof user === 'string' ? user : user.display_name
+        }));
       });
     }
     let ws: WebSocket;
@@ -66,7 +65,11 @@ export const HeatProvider: FC<HeatProviderProps> = ({heatId, children}) => {
       ws = new WebSocket(url);
       ws.addEventListener('message', onMessage);
       ws.addEventListener('open', onLogin);
-      ws.addEventListener('close', init, {once: true});
+      ws.addEventListener('close', () => {
+        ws.removeEventListener('message', onMessage);
+        ws.removeEventListener('open', onLogin);
+        init()
+      }, {once: true});
     }
     init();
     return () => {
@@ -77,8 +80,8 @@ export const HeatProvider: FC<HeatProviderProps> = ({heatId, children}) => {
       ws.removeEventListener('open', onLogin);
       ws.removeEventListener('close', init);
       ws.close();
-      listeners.current = null;
+      listeners.current = [];
     }
   }, [heatId]);
-  return <HeatContext.Provider value={{onUserClick, removeListenerId}}>{children}</HeatContext.Provider>;
+  return <HeatContext.Provider value={{addListener, removeListener}}>{children}</HeatContext.Provider>;
 }

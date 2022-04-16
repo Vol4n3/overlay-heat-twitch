@@ -1,3 +1,9 @@
+export const PI = Math.PI;
+export const PI2 = PI * 2;
+export const HALF_PI = PI / 2;
+export const QUART_PI = PI / 4;
+export const TENTH_PI = PI / 10;
+export const TWENTIETH_PI = PI / 20;
 /**
  *
  * @param x 0 => 1
@@ -16,10 +22,10 @@ export const CoordinateRatioToScreen = (
   }
 }
 export const AngleFlip = (angle: number): number => {
-  return angle > 0 ? angle - Math.PI * 2 : angle + Math.PI * 2;
+  return angle > 0 ? angle - PI2 : angle + PI2;
 }
 export const AngleKeepRange = (angle: number): number => {
-  return Math.abs(angle) >= Math.PI ? AngleFlip(angle) : angle;
+  return Math.abs(angle) >= PI ? AngleFlip(angle) : angle;
 }
 export const numberRange = (n: number, min: number, max: number): number => {
   return numberMax(numberMin(n, min), max);
