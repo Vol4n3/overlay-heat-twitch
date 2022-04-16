@@ -1,5 +1,5 @@
 import {FC, useEffect, useReducer, useState} from 'react';
-import {SceneNames, ScenesHeat} from '../heat/scenes-heat';
+import {SceneNames, SwitchScenes} from '../heat/switch-scenes';
 import {HeatProvider} from '../../providers/heat.provider';
 import styled from 'styled-components';
 import {ReducerObject, ReducerObjectType} from '../../utils/react-reducer.utils';
@@ -16,7 +16,7 @@ export const Container = styled.div`
   display: flex;
 `;
 export const Main: FC = () => {
-  const [getConfig, setConfig] = useReducer<ReducerObjectType<ScenesConfig>>(ReducerObject, {});
+  const [getConfig, setConfig] = useReducer<ReducerObjectType<ScenesConfig>>(ReducerObject, {isLoading: true});
   const [getUriConfig, setUriConfig] = useState<string>("");
   useEffect(() => {
     setUriConfig(`${process.env.NODE_ENV === "development" ? "/" : pkg.homepage}?config=${
@@ -33,25 +33,26 @@ export const Main: FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const uriConfig = params.get("config");
+
     if (!uriConfig) {
-      return
+      return setConfig({merge: {isLoading: false}});
     }
     const decodeUri = window.decodeURIComponent(uriConfig);
     if (!decodeUri) {
-      return;
+      return setConfig({merge: {isLoading: false}});
     }
     const decodeBase64 = window.atob(decodeUri);
     if (!decodeBase64) {
-      return;
+      return setConfig({merge: {isLoading: false}});
     }
     const json = JSON.parse(decodeBase64);
     if (!json) {
-      return;
+      return setConfig({merge: {isLoading: false}});
     }
     setConfig({replace: json})
   }, [])
-  return getConfig.active ? <HeatProvider heatId={getConfig.heatId || process.env.REACT_APP_HEAT_CHANNEL || ""}>
-    <ScenesHeat config={getConfig}/> </HeatProvider> : <Container>
+  return getConfig.isLoading ? null : getConfig.active ? <HeatProvider heatId={getConfig.heatId || ""}>
+    <SwitchScenes config={getConfig}/> </HeatProvider> : <Container>
     <div><h1>Configurer la scene</h1>
       <select value={getConfig.sceneType || ''}
               onChange={v => setConfig({merge: {sceneType: v.target.value as SceneType}})}>

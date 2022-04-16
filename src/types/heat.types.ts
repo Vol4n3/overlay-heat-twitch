@@ -18,6 +18,5 @@ export interface MessageHeat {
 }
 
 export interface UserPoint extends IPoint2 {
-  uid: string,
   userID: string;
 }

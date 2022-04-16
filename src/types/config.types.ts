@@ -8,4 +8,5 @@ export interface ScenesConfig {
   dartTargetConfig?: any;
   heatId?: string;
   sceneType?: SceneType;
+  isLoading?: boolean;
 }

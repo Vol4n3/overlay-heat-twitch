@@ -8,9 +8,11 @@ import {Bullet} from '../2d/objects/bullet';
 import {PickRandomOne} from '../utils/array.utils';
 import {ContainerScene} from '../components/ui/container-scene';
 import {Collider} from '../2d/core/collider';
+import {useHeat} from '../providers/heat.provider';
 
 export const AsteroidGame: FC = () => {
   const refScene = useRef<HTMLDivElement>(null);
+  const {addListener, removeListener} = useHeat();
   useEffect(() => {
     const container = refScene.current;
     if (!container) {
@@ -69,7 +71,7 @@ export const AsteroidGame: FC = () => {
         (asteroidOwner) => startPlay(asteroidOwner));
       scene.addItem(starship);
       collider = new Collider();
-      collisionGroupId = collider.addGroup();
+      collisionGroupId = collider.addGroup("sorted");
       scene.addItem(collider);
       collider.addItemToGroup(starship, collisionGroupId);
       refLoopShoot = window.setInterval(() => {
@@ -96,11 +98,11 @@ export const AsteroidGame: FC = () => {
       }
       starship.target = new Vector2(event.clientX, event.clientY);
     }
-    const onUserClick = (event: CustomEvent<UserPoint>) => {
-      if (!event.detail || !starship) {
+    const onUserClick = (event: UserPoint) => {
+      if (!starship) {
         return
       }
-      const {x, y, userID} = event.detail;
+      const {x, y, userID} = event;
       if (!starship.owner) {
         starship.owner = userID
         return;
@@ -113,16 +115,14 @@ export const AsteroidGame: FC = () => {
       }
       createAsteroid(x, y, userID);
     }
-    // @ts-ignore
-    window.addEventListener('heatclick', onUserClick);
+    const idEvent = addListener(onUserClick);
     window.addEventListener('click', onClick);
     return () => {
       clearInterval(intervalRefAsteroid);
       scene.destroy();
-      // @ts-ignore
-      window.removeEventListener('heatclick', onUserClick);
+      removeListener(idEvent);
       window.removeEventListener('click', onClick);
     };
-  }, [refScene]);
+  }, [refScene, addListener, removeListener]);
   return <ContainerScene ref={refScene}/>
 }

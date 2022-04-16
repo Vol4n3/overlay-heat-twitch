@@ -4,6 +4,8 @@ import {CanCollide} from '../core/collider';
 import {PlayerSoccer} from './player-soccer';
 import {Vector2} from '../geometry/vector2';
 import {AngleKeepRange, PI2} from '../../utils/number.utils';
+import {Cage} from './cage';
+import {IPoint2} from '../../types/point.types';
 
 const img = new Image();
 let loaded = false;
@@ -13,9 +15,22 @@ img.onload = () => {
 img.src = "/overlay-heat-twitch/assets/texture_ballon.jpg";
 
 export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
+  constructor(x: number, y: number) {
+    super(x, y, 30);
+    this.initialPosition = {x, y}
+  }
 
+  initialPosition: IPoint2
 
   collisionId: number = 0;
+  lastShooter: string = "";
+
+  detectGoal(cage: Cage) {
+    if (cage.isInside(this)) {
+      this.position.operation('equal', this.initialPosition);
+      this.velocity = new Vector2(0, 0);
+    }
+  }
 
   detection(item: CanCollide): void {
     if (item instanceof Ballon) {
@@ -28,6 +43,9 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
       }
       return;
     }
+    if (item instanceof Cage) {
+      this.detectGoal(item);
+    }
   }
 
   sceneId: number = 0;
@@ -37,7 +55,8 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
     if (this.texture === null) {
       if (loaded) {
         this.texture = ctx.createPattern(img, "repeat");
-        this.texture?.setTransform(new DOMMatrix().scale(0.25, 0.25));
+        const scale = 0.244;
+        this.texture?.setTransform(new DOMMatrix().scale(scale, scale));
       }
     }
     ctx.translate(this.position.x, this.position.y)
@@ -53,6 +72,7 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
   }
 
   playerShoot(player: PlayerSoccer): void {
+    this.lastShooter = player.owner;
     const directionBall = new Vector2(this.x - player.x, this.y - player.y);
     const velocityDiff = new Vector2(player.calculatedVelocity.x + this.velocity.x, player.calculatedVelocity.y + this.velocity.y);
     directionBall.length = velocityDiff.length * 0.95;
@@ -67,8 +87,6 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
     this.position.operation('add', this.velocity);
     const roundedX = Math.round(this.velocity.x * 100) / 100;
     this.rotation += AngleKeepRange(((roundedX) / 200));
-
     this.velocity.b.operation("multiply", 0.99);
-
   }
 }
