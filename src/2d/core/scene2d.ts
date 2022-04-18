@@ -48,6 +48,10 @@ export class Scene2d {
   private uid: number = 100;
   private updateTime: number = 0;
 
+  addMultipleItem(items: Scene2DItem[]) {
+    items.forEach(i => this.addItem(i))
+  }
+
   addItem(item: Scene2DItem, order?: number) {
     const id = this.uid++;
     item.sceneId = id;

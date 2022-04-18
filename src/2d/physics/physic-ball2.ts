@@ -39,6 +39,7 @@ export class PhysicBall2 extends Circle2 {
     this.velocity.b.operation('multiply', this.friction);
     this.velocity.b.operation('add', this.gravity);
     this.position.operation("add", this.velocity);
+
   }
 
   bounceBoundary(rect: Rectangle2, bounceStrength: IPoint2 = {x: 1, y: 1}): string {
