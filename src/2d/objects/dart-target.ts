@@ -1,7 +1,8 @@
 import {Scene2d, Scene2DItem} from '../core/scene2d';
-import {Circle2} from '../geometry/circle2';
+import {PhysicBall2} from '../physics/physic-ball2';
 import {Vector2} from '../geometry/vector2';
 import {HALF_PI, PI, PI2, QUART_PI, TENTH_PI, TWENTIETH_PI} from '../../utils/number.utils';
+import {Rectangle2} from '../geometry/rectangle2';
 
 const parts: number[] = [6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20, 1, 18, 4, 13];
 const vectorToPoint: number[] = [11, 14, 9, 12, 5, 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11]
@@ -16,7 +17,7 @@ const extraPointSize = 10;
 const maxRadiusDoublePoint = maxPointsRadius;
 const maxRadiusTriplePoint = targetSize - 100;
 
-export class DartTarget extends Circle2 implements Scene2DItem {
+export class DartTarget extends PhysicBall2 implements Scene2DItem {
   velocity = new Vector2(0, 0);
 
   constructor(x: number, y: number) {
@@ -39,9 +40,10 @@ export class DartTarget extends Circle2 implements Scene2DItem {
   }
 
   update(scene: Scene2d, time: number): void {
+    const {width, height} = scene.canvas;
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
-    this.bounceBoundary(targetSize, scene.ctx.canvas.width - targetSize, targetSize, scene.ctx.canvas.height - targetSize);
+    this.bounceBoundary(new Rectangle2(targetSize, targetSize, width, height))
     if (time % 300 < 1) {
       this.velocity.x += Math.random() * 6 - 3;
       this.velocity.y += Math.random() * 6 - 3;

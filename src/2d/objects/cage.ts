@@ -1,6 +1,6 @@
 import {Rectangle2} from '../geometry/rectangle2';
 import {Scene2d, Scene2DItem} from '../core/scene2d';
-import {Ballon} from './ballon';
+import {SoccerBall} from './soccerBall';
 import {CanCollide} from '../core/collider';
 
 export class Cage extends Rectangle2 implements Scene2DItem, CanCollide {
@@ -9,7 +9,7 @@ constructor(x: number, y: number, w: number, h: number, public team: string) {
 }
   collisionId: number = 0;
   detection(item: CanCollide): void {
-    if (item instanceof Ballon) {
+    if (item instanceof SoccerBall) {
       item.detectGoal(this)
     }
 

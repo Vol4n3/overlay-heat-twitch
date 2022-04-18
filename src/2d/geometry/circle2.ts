@@ -1,55 +1,22 @@
-import {Vector2} from './vector2';
-import {Point2} from './point2';
-
-
 export class Circle2 {
-  public velocity: Vector2 = new Vector2(0, 0);
-  public rotationSpeed: number = 0;
-
-  constructor(x: number, y: number, public radius: number) {
-    this.position = new Point2(x, y);
+  constructor(private _x: number, private _y: number, public radius: number) {
   }
 
-  public rotation: number = 0;
-  public position: Point2;
+  public rotation = 0;
 
   get x(): number {
-    return this.position.x;
+    return this._x;
   }
 
-  set x(n: number) {
-    this.position.x = n;
+  set x(value: number) {
+    this._x = value;
   }
 
   get y(): number {
-    return this.position.y;
+    return this._y;
   }
 
-  set y(n: number) {
-    this.position.y = n;
-  }
-
-  bounceBoundary(xMin: number, xMax: number, yMin: number, yMax: number, bounceStrength: number = 1): boolean {
-    let isBounce = false;
-    if (this.position.x > xMax || this.position.x < xMin) {
-      if ((this.position.x > xMax && this.velocity.x > 0) || (this.position.x < xMin && this.velocity.x < 0)) {
-        this.velocity.x *= -bounceStrength
-        isBounce = true;
-      }
-    }
-    if (this.position.y > yMax || this.position.y < yMin) {
-      if ((this.position.y > yMax && this.velocity.y > 0) || (this.position.y < yMin && this.velocity.y < 0)) {
-        this.velocity.y *= -bounceStrength;
-        isBounce = true;
-      }
-    }
-    return isBounce
-  }
-
-  isCollisionToCircle(circle: Circle2): null | Point2 {
-    if (this.position.distanceTo(circle) < (this.radius + circle.radius)) {
-      return new Point2(0, 0);
-    }
-    return null
+  set y(value: number) {
+    this._y = value;
   }
 }

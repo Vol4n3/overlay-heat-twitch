@@ -1,11 +1,12 @@
 import {Scene2d, Scene2DItem} from '../core/scene2d';
-import {Circle2} from '../geometry/circle2';
+import {PhysicBall2} from '../physics/physic-ball2';
 import {CanCollide} from '../core/collider';
 import {PlayerSoccer} from './player-soccer';
 import {Vector2} from '../geometry/vector2';
 import {AngleKeepRange, PI2} from '../../utils/number.utils';
 import {Cage} from './cage';
 import {IPoint2} from '../../types/point.types';
+import {Rectangle2} from '../geometry/rectangle2';
 
 const img = new Image();
 let loaded = false;
@@ -14,7 +15,7 @@ img.onload = () => {
 }
 img.src = "/overlay-heat-twitch/assets/texture_ballon.jpg";
 
-export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
+export class SoccerBall extends PhysicBall2 implements Scene2DItem, CanCollide {
   constructor(x: number, y: number, private messager: (m: string) => void) {
     super(x, y, 30);
     this.initialPosition = {x, y}
@@ -40,7 +41,7 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
   }
 
   detection(item: CanCollide): void {
-    if (item instanceof Ballon) {
+    if (item instanceof SoccerBall) {
       return;
     }
     if (item instanceof PlayerSoccer) {
@@ -90,7 +91,10 @@ export class Ballon extends Circle2 implements Scene2DItem, CanCollide {
 
   update(scene: Scene2d, time: number): void {
     const padding = 50;
-    this.bounceBoundary(padding, scene.canvas.width - padding, padding, scene.canvas.height - padding, 0.9);
+    this.bounceBoundary(new Rectangle2(padding, padding, scene.canvas.width - padding, scene.canvas.height - padding), {
+      x: 0.9,
+      y: 0.9
+    });
     this.position.operation('add', this.velocity);
     const roundedX = Math.round(this.velocity.x * 100) / 100;
     this.rotation += AngleKeepRange(((roundedX) / 200));

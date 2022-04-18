@@ -15,6 +15,7 @@ export const Container = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  gap: 16px;
   background-color: #263238;
   color: white;
 `;

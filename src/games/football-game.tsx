@@ -1,7 +1,7 @@
 import {FC, useEffect, useRef} from 'react';
 import {ContainerScene} from '../components/ui/container-scene';
 import {Scene2d} from '../2d/core/scene2d';
-import {Ballon} from '../2d/objects/ballon';
+import {SoccerBall} from '../2d/objects/soccerBall';
 import {PlayerSoccer} from '../2d/objects/player-soccer';
 import {UserPoint} from '../types/heat.types';
 import {Collider} from '../2d/core/collider';
@@ -17,7 +17,7 @@ const cageHeight = 250;
 const padding = 50;
 export const FootballGame: FC = () => {
   const containerRef = useRef(null);
-  const {addListener, removeListener} = useHeat();
+  const {addHeatListener, removeHeatListener} = useHeat();
   const {sendTmiMessage} = useTmi();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const FootballGame: FC = () => {
       bddPlayers = {};
       collider.cleanGroup(mainGroup);
       collider.cleanGroup(cageGroup);
-      const ballon = new Ballon(scene.canvas.width / 2, scene.canvas.height / 2, sendTmiMessage);
+      const ballon = new SoccerBall(scene.canvas.width / 2, scene.canvas.height / 2, sendTmiMessage);
       scene.addItem(terrain);
       scene.addItem(cageBleu);
       scene.addItem(cageRouge);
@@ -85,14 +85,14 @@ export const FootballGame: FC = () => {
     const onClick = (event: MouseEvent) => {
       createPlayer(event.x, event.y, "test")
     }
-    const idEvent = addListener(onUserClick);
+    const idEvent = addHeatListener(onUserClick);
     window.addEventListener('click', onClick);
     return () => {
       scene.destroy();
-      removeListener(idEvent);
+      removeHeatListener(idEvent);
       window.removeEventListener('click', onClick);
     };
-  }, [removeListener, addListener, sendTmiMessage]);
+  }, [removeHeatListener, addHeatListener, sendTmiMessage]);
 
   return <ContainerScene ref={containerRef}>
   </ContainerScene>

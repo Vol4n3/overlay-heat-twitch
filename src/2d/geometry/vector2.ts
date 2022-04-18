@@ -11,10 +11,6 @@ export class Vector2 implements IPoint2 {
   public b: Point2 = new Point2();
   private a: Point2 = new Point2();
 
-  copy(): Vector2 {
-    return new Vector2(this.x, this.y);
-  }
-
   get angle(): number {
     return this.a.angleTo(this.b);
   }
@@ -46,10 +42,22 @@ export class Vector2 implements IPoint2 {
     return new Vector2(Math.cos(angle) * length, Math.sin(angle) * length);
   }
 
+  copy(): Vector2 {
+    return new Vector2(this.x, this.y);
+  }
+
   createFromDiff(p: IPoint2) {
     return new Vector2(this.x - p.x, this.y - p.y)
   }
 
+  createTangent(): Vector2 {
+    return new Vector2(-this.y, this.x);
+  }
+
+  normalized(): Vector2 {
+    const len = this.length;
+    return new Vector2(this.x / len, this.y / len);
+  }
 
   set y(n: number) {
     this.b.y = n;

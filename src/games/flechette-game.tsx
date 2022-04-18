@@ -11,7 +11,7 @@ export const FlechetteGame: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scores, setScore] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
   const [shoots, setShoots] = useReducer<ReducerObjectType<{ [key: string]: number }>>(ReducerObject, {});
-  const {addListener, removeListener} = useHeat();
+  const {addHeatListener, removeHeatListener} = useHeat();
   useEffect(() => {
     const div = containerRef.current;
     if (!div) {
@@ -40,17 +40,17 @@ export const FlechetteGame: FC = () => {
     const onClick = (event: MouseEvent) => {
       addFlechette(event.x, event.y, "test");
     }
-    const idEvent = addListener(onUserClick);
+    const idEvent = addHeatListener(onUserClick);
     window.addEventListener("click", onClick)
     return () => {
       scene.destroy();
       if (!div) {
         return;
       }
-      removeListener(idEvent);
+      removeHeatListener(idEvent);
       window.removeEventListener("click", onClick)
     };
-  }, [addListener, containerRef, removeListener])
+  }, [addHeatListener, containerRef, removeHeatListener])
   return <>
     <ContainerScene ref={containerRef}/>
     <div style={{

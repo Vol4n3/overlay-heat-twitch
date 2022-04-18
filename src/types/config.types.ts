@@ -1,4 +1,4 @@
-export const SCENES_ID = ["asteroid", "dartTarget", "soccer"] as const;
+export const SCENES_ID = ["asteroid", "dartTarget", "soccer", "basket"] as const;
 export type SceneType = typeof SCENES_ID[number];
 
 export interface ScenesConfig {

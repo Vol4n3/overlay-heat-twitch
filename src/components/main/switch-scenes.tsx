@@ -3,11 +3,13 @@ import {AsteroidGame} from '../../games/asteroid-game';
 import {FlechetteGame} from '../../games/flechette-game';
 import {ScenesConfig, SceneType} from '../../types/config.types';
 import {FootballGame} from '../../games/football-game';
+import {BasketGame} from '../../games/basket-game';
 
 export const SceneNames: { [key in SceneType]: string } = {
   dartTarget: "Jeux de fléchette",
   asteroid: "Astéroïdes",
-  soccer: "Football"
+  soccer: "Football",
+  basket: "Basket ball"
 }
 
 export const SwitchScenes: FC<{ config: ScenesConfig }> = ({config}) => {
@@ -19,6 +21,8 @@ export const SwitchScenes: FC<{ config: ScenesConfig }> = ({config}) => {
         return <FlechetteGame/>
       case 'soccer':
         return <FootballGame/>
+      case 'basket':
+        return <BasketGame/>
       default:
         return null
     }

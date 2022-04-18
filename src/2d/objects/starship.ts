@@ -1,5 +1,5 @@
 import {Scene2d, Scene2DItem} from '../core/scene2d';
-import {Circle2} from '../geometry/circle2';
+import {PhysicBall2} from '../physics/physic-ball2';
 import {Vector2} from '../geometry/vector2';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
 import {AngleFlip, AngleKeepRange, HALF_PI, PI} from '../../utils/number.utils';
@@ -8,7 +8,7 @@ import {Asteroid} from './asteroid';
 
 const rotationSpeed = 50;
 
-export class Starship extends Circle2 implements Scene2DItem, CanCollide {
+export class Starship extends PhysicBall2 implements Scene2DItem, CanCollide {
 
   constructor(x: number, y: number, public owner: string = "",
               private onDestroyed: (asteroidOwner: string) => void) {

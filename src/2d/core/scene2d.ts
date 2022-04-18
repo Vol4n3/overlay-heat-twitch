@@ -1,3 +1,5 @@
+import {loadImage} from '../../utils/loader.utils';
+
 export interface Scene2DItem {
   sceneId: number;
   scenePriority: number;
@@ -52,6 +54,15 @@ export class Scene2d {
     item.scenePriority = order || id;
     this.items.push(item);
     this.items = this.items.sort((a, b) => b.scenePriority - a.scenePriority);
+  }
+
+  async createTexture(url: string, repetition: string | null = null, matrix?: DOMMatrix): Promise<CanvasPattern | null> {
+    const image = await loadImage(url);
+    const pattern = this.ctx.createPattern(image, repetition)
+    if (pattern && matrix) {
+      pattern.setTransform(matrix)
+    }
+    return pattern
   }
 
   animate() {

@@ -53,7 +53,7 @@ export const FormConfig: FC<FormConfigProps> = ({config, onChange}) => {
       </label>
       <div>
 
-        <button type={'submit'}>Prévisualiser</button>
+        <button type={'submit'}>Générer l'url et prévisualiser</button>
       </div>
     </div>
   </form>

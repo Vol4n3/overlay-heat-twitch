@@ -1,13 +1,13 @@
-import {Circle2} from '../geometry/circle2';
+import {PhysicBall2} from '../physics/physic-ball2';
 import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {CanCollide} from '../core/collider';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
 import {AngleFlip, AngleKeepRange, HALF_PI, PI, PI2} from '../../utils/number.utils';
 import {Vector2} from '../geometry/vector2';
 import {Point2} from '../geometry/point2';
-import {Ballon} from './ballon';
+import {SoccerBall} from './soccerBall';
 
-export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
+export class PlayerSoccer extends PhysicBall2 implements Scene2DItem, CanCollide {
   collisionId: number = 0;
 
   target: null | Vector2 = null;
@@ -65,7 +65,7 @@ export class PlayerSoccer extends Circle2 implements Scene2DItem, CanCollide {
 
       return;
     }
-    if (item instanceof Ballon) {
+    if (item instanceof SoccerBall) {
       const collision = this.isCollisionToCircle(item);
       if (collision) {
         item.playerShoot(this);

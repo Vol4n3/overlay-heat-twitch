@@ -1,5 +1,4 @@
 import {numberRange} from '../../utils/number.utils';
-import {VectorLength} from '../../utils/vector.utils';
 import {DotProductName, IPoint2} from '../../types/point.types';
 
 export class Point2 implements IPoint2 {
@@ -14,17 +13,18 @@ export class Point2 implements IPoint2 {
     return Math.atan2(p.y - this.y, p.x - this.x);
   }
 
-  moveDirectionTo(angle: number, length: number): void {
-    this.x += Math.cos(angle) * length;
-    this.y += Math.sin(angle) * length;
-  }
-
   copy(): Point2 {
     return new Point2(this.x, this.y);
   }
 
   distanceTo(p: IPoint2): number {
-    return VectorLength([this.x - p.x, this.y - p.y]);
+    const dx = this.x - p.x;
+    const dy = this.y - p.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  dotProduct(p: IPoint2): number {
+    return this.x * p.x + this.y * p.y;
   }
 
   operation<T extends IPoint2 | number>(type: DotProductName, p: T, y?: T extends number ? number : undefined) {
@@ -42,6 +42,11 @@ export class Point2 implements IPoint2 {
   setRange(xMin: number, xMax: number, yMin: number, yMax: number) {
     this.x = numberRange(this.x, xMin, xMax);
     this.y = numberRange(this.y, yMin, yMax);
+  }
+
+  moveDirectionTo(angle: number, length: number): void {
+    this.x += Math.cos(angle) * length;
+    this.y += Math.sin(angle) * length;
   }
 
   teleportBoundary(xMin: number, xMax: number, yMin: number, yMax: number) {

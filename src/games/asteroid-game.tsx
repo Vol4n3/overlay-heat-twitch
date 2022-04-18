@@ -12,7 +12,7 @@ import {useHeat} from '../providers/heat.provider';
 
 export const AsteroidGame: FC = () => {
   const refScene = useRef<HTMLDivElement>(null);
-  const {addListener, removeListener} = useHeat();
+  const {addHeatListener, removeHeatListener} = useHeat();
   useEffect(() => {
     const container = refScene.current;
     if (!container) {
@@ -115,14 +115,14 @@ export const AsteroidGame: FC = () => {
       }
       createAsteroid(x, y, userID);
     }
-    const idEvent = addListener(onUserClick);
+    const idEvent = addHeatListener(onUserClick);
     window.addEventListener('click', onClick);
     return () => {
       clearInterval(intervalRefAsteroid);
       scene.destroy();
-      removeListener(idEvent);
+      removeHeatListener(idEvent);
       window.removeEventListener('click', onClick);
     };
-  }, [refScene, addListener, removeListener]);
+  }, [refScene, addHeatListener, removeHeatListener]);
   return <ContainerScene ref={refScene}/>
 }

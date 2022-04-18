@@ -1,24 +1,38 @@
 import {createContext, FC, PropsWithChildren, useContext, useEffect, useRef} from 'react';
-import {HeatApi, MessageHeat, UserPoint} from '../types/heat.types';
+import {HeatApi, HeatUser, MessageHeat, UserPoint} from '../types/heat.types';
 import {CoordinateRatioToScreen} from '../utils/number.utils';
-import {getUserName} from '../utils/heat.utils';
 import {RemoveItemInArray} from '../utils/deep-object.utils';
 
-
+const cachedUsers: { [key: string]: HeatUser } = {};
+const getUserName = async (id: string): Promise<string | HeatUser> => {
+  if (typeof cachedUsers[id] !== 'undefined') {
+    return cachedUsers[id];
+  }
+  if (id.startsWith("A")) return "Anonyme";
+  else if (id.startsWith("U")) return "Inconnu";
+  else {
+    const result: HeatUser = await fetch(`https://heat-api.j38.net/user/${id}`).then(blob => blob.json());
+    if (!result) {
+      return id
+    }
+    cachedUsers[id] = result;
+    return result;
+  }
+}
 type HeatListener = (event: UserPoint) => void;
 
 interface HeatContextProps {
-  addListener(listener: HeatListener): number;
+  addHeatListener(listener: HeatListener): number;
 
-  removeListener(uid: number): void;
+  removeHeatListener(uid: number): void;
 }
 
 const notInit = () => {
   throw new Error('not init')
 };
 const HeatContext = createContext<HeatContextProps>({
-  addListener: notInit,
-  removeListener: notInit
+  addHeatListener: notInit,
+  removeHeatListener: notInit
 })
 export const useHeat = () => useContext(HeatContext);
 
@@ -83,5 +97,6 @@ export const HeatProvider: FC<PropsWithChildren<HeatProviderProps>> = ({heatId, 
       listeners.current = [];
     }
   }, [heatId]);
-  return <HeatContext.Provider value={{addListener, removeListener}}>{children}</HeatContext.Provider>;
+  return <HeatContext.Provider
+    value={{addHeatListener: addListener, removeHeatListener: removeListener}}>{children}</HeatContext.Provider>;
 }
