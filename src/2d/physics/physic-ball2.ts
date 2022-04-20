@@ -5,7 +5,6 @@ import {Rectangle2} from '../geometry/rectangle2';
 import {Circle2} from '../geometry/circle2';
 import {Scene2d, Scene2DItem} from '../core/scene2d';
 import {PI2} from '../../utils/number.utils';
-import {Segment2} from '../geometry/segment2';
 
 
 export class PhysicBall2 extends Circle2 implements Scene2DItem {
@@ -92,10 +91,7 @@ export class PhysicBall2 extends Circle2 implements Scene2DItem {
   circleCollisionResponse(other: PhysicBall2): void {
     if (!this.isStatic || (this.velocity.x !== 0 && this.velocity.y !== 0)) {
       const displacement = this.position.createWithDirection(this.velocity.angle, this.radius);
-      const projection = new Segment2(displacement, {
-        x: displacement.x + this.velocity.x,
-        y: displacement.y + this.velocity.y
-      })
+      const projection = this.velocity.toSegment(displacement);
       const intersect = projection.collideCircle(other);
       if (intersect) {
         console.log(intersect);
