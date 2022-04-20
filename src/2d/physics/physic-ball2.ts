@@ -14,7 +14,7 @@ export class PhysicBall2 extends Circle2 implements Scene2DItem {
     this.position = new Point2(x, y);
   }
 
-  public friction: Point2 = new Point2(1, 1);
+  public friction: Point2 = new Point2(0.999, 0.999);
   public gravity: Point2 = new Point2(0, 0);
   public isStatic: boolean = false;
   public mass: number = 1;
@@ -127,15 +127,15 @@ export class PhysicBall2 extends Circle2 implements Scene2DItem {
     const m1 = (dpNorm1 * (this.mass - other.mass) + 2 * other.mass * dpNorm2) / (this.mass + other.mass);
     const m2 = (dpNorm2 * (other.mass - this.mass) + 2 * this.mass * dpNorm1) / (this.mass + other.mass);
     if (!this.isStatic) {
-      this.velocity.x = tanVec.x * dpTan1 + normalized.x * m1;
-      this.velocity.y = tanVec.y * dpTan1 + normalized.y * m1;
+      this.velocity.x = (tanVec.x * dpTan1 + normalized.x * m1) * 0.99;
+      this.velocity.y = (tanVec.y * dpTan1 + normalized.y * m1) * 0.99;
       this.rotationSpeed = this.velocity.x / 40;
 
     }
 
     if (!other.isStatic) {
-      other.velocity.x = tanVec.x * dpTan2 + normalized.x * m2;
-      other.velocity.y = tanVec.y * dpTan2 + normalized.y * m2;
+      other.velocity.x = (tanVec.x * dpTan2 + normalized.x * m2) * 0.99;
+      other.velocity.y = (tanVec.y * dpTan2 + normalized.y * m2) * 0.99;
       other.rotationSpeed = other.velocity.x / 40;
     }
 
