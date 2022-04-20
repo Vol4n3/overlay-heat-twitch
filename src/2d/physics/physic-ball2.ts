@@ -4,7 +4,8 @@ import {IPoint2} from '../../types/point.types';
 import {Rectangle2} from '../geometry/rectangle2';
 import {Circle2} from '../geometry/circle2';
 import {Scene2d, Scene2DItem} from '../core/scene2d';
-import {PI2} from '../../utils/number.utils';
+import {AngleKeepRange, PI2} from '../../utils/number.utils';
+import {Segment2} from '../geometry/segment2';
 
 
 export class PhysicBall2 extends Circle2 implements Scene2DItem {
@@ -68,7 +69,7 @@ export class PhysicBall2 extends Circle2 implements Scene2DItem {
       this.velocity.b.operation('add', this.gravity);
     }
     this.position.operation("add", this.velocity);
-
+    this.rotation =  AngleKeepRange(this.rotation + this.rotationSpeed);
   }
 
   bounceBoundary(rect: Rectangle2, bounceStrength: IPoint2 = {x: 1, y: 1}): string {
@@ -76,60 +77,67 @@ export class PhysicBall2 extends Circle2 implements Scene2DItem {
     if (this.position.x > rect.w || this.position.x < rect.x) {
       if ((this.position.x > rect.w && this.velocity.x >= 0) || (this.position.x < rect.x && this.velocity.x <= 0)) {
         this.velocity.x *= -bounceStrength.x;
+        this.velocity.y *= bounceStrength.y;
       }
       isBounce = "x";
     }
     if (this.position.y > rect.h || this.position.y < rect.y) {
       if ((this.position.y > rect.h && this.velocity.y >= 0) || (this.position.y < rect.y && this.velocity.y <= 0)) {
         this.velocity.y *= -bounceStrength.y;
+        this.velocity.x *= bounceStrength.x;
       }
+      this.rotationSpeed = this.velocity.x / 40;
       isBounce = "y";
     }
     return isBounce
   }
 
+  get projectedVelocitySegment(): Segment2 {
+    const displacement = this.position.createWithDirection(this.velocity.angle, this.radius);
+    return this.velocity.toSegment(displacement);
+  }
+
   circleCollisionResponse(other: PhysicBall2): void {
-    if (!this.isStatic || (this.velocity.x !== 0 && this.velocity.y !== 0)) {
-      const displacement = this.position.createWithDirection(this.velocity.angle, this.radius);
-      const projection = this.velocity.toSegment(displacement);
-      const intersect = projection.collideCircle(other);
-      if (intersect) {
-        console.log(intersect);
-      }
+
+    if (this.isGrounded || other.isGrounded) {
+      this.isGrounded = true;
+      other.isGrounded = true;
+    }
+    const intersect = new Vector2(other.x - this.x, other.y - this.y);
+    const distance = intersect.length;
+    const normalized = intersect.normalized();
+    // separate the two circles after intersection (static response)
+    const overlap = 0.5 * (distance - this.radius - other.radius);
+    if (!this.isStatic) {
+      this.x -= overlap * (this.x - other.x) / distance;
+      this.y -= overlap * (this.y - other.y) / distance;
+    }
+    if (!other.isStatic) {
+      other.x += overlap * (this.x - other.x) / distance;
+      other.y += overlap * (this.y - other.y) / distance;
+    }
+    const tanVec = normalized.perp();
+
+    const dpTan1 = this.velocity.b.dotProduct(tanVec);
+    const dpTan2 = other.velocity.b.dotProduct(tanVec);
+
+    const dpNorm1 = this.velocity.b.dotProduct(normalized);
+    const dpNorm2 = other.velocity.b.dotProduct(normalized);
+
+    const m1 = (dpNorm1 * (this.mass - other.mass) + 2 * other.mass * dpNorm2) / (this.mass + other.mass);
+    const m2 = (dpNorm2 * (other.mass - this.mass) + 2 * this.mass * dpNorm1) / (this.mass + other.mass);
+    if (!this.isStatic) {
+      this.velocity.x = tanVec.x * dpTan1 + normalized.x * m1;
+      this.velocity.y = tanVec.y * dpTan1 + normalized.y * m1;
+      this.rotationSpeed = this.velocity.x / 40;
+
     }
 
-    /*    const intersect = new Vector2(other.x - this.x, other.y - this.y);
-        const distance = intersect.length;
-        const normalized = intersect.normalized();
-        // separate the two circles after intersection (static response)
-        const overlap = 0.5 * (distance - this.radius - other.radius);
-        if (!this.isStatic) {
-          this.x -= overlap * (this.x - other.x) / distance;
-          this.y -= overlap * (this.y - other.y) / distance;
-        }
-        if (!other.isStatic) {
-          other.x += overlap * (this.x - other.x) / distance;
-          other.y += overlap * (this.y - other.y) / distance;
-        }
-        const tanVec = normalized.perp();
-
-        const dpTan1 = this.velocity.b.dotProduct(tanVec);
-        const dpTan2 = other.velocity.b.dotProduct(tanVec);
-
-        const dpNorm1 = this.velocity.b.dotProduct(normalized);
-        const dpNorm2 = other.velocity.b.dotProduct(normalized);
-
-        const m1 = (dpNorm1 * (this.mass - other.mass) + 2 * other.mass * dpNorm2) / (this.mass + other.mass);
-        const m2 = (dpNorm2 * (other.mass - this.mass) + 2 * this.mass * dpNorm1) / (this.mass + other.mass);
-        if (!this.isStatic) {
-          this.velocity.x = tanVec.x * dpTan1 + normalized.x * m1;
-          this.velocity.y = tanVec.y * dpTan1 + normalized.y * m1;
-        }
-
-        if (!other.isStatic) {
-          other.velocity.x = tanVec.x * dpTan2 + normalized.x * m2;
-          other.velocity.y = tanVec.y * dpTan2 + normalized.y * m2;
-        }*/
+    if (!other.isStatic) {
+      other.velocity.x = tanVec.x * dpTan2 + normalized.x * m2;
+      other.velocity.y = tanVec.y * dpTan2 + normalized.y * m2;
+      other.rotationSpeed = other.velocity.x / 40;
+    }
 
   }
 
