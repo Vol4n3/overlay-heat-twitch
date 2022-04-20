@@ -1,4 +1,4 @@
-import {Scene2d, Scene2DItem} from './scene2d';
+import {Item2Scene, Scene2d} from './scene2d';
 import {IPoint2} from '../../types/point.types';
 
 /**
@@ -21,11 +21,11 @@ export interface CanCollide extends IPoint2 {
   detection(item: CanCollide): void;
 }
 
-export class Collider implements Scene2DItem {
+export class Collider implements Item2Scene {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw(scene: Scene2d, time: number): void {
+  draw2d(scene: Scene2d, time: number): void {
   }
 
   private groups: ColliderGroup<CanCollide[]>[] = [];

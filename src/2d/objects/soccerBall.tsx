@@ -1,4 +1,4 @@
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {PhysicBall2} from '../physics/physic-ball2';
 import {CanCollide} from '../core/collider';
 import {PlayerSoccer} from './player-soccer';
@@ -15,7 +15,7 @@ img.onload = () => {
 }
 img.src = "/overlay-heat-twitch/assets/texture_ballon.jpg";
 
-export class SoccerBall extends PhysicBall2 implements Scene2DItem, CanCollide {
+export class SoccerBall extends PhysicBall2 implements Item2Scene, CanCollide {
   constructor(x: number, y: number, private messager: (m: string) => void) {
     super(x, y, 30);
     this.initialPosition = {x, y}
@@ -59,7 +59,7 @@ export class SoccerBall extends PhysicBall2 implements Scene2DItem, CanCollide {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw({ctx}: Scene2d, time: number) {
+  draw2d({ctx}: Scene2d, time: number) {
     if (this.texture === null) {
       if (loaded) {
         this.texture = ctx.createPattern(img, "repeat");

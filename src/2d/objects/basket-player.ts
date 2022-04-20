@@ -1,8 +1,8 @@
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {HALF_PI, PI2} from '../../utils/number.utils';
 import {PhysicBall2} from '../physics/physic-ball2';
 
-export class BasketPlayer extends PhysicBall2 implements Scene2DItem {
+export class BasketPlayer extends PhysicBall2 implements Item2Scene {
 
 
   constructor(x: number, y: number) {
@@ -12,7 +12,7 @@ export class BasketPlayer extends PhysicBall2 implements Scene2DItem {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw(scene: Scene2d, time: number): void {
+  draw2d(scene: Scene2d, time: number): void {
     const {ctx} = scene;
     ctx.translate(this.position.x, this.position.y);
     ctx.rotate(this.rotation);

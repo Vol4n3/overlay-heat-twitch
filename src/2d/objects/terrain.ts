@@ -1,12 +1,12 @@
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 
 const padding = 50;
 
-export class Terrain implements Scene2DItem {
+export class Terrain implements Item2Scene {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw(scene: Scene2d, time: number): void {
+  draw2d(scene: Scene2d, time: number): void {
     const {ctx, canvas} = scene;
     const {width, height} = canvas;
     const w = width - padding;

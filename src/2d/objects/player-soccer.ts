@@ -1,5 +1,5 @@
 import {PhysicBall2} from '../physics/physic-ball2';
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {CanCollide} from '../core/collider';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
 import {AngleFlip, AngleKeepRange, HALF_PI, PI, PI2} from '../../utils/number.utils';
@@ -7,7 +7,7 @@ import {Vector2} from '../geometry/vector2';
 import {Point2} from '../geometry/point2';
 import {SoccerBall} from './soccerBall';
 
-export class PlayerSoccer extends PhysicBall2 implements Scene2DItem, CanCollide {
+export class PlayerSoccer extends PhysicBall2 implements Item2Scene, CanCollide {
   collisionId: number = 0;
 
   target: null | Vector2 = null;
@@ -74,7 +74,7 @@ export class PlayerSoccer extends PhysicBall2 implements Scene2DItem, CanCollide
     }
   }
 
-  draw(scene2d: Scene2d, time: number): void {
+  draw2d(scene2d: Scene2d, time: number): void {
     const {ctx} = scene2d;
     ctx.translate(this.position.x, this.position.y)
     ctx.rotate(this.rotation);

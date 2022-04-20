@@ -1,11 +1,11 @@
 import {PhysicBall2} from '../physics/physic-ball2';
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {CanCollide} from '../core/collider';
 import {Asteroid} from './asteroid';
 import {PI2} from '../../utils/number.utils';
 
 
-export class Bullet extends PhysicBall2 implements Scene2DItem, CanCollide {
+export class Bullet extends PhysicBall2 implements Item2Scene, CanCollide {
   constructor(x: number, y: number, public owner: string) {
     super(x, y, 5);
   }
@@ -21,7 +21,7 @@ export class Bullet extends PhysicBall2 implements Scene2DItem, CanCollide {
     }
   }
 
-  draw({ctx}: Scene2d, time: number): void {
+  draw2d({ctx}: Scene2d, time: number): void {
     ctx.beginPath();
     ctx.arc(this.position.x, this.position.y, this.radius, 0, PI2);
     ctx.fillStyle = 'yellow';

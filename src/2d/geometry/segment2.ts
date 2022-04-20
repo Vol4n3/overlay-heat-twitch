@@ -1,19 +1,19 @@
 import {IPoint2} from '../../types/point.types';
 import {Vector2} from './vector2';
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {Circle2} from './circle2';
 import {AngleTo, PointDistance} from '../../utils/point.utils';
 import {AngleKeepRange, PI2} from '../../utils/number.utils';
 
 
-export class Segment2 implements Scene2DItem {
+export class Segment2 implements Item2Scene {
   constructor(public p1: IPoint2, public p2: IPoint2) {
   }
 
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw(scene: Scene2d, time: number): void {
+  draw2d(scene: Scene2d, time: number): void {
     const {ctx} = scene;
     ctx.beginPath();
     ctx.moveTo(this.p1.x, this.p1.y);

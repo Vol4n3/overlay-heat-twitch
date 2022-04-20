@@ -1,13 +1,15 @@
 import {Rectangle2} from '../geometry/rectangle2';
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {SoccerBall} from './soccerBall';
 import {CanCollide} from '../core/collider';
 
-export class Cage extends Rectangle2 implements Scene2DItem, CanCollide {
-constructor(x: number, y: number, w: number, h: number, public team: string) {
-  super(x, y, w, h);
-}
+export class Cage extends Rectangle2 implements Item2Scene, CanCollide {
+  constructor(x: number, y: number, w: number, h: number, public team: string) {
+    super(x, y, w, h);
+  }
+
   collisionId: number = 0;
+
   detection(item: CanCollide): void {
     if (item instanceof SoccerBall) {
       item.detectGoal(this)
@@ -18,7 +20,7 @@ constructor(x: number, y: number, w: number, h: number, public team: string) {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw({ctx}: Scene2d) {
+  draw2d({ctx}: Scene2d) {
     ctx.strokeStyle = this.team;
     ctx.globalAlpha = 0.5
     ctx.lineWidth = 5;

@@ -1,14 +1,20 @@
 import {loadImage} from '../../utils/loader.utils';
+import {System, Vector} from 'detect-collisions';
 
-export interface Scene2DItem {
+export interface Item2Scene {
   sceneId: number;
   scenePriority: number;
 
-  draw(scene: Scene2d, time: number): void;
+  draw2d(scene: Scene2d, time: number): void;
 
   update(scene: Scene2d, time: number): void;
 }
 
+export interface ItemSystem {
+  isStatic?: boolean;
+
+  isCollide(other: ItemSystem, overlap: Vector): void;
+}
 
 export type canvasWriteTextConfig = {
   fillStyle?: string | CanvasGradient | CanvasPattern;
@@ -24,6 +30,7 @@ export type canvasWriteTextConfig = {
 }
 
 export class Scene2d {
+  system = new System();
   constructor(private container: HTMLDivElement, updateInterval: number = 30) {
     this.canvas = document.createElement('canvas');
     this.canvas.style.top = "0";
@@ -35,29 +42,27 @@ export class Scene2d {
     window.addEventListener('resize', this.refResize);
     this.resize();
     this.animate();
-    this.tickInterval = window.setInterval(this.update.bind(this), updateInterval);
   }
 
   public readonly canvas: HTMLCanvasElement;
   public readonly ctx: CanvasRenderingContext2D;
   private drawTime: number = 0;
-  private items: Scene2DItem[] = [];
+  private items: Item2Scene[] = [];
   private refResize = this.resize.bind(this)
   private tickAnimation: number = 0;
-  private readonly tickInterval: number = 0;
   private uid: number = 100;
   private updateTime: number = 0;
 
-  addMultipleItem(items: Scene2DItem[]) {
-    items.forEach(i => this.addItem(i))
-  }
-
-  addItem(item: Scene2DItem, order?: number) {
+  addItem(item: Item2Scene, order?: number) {
     const id = this.uid++;
     item.sceneId = id;
     item.scenePriority = order || id;
     this.items.push(item);
     this.items = this.items.sort((a, b) => b.scenePriority - a.scenePriority);
+  }
+
+  addMultipleItem(items: Item2Scene[]) {
+    items.forEach(i => this.addItem(i))
   }
 
   async createTexture(url: string, repetition: string | null = null, matrix?: DOMMatrix): Promise<CanvasPattern | null> {
@@ -70,14 +75,23 @@ export class Scene2d {
   }
 
   animate() {
+    this.tickAnimation = requestAnimationFrame(this.animate.bind(this))
+    this.system.checkAll(({a, overlapV, b}) => {
+      a.isCollide(b, overlapV);
+    });
+    this.items.forEach(d => {
+      d.update(this, this.updateTime)
+    });
+
+    this.updateTime++;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.items.forEach(d => {
       this.ctx.save();
-      d.draw(this, this.drawTime);
+      d.draw2d(this, this.drawTime);
       this.ctx.restore();
     });
     this.drawTime++;
-    this.tickAnimation = requestAnimationFrame(this.animate.bind(this))
+
   }
 
   writeText(config: canvasWriteTextConfig) {
@@ -100,17 +114,17 @@ export class Scene2d {
   }
 
   destroy() {
+    this.system.clear();
     this.container.removeChild(this.canvas);
     window.removeEventListener('resize', this.refResize);
-    window.clearInterval(this.tickInterval);
     window.cancelAnimationFrame(this.tickAnimation);
   }
 
-  getItem(id: number): Scene2DItem | undefined {
+  getItem(id: number): Item2Scene | undefined {
     return this.items.find(f => f.sceneId === id);
   }
 
-  removeItem(item: Scene2DItem): void {
+  removeItem(item: Item2Scene): void {
     const findDrawIndex = this.items.findIndex(f => f.sceneId === item.sceneId);
     if (findDrawIndex >= 0) {
       this.items.splice(findDrawIndex, 1);
@@ -120,12 +134,5 @@ export class Scene2d {
   resize() {
     this.canvas.width = this.container.clientWidth;
     this.canvas.height = this.container.clientHeight;
-  }
-
-  update() {
-    this.items.forEach(d => {
-      d.update(this, this.updateTime)
-    });
-    this.updateTime++;
   }
 }

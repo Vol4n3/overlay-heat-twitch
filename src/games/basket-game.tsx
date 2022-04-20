@@ -1,15 +1,14 @@
 import {ContainerScene} from '../components/ui/container-scene';
 import {useEffect, useRef} from 'react';
 import {Scene2d} from '../2d/core/scene2d';
-import {BasketBall} from '../2d/objects/basket-ball';
 import {useHeat} from '../providers/heat.provider';
 import {UserPoint} from '../types/heat.types';
-import {Collider} from '../2d/core/collider';
 import {Vector2} from '../2d/geometry/vector2';
 import {BasketPlayer} from '../2d/objects/basket-player';
 import {Hoop} from '../2d/objects/hoop';
 import {HoopSegment} from '../2d/objects/hoop-segment';
 import {useTmi} from '../providers/tmi.provider';
+import {TestBasketBall} from '../2d/objects/test-basket-ball';
 
 export const BasketGame = () => {
   const refScene = useRef<HTMLDivElement>(null);
@@ -29,8 +28,7 @@ export const BasketGame = () => {
       "/overlay-heat-twitch/assets/basket_texture.webp", "repeat", matrix).then(result => {
       texture = result;
     });
-    const collider = new Collider();
-    const mainGroup = collider.addGroup('all');
+
     const queuePoints: UserPoint[] = [];
     let interval: number;
     const player = new BasketPlayer(500, 500);
@@ -41,13 +39,12 @@ export const BasketGame = () => {
     const panierSegment = new HoopSegment(hoop1, hoop2);
 
     const startGame = () => {
-      collider.cleanGroup(mainGroup);
       window.clearInterval(interval);
       scene.cleanItems();
-      scene.addMultipleItem([player, collider, hoop1, hoop2, panierSegment]);
+      scene.addMultipleItem([player, hoop1, hoop2, panierSegment]);
 
-      collider.addItemToGroup(hoop1, mainGroup);
-      collider.addItemToGroup(hoop2, mainGroup);
+      scene.system.insert(hoop1);
+      scene.system.insert(hoop2);
       const onPanier = (owner: string) => {
         player.position.x = Math.round(Math.random() * scene.canvas.width);
         player.position.y = Math.round(Math.random() * scene.canvas.height);
@@ -59,18 +56,18 @@ export const BasketGame = () => {
           return
         }
         queuePoints.shift();
-        const ballon = new BasketBall(player.x, player.y, panierSegment, texture);
+        const ballon = new TestBasketBall(player.x, player.y, panierSegment, texture);
         ballon.owner = point.userID;
         ballon.onPanier = onPanier;
         const direction = new Vector2(point.x - player.x, point.y - player.y);
-        direction.length /= 20;
+        direction.length /= 30;
         ballon.velocity = direction
-        collider.addItemToGroup(ballon, mainGroup);
+        scene.system.insert(ballon);
         scene.addItem(ballon);
         setTimeout(() => {
           scene.removeItem(ballon);
-          collider.removeItemFromGroup(ballon, mainGroup);
-        }, 30000);
+          scene.system.remove(ballon);
+        }, 15000);
       }, 1);
     }
     startGame();

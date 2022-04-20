@@ -2,7 +2,6 @@ export class Circle2 {
   constructor(private _x: number, private _y: number, public radius: number) {
   }
 
-  public rotation = 0;
 
   get x(): number {
     return this._x;

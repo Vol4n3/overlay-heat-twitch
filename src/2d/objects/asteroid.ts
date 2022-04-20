@@ -1,5 +1,5 @@
 import {PhysicBall2} from '../physics/physic-ball2';
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {Vector2} from '../geometry/vector2';
 import {Perlin} from '../../utils/perlin.utils';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
@@ -16,7 +16,7 @@ img.onload = () => {
 img.src = "/overlay-heat-twitch/assets/texture_asteroid.jpg";
 
 
-export class Asteroid extends PhysicBall2 implements Scene2DItem, CanCollide {
+export class Asteroid extends PhysicBall2 implements Item2Scene, CanCollide {
   constructor(
     x: number, y: number,
     public owner: string,
@@ -43,7 +43,7 @@ export class Asteroid extends PhysicBall2 implements Scene2DItem, CanCollide {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw({ctx}: Scene2d, time: number): void {
+  draw2d({ctx}: Scene2d, time: number): void {
 
     if (this.texture === null) {
       if (loaded) {

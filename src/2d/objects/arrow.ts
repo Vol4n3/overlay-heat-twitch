@@ -1,10 +1,10 @@
 import {PhysicBall2} from '../physics/physic-ball2';
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {Vector2} from '../geometry/vector2';
 import {DartTarget} from './dart-target';
 import {HALF_PI} from '../../utils/number.utils';
 
-export class Arrow extends PhysicBall2 implements Scene2DItem {
+export class Arrow extends PhysicBall2 implements Item2Scene {
   constructor(x: number, y: number, private target: DartTarget) {
     super(x, y, 70);
   }
@@ -30,7 +30,7 @@ export class Arrow extends PhysicBall2 implements Scene2DItem {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw({ctx}: Scene2d, time: number): void {
+  draw2d({ctx}: Scene2d, time: number): void {
     ctx.beginPath()
     for (let i = 0; i < 4; i++) {
       ctx.moveTo(this.position.x, this.position.y);

@@ -1,4 +1,4 @@
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {PhysicBall2} from '../physics/physic-ball2';
 import {Vector2} from '../geometry/vector2';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
@@ -8,7 +8,7 @@ import {Asteroid} from './asteroid';
 
 const rotationSpeed = 50;
 
-export class Starship extends PhysicBall2 implements Scene2DItem, CanCollide {
+export class Starship extends PhysicBall2 implements Item2Scene, CanCollide {
 
   constructor(x: number, y: number, public owner: string = "",
               private onDestroyed: (asteroidOwner: string) => void) {
@@ -28,7 +28,7 @@ export class Starship extends PhysicBall2 implements Scene2DItem, CanCollide {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw({ctx}: Scene2d, time: number): void {
+  draw2d({ctx}: Scene2d, time: number): void {
     ctx.translate(-this.radius, -this.radius);
     ctx.translate(this.position.x, this.position.y)
     ctx.translate(this.radius, this.radius);

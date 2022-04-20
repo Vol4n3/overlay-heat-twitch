@@ -1,31 +1,21 @@
-import {Scene2d, Scene2DItem} from '../core/scene2d';
-import {CanCollide} from '../core/collider';
-import {PhysicBall2} from '../physics/physic-ball2';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {PI2} from '../../utils/number.utils';
-import {BasketBall} from './basket-ball';
+import {CollisionCircle} from '../physics/collision-circle';
 
-export class Hoop extends PhysicBall2 implements Scene2DItem, CanCollide {
-  collisionId: number = 0;
-
-  detection(item: CanCollide): void {
-    if (item instanceof BasketBall) {
-      const collision = this.isCollisionToCircle(item);
-      if (collision) {
-        this.circleCollisionResponse(item);
-      }
-      return;
-    }
-  }
-
+export class Hoop extends CollisionCircle implements Item2Scene {
   isStatic = true;
   mass = 3;
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw(scene: Scene2d, time: number): void {
+  constructor(x: number, y: number, radius: number) {
+    super({x, y}, radius);
+  }
+
+  draw2d(scene: Scene2d, time: number): void {
     const {ctx} = scene;
     ctx.beginPath();
-    ctx.arc(this.position.x, this.position.y, this.radius, 0, PI2);
+    ctx.arc(this.x, this.y, this.r, 0, PI2);
     ctx.fillStyle = 'red';
     ctx.fill();
     ctx.closePath();

@@ -3,17 +3,18 @@ import {Point2} from '../geometry/point2';
 import {IPoint2} from '../../types/point.types';
 import {Rectangle2} from '../geometry/rectangle2';
 import {Circle2} from '../geometry/circle2';
-import {Scene2d, Scene2DItem} from '../core/scene2d';
+import {Item2Scene, Scene2d} from '../core/scene2d';
 import {AngleKeepRange, PI2} from '../../utils/number.utils';
 import {Segment2} from '../geometry/segment2';
 
 
-export class PhysicBall2 extends Circle2 implements Scene2DItem {
+export class PhysicBall2 extends Circle2 implements Item2Scene {
   constructor(x: number, y: number, radius: number) {
     super(x, y, radius);
     this.position = new Point2(x, y);
   }
 
+  public rotation = 0;
   public friction: Point2 = new Point2(0.999, 0.999);
   public gravity: Point2 = new Point2(0, 0);
   public isStatic: boolean = false;
@@ -24,7 +25,7 @@ export class PhysicBall2 extends Circle2 implements Scene2DItem {
   sceneId: number = 0;
   scenePriority: number = 0;
 
-  draw(scene: Scene2d, time: number): void {
+  draw2d(scene: Scene2d, time: number): void {
     const {ctx} = scene;
     ctx.translate(this.position.x, this.position.y)
     ctx.rotate(this.rotation);
