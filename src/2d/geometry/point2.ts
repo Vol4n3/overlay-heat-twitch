@@ -5,6 +5,10 @@ export class Point2 implements IPoint2 {
   constructor(public x: number = 0, public y: number = 0) {
   }
 
+  static create(point: IPoint2): Point2 {
+    return new Point2(point.x, point.y);
+  }
+
   angleFrom(p: IPoint2): number {
     return Math.atan2(this.y - p.y, this.x - p.x);
   }
@@ -42,6 +46,10 @@ export class Point2 implements IPoint2 {
   setRange(xMin: number, xMax: number, yMin: number, yMax: number) {
     this.x = numberRange(this.x, xMin, xMax);
     this.y = numberRange(this.y, yMin, yMax);
+  }
+
+  createWithDirection(angle: number, length: number): Point2 {
+    return new Point2(this.x + Math.cos(angle) * length, this.y + Math.sin(angle) * length);
   }
 
   moveDirectionTo(angle: number, length: number): void {

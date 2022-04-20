@@ -1,5 +1,6 @@
 import {IPoint2} from '../../types/point.types';
 import {Point2} from './point2';
+import {Segment2} from './segment2';
 
 export class Vector2 implements IPoint2 {
 
@@ -50,13 +51,26 @@ export class Vector2 implements IPoint2 {
     return new Vector2(this.x - p.x, this.y - p.y)
   }
 
-  createTangent(): Vector2 {
-    return new Vector2(-this.y, this.x);
-  }
-
   normalized(): Vector2 {
     const len = this.length;
     return new Vector2(this.x / len, this.y / len);
+  }
+
+  opposite(): Vector2 {
+    return new Vector2(-this.y, -this.x);
+  }
+
+  perp(): Vector2 {
+    return new Vector2(-this.y, this.x);
+  }
+
+  toSegment(origin: IPoint2): Segment2 {
+    return new Segment2(origin, {x: origin.x + this.b.x, y: origin.y + this.b.y})
+  }
+
+  withLength(size: number): Vector2 {
+    const angle = this.angle;
+    return new Vector2(Math.cos(angle) * size, Math.sin(angle) * size)
   }
 
   set y(n: number) {

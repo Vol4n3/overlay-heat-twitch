@@ -23,17 +23,11 @@ export class BasketBall extends PhysicBall2 implements Scene2DItem, CanCollide {
 
   detection(item: CanCollide): void {
     if (item instanceof BasketBall) {
-      const collision = this.isCollisionToCircle(item);
-      if (collision) {
         this.circleCollisionResponse(item);
-      }
       return;
     }
     if (item instanceof Hoop) {
-      const collision = this.isCollisionToCircle(item);
-      if (collision) {
         this.circleCollisionResponse(item);
-      }
       return;
     }
   }
@@ -77,6 +71,9 @@ export class BasketBall extends PhysicBall2 implements Scene2DItem, CanCollide {
       }
     }
     this.applyPhysics();
-    this.bounceBoundary(new Rectangle2(0, -5000, width, height), {x: 0.8, y: 0.8});
+    this.isGrounded = !!this.bounceBoundary(new Rectangle2(this.radius, -5000, width - this.radius, height - this.radius), {
+      x: 0.8,
+      y: 0.8
+    });
   }
 }
