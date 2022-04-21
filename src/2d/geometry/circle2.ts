@@ -1,4 +1,6 @@
-export class Circle2 {
+import {IPoint2} from '../../types/point.types';
+
+export class Circle2 implements IPoint2{
   constructor(private _x: number, private _y: number, public radius: number) {
   }
 

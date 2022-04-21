@@ -1,4 +1,4 @@
-import {PhysicBall2} from '../physics/physic-ball2';
+import {OldPhysicBall2} from '../physics/old-physic-ball2';
 import {Item2Scene, Scene2d} from '../core/scene2d';
 import {CanCollide} from '../core/collider';
 import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
@@ -7,7 +7,7 @@ import {Vector2} from '../geometry/vector2';
 import {Point2} from '../geometry/point2';
 import {SoccerBall} from './soccerBall';
 
-export class PlayerSoccer extends PhysicBall2 implements Item2Scene, CanCollide {
+export class PlayerSoccer extends OldPhysicBall2 implements Item2Scene, CanCollide {
   collisionId: number = 0;
 
   target: null | Vector2 = null;

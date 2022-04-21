@@ -1,8 +1,8 @@
 import {Item2Scene, Scene2d} from '../core/scene2d';
 import {PI2} from '../../utils/number.utils';
-import {CollisionCircle} from '../physics/collision-circle';
+import {PhysicBall2} from '../physics/physic-ball2';
 
-export class Hoop extends CollisionCircle implements Item2Scene {
+export class Hoop extends PhysicBall2 implements Item2Scene {
   isStatic = true;
   mass = 3;
   sceneId: number = 0;

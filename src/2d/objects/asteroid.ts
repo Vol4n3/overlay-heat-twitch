@@ -1,4 +1,4 @@
-import {PhysicBall2} from '../physics/physic-ball2';
+import {OldPhysicBall2} from '../physics/old-physic-ball2';
 import {Item2Scene, Scene2d} from '../core/scene2d';
 import {Vector2} from '../geometry/vector2';
 import {Perlin} from '../../utils/perlin.utils';
@@ -16,7 +16,7 @@ img.onload = () => {
 img.src = "/overlay-heat-twitch/assets/texture_asteroid.jpg";
 
 
-export class Asteroid extends PhysicBall2 implements Item2Scene, CanCollide {
+export class Asteroid extends OldPhysicBall2 implements Item2Scene, CanCollide {
   constructor(
     x: number, y: number,
     public owner: string,

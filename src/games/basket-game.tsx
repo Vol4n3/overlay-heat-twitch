@@ -7,25 +7,25 @@ import {Vector2} from '../2d/geometry/vector2';
 import {BasketPlayer} from '../2d/objects/basket-player';
 import {Hoop} from '../2d/objects/hoop';
 import {HoopSegment} from '../2d/objects/hoop-segment';
-import {useTmi} from '../providers/tmi.provider';
-import {TestBasketBall} from '../2d/objects/test-basket-ball';
+import {TmiMessage, useTmi} from '../providers/tmi.provider';
+import {BasketBall} from '../2d/objects/basket-ball';
 
 export const BasketGame = () => {
   const refScene = useRef<HTMLDivElement>(null);
   const {removeHeatListener, addHeatListener} = useHeat();
-  const {sendTmiMessage} = useTmi();
+  const {sendTmiMessage,removeTmiListener,addTmiListener} = useTmi();
+
   useEffect(() => {
     const container = refScene.current;
     if (!container) {
       return;
     }
-
-    const scene = new Scene2d(container, 1000 / 60);
-    const scale = 0.700;
-    const matrix = new DOMMatrix().scale(scale, scale);
+    const bddPlayers: { [key: string]: { power: number } } = {test: {power: 40}};
+    const scene = new Scene2d(container);
+    const matrix = new DOMMatrix().scale(70/286 , 70/200);
     let texture: CanvasPattern | null;
     scene.createTexture(
-      "/overlay-heat-twitch/assets/basket_texture.webp", "repeat", matrix).then(result => {
+      "/overlay-heat-twitch/assets/texture-basket.png", "repeat", matrix).then(result => {
       texture = result;
     });
 
@@ -56,18 +56,18 @@ export const BasketGame = () => {
           return
         }
         queuePoints.shift();
-        const ballon = new TestBasketBall(player.x, player.y, panierSegment, texture);
+        const ballon = new BasketBall(player.x, player.y, panierSegment, texture);
         ballon.owner = point.userID;
         ballon.onPanier = onPanier;
         const direction = new Vector2(point.x - player.x, point.y - player.y);
-        direction.length /= 30;
+        direction.length *= 0.01 + (bddPlayers[point.userID].power || 10) / 1000;
         ballon.velocity = direction
         scene.system.insert(ballon);
         scene.addItem(ballon);
         setTimeout(() => {
           scene.removeItem(ballon);
           scene.system.remove(ballon);
-        }, 15000);
+        }, 50000);
       }, 1);
     }
     startGame();
@@ -78,12 +78,34 @@ export const BasketGame = () => {
     const testClick = (event: MouseEvent) => {
       queuePoints.push({x: event.x, y: event.y, userID: 'test'});
     }
+    const onPowerChange = (event: TmiMessage)=>{
+      const user =  event.tags.username;
+      if(!user){
+        return
+      }
+      if(!event.message){
+        return;
+      }
+      const split = event.message.split(" ");
+      if(!split[0].toLocaleLowerCase().startsWith('!power')){
+        return;
+      }
+      if(split.length < 2){
+        return;
+      }
+      const parse = parseInt(split[1],10);
+      const power = parse > 40 ? 40 : parse < 0 ? 0 : parse;
+      bddPlayers[user] = {power};
+      sendTmiMessage(`la puissance de tir pour @${user} est maintenant de ${power}`,10);
+    }
+    const idTmiEvent = addTmiListener(onPowerChange);
     window.addEventListener('click', testClick);
     return () => {
       removeHeatListener(idHeat);
+      removeTmiListener(idTmiEvent);
       scene.destroy();
       window.removeEventListener('click', testClick);
     };
-  }, [addHeatListener, removeHeatListener, sendTmiMessage])
+  }, [addHeatListener, removeHeatListener, sendTmiMessage,addTmiListener,removeTmiListener])
   return <ContainerScene ref={refScene}/>
 }

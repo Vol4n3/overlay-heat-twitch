@@ -1,8 +1,8 @@
 import {Item2Scene, Scene2d} from '../core/scene2d';
 import {HALF_PI, PI2} from '../../utils/number.utils';
-import {PhysicBall2} from '../physics/physic-ball2';
+import {OldPhysicBall2} from '../physics/old-physic-ball2';
 
-export class BasketPlayer extends PhysicBall2 implements Item2Scene {
+export class BasketPlayer extends OldPhysicBall2 implements Item2Scene {
 
 
   constructor(x: number, y: number) {

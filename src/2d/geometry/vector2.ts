@@ -55,7 +55,9 @@ export class Vector2 implements IPoint2 {
     const len = this.length;
     return new Vector2(this.x / len, this.y / len);
   }
-
+  wedge(v: IPoint2): number{
+    return this.x * v.y - this.y * v.x;
+  }
   opposite(): Vector2 {
     return new Vector2(-this.y, -this.x);
   }

@@ -1,44 +1,38 @@
-import {Item2Scene, Scene2d} from '../core/scene2d';
-import {CanCollide} from '../core/collider';
 import {PhysicBall2} from '../physics/physic-ball2';
-import {PI2} from '../../utils/number.utils';
-import {Rectangle2} from '../geometry/rectangle2';
 import {HoopSegment} from './hoop-segment';
+import {Item2Scene, Scene2d} from '../core/scene2d';
+import {PI2} from '../../utils/number.utils';
 import {Segment2} from '../geometry/segment2';
+import {Rectangle2} from '../geometry/rectangle2';
 
-export class BasketBall extends PhysicBall2 implements Item2Scene, CanCollide {
+export class BasketBall extends PhysicBall2 implements Item2Scene {
   constructor(
     x: number,
     y: number,
     public hoopSegment: HoopSegment,
     private texture?: null | CanvasPattern) {
-    super(x, y, 30);
-    this.gravity.y = 0.5;
+    super({x, y}, 30);
+    this.gravity.y = 0.3;
   }
 
   onPanier: ((owner: string) => void) | null = null;
   public owner = "";
-  collisionId: number = 0;
-
-  detection(item: CanCollide): void {
-    if (item instanceof BasketBall) {
-      const collision = this.isCollisionToCircle(item);
-      if (collision) {
-        this.circleCollisionResponse(item);
-      }
-      return;
-    }
-  }
-
   sceneId: number = 0;
   scenePriority: number = 0;
 
   draw2d(scene: Scene2d, time: number): void {
     const {ctx} = scene;
-    ctx.translate(this.position.x, this.position.y)
+
+    ctx.translate(-this.r, -this.r);
+    ctx.translate(this.x, this.y)
+    ctx.translate(this.r, this.r);
+
     ctx.rotate(this.rotation);
+    ctx.translate(-this.r, -this.r);
+
+
     ctx.beginPath();
-    ctx.arc(0, 0, this.radius, 0, PI2);
+    ctx.arc(this.r, this.r, this.r, 0, PI2);
     if (this.texture) {
       ctx.fillStyle = this.texture;
       ctx.globalAlpha = 0.75;
@@ -47,8 +41,8 @@ export class BasketBall extends PhysicBall2 implements Item2Scene, CanCollide {
     ctx.closePath();
     scene.writeText({
       fillStyle: "white",
-      y: 0,
-      x: 0,
+      y: this.r,
+      x: this.r,
       textBaseline: "middle",
       textAlign: "center",
       text: this.owner
@@ -57,9 +51,15 @@ export class BasketBall extends PhysicBall2 implements Item2Scene, CanCollide {
 
   update(scene: Scene2d, time: number): void {
     const {width, height} = scene.canvas;
-    const intersection = this.hoopSegment.intersect(new Segment2(this.position, {
-      x: this.position.x + this.velocity.x,
-      y: this.position.y + this.velocity.y
+    this.bounceBoundary(new Rectangle2(this.r, -5000, width - this.r, height - this.r), {
+      x: 0.9,
+      y: 0.6
+    });
+    this.applyPhysics();
+
+    const intersection = this.hoopSegment.intersect(new Segment2(this, {
+      x: this.x + this.velocity.x,
+      y: this.y + this.velocity.y
     }));
     if (intersection) {
       if (this.velocity.y > 0) {
@@ -68,10 +68,5 @@ export class BasketBall extends PhysicBall2 implements Item2Scene, CanCollide {
         }
       }
     }
-    this.applyPhysics();
-    this.isGrounded = !!this.bounceBoundary(new Rectangle2(this.radius, -5000, width - this.radius, height - this.radius), {
-      x: 0.9,
-      y: 0.7
-    });
   }
 }

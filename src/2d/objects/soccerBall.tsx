@@ -1,5 +1,5 @@
 import {Item2Scene, Scene2d} from '../core/scene2d';
-import {PhysicBall2} from '../physics/physic-ball2';
+import {OldPhysicBall2} from '../physics/old-physic-ball2';
 import {CanCollide} from '../core/collider';
 import {PlayerSoccer} from './player-soccer';
 import {Vector2} from '../geometry/vector2';
@@ -15,7 +15,7 @@ img.onload = () => {
 }
 img.src = "/overlay-heat-twitch/assets/texture_ballon.jpg";
 
-export class SoccerBall extends PhysicBall2 implements Item2Scene, CanCollide {
+export class SoccerBall extends OldPhysicBall2 implements Item2Scene, CanCollide {
   constructor(x: number, y: number, private messager: (m: string) => void) {
     super(x, y, 30);
     this.initialPosition = {x, y}

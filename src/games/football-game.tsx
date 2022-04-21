@@ -29,7 +29,7 @@ export const FootballGame: FC = () => {
     const mainGroup = collider.addGroup('sorted');
     const cageGroup = collider.addGroup('all');
 
-    const scene = new Scene2d(container, 1000 / 60);
+    const scene = new Scene2d(container);
     // attention cage rouge et cage bleu ne seront pas mis à jour si la taille change
     const cageRouge = new Cage(
       padding - cageWidth / 2,

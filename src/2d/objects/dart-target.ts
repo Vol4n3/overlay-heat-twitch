@@ -1,5 +1,5 @@
 import {Item2Scene, Scene2d} from '../core/scene2d';
-import {PhysicBall2} from '../physics/physic-ball2';
+import {OldPhysicBall2} from '../physics/old-physic-ball2';
 import {Vector2} from '../geometry/vector2';
 import {HALF_PI, PI, PI2, QUART_PI, TENTH_PI, TWENTIETH_PI} from '../../utils/number.utils';
 import {Rectangle2} from '../geometry/rectangle2';
@@ -17,7 +17,7 @@ const extraPointSize = 10;
 const maxRadiusDoublePoint = maxPointsRadius;
 const maxRadiusTriplePoint = targetSize - 100;
 
-export class DartTarget extends PhysicBall2 implements Item2Scene {
+export class DartTarget extends OldPhysicBall2 implements Item2Scene {
   velocity = new Vector2(0, 0);
 
   constructor(x: number, y: number) {

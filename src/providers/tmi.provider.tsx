@@ -16,7 +16,7 @@ interface TmiContextProps {
 
   removeTmiListener(uid: number): void;
 
-  sendTmiMessage(message: string): void;
+  sendTmiMessage(message: string, timeout?: number): void;
 }
 
 const notInit = () => {
@@ -48,7 +48,7 @@ export const TmiProvider: FC<PropsWithChildren<TmiProviderProps>> = props => {
   const removeListener = (uid: number): void => {
     listeners.current = RemoveItemInArray(listeners.current, uid);
   }
-  const sendTmiMessage = (message: string) => {
+  const sendTmiMessage = (message: string,timeout:number = 4000) => {
     if (!channelId) {
       return
     }
@@ -59,7 +59,7 @@ export const TmiProvider: FC<PropsWithChildren<TmiProviderProps>> = props => {
     }
     setTimeout(() => {
       client.say(channelId, message)
-    }, 4000);
+    }, timeout);
   }
   useEffect(() => {
     if (!channelId) {

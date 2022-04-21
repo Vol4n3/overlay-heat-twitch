@@ -31,7 +31,12 @@ export type canvasWriteTextConfig = {
 
 export class Scene2d {
   system = new System();
-  constructor(private container: HTMLDivElement, updateInterval: number = 30) {
+  fpsInterval;
+
+  constructor(private container: HTMLDivElement, fps: number = 60) {
+    this.fpsInterval = 1000 / fps;
+    this.then = window.performance.now();
+    this.startTime = this.then;
     this.canvas = document.createElement('canvas');
     this.canvas.style.top = "0";
     this.canvas.style.left = "0";
@@ -41,17 +46,16 @@ export class Scene2d {
     container.appendChild(this.canvas);
     window.addEventListener('resize', this.refResize);
     this.resize();
-    this.animate();
+    this.tickAnimation = requestAnimationFrame(this.animate.bind(this));
   }
 
   public readonly canvas: HTMLCanvasElement;
   public readonly ctx: CanvasRenderingContext2D;
-  private drawTime: number = 0;
   private items: Item2Scene[] = [];
   private refResize = this.resize.bind(this)
   private tickAnimation: number = 0;
   private uid: number = 100;
-  private updateTime: number = 0;
+  private loopTime: number = 0;
 
   addItem(item: Item2Scene, order?: number) {
     const id = this.uid++;
@@ -74,24 +78,32 @@ export class Scene2d {
     return pattern
   }
 
-  animate() {
-    this.tickAnimation = requestAnimationFrame(this.animate.bind(this))
-    this.system.checkAll(({a, overlapV, b}) => {
-      a.isCollide(b, overlapV);
-    });
-    this.items.forEach(d => {
-      d.update(this, this.updateTime)
-    });
+  private now: number = 0;
+  private elapsed: number = 0;
+  private then: number = 0;
+  private startTime: number = 0;
 
-    this.updateTime++;
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.items.forEach(d => {
-      this.ctx.save();
-      d.draw2d(this, this.drawTime);
-      this.ctx.restore();
-    });
-    this.drawTime++;
-
+  animate(newTime: DOMHighResTimeStamp) {
+    this.tickAnimation = requestAnimationFrame(this.animate.bind(this));
+    this.now = newTime;
+    this.elapsed = this.now - this.then;
+    if (this.elapsed > this.fpsInterval) {
+      // Get ready for next frame by setting then=now, but...
+      // Also, adjust for fpsInterval not being multiple of 16.67
+      this.then = this.now - (this.elapsed % this.fpsInterval);
+      // draw stuff here
+      this.system.checkAll(({a, overlapV, b}) => {
+        a.isCollide(b, overlapV);
+      });
+      this.loopTime++;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.items.forEach(d => {
+        d.update(this, this.loopTime);
+        this.ctx.save();
+        d.draw2d(this, this.loopTime);
+        this.ctx.restore();
+      });
+    }
   }
 
   writeText(config: canvasWriteTextConfig) {

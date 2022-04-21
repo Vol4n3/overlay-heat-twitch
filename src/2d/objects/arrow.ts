@@ -1,10 +1,10 @@
-import {PhysicBall2} from '../physics/physic-ball2';
+import {OldPhysicBall2} from '../physics/old-physic-ball2';
 import {Item2Scene, Scene2d} from '../core/scene2d';
 import {Vector2} from '../geometry/vector2';
 import {DartTarget} from './dart-target';
 import {HALF_PI} from '../../utils/number.utils';
 
-export class Arrow extends PhysicBall2 implements Item2Scene {
+export class Arrow extends OldPhysicBall2 implements Item2Scene {
   constructor(x: number, y: number, private target: DartTarget) {
     super(x, y, 70);
   }
