@@ -10,7 +10,7 @@ export const FindAndDeleteItemInArray = <T, U extends keyof T>(current: T[], key
   if (index < 0) {
     return current;
   }
-  return RemoveItemInArray(current, index);
+  return RemoveItemInArrayByIndex(current, index);
 };
 export const FindAndUpdateItemInArray = <T, U extends keyof T>(current: T[], key: U, value: T): T[] => {
   const index = current.findIndex((c) => c[key] === value[key]);
@@ -22,8 +22,11 @@ export const FindAndUpdateItemInArray = <T, U extends keyof T>(current: T[], key
 export const UpdateItemInArray = <T>(current: T[], index: number, value: T): T[] => {
   return current.map((item, i) => i === index ? value : item);
 };
-export const RemoveItemInArray = <T>(current: T[], index: number): T[] => {
+export const RemoveItemInArrayByIndex = <T>(current: T[], index: number): T[] => {
   return current.filter((_, i) => i !== index);
+};
+export const RemoveItemsInArray = <T>(current: T[], item: T): T[] => {
+  return current.filter(f => f !== item);
 };
 export const TranslateItemInArray = <T>(arr: T[], from: number, to: number): T[] => {
   if (to < 0) {

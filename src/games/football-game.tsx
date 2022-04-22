@@ -85,11 +85,11 @@ export const FootballGame: FC = () => {
     const onClick = (event: MouseEvent) => {
       createPlayer(event.x, event.y, "test")
     }
-    const idEvent = addHeatListener(onUserClick);
+    addHeatListener(onUserClick);
     window.addEventListener('click', onClick);
     return () => {
       scene.destroy();
-      removeHeatListener(idEvent);
+      removeHeatListener(onUserClick);
       window.removeEventListener('click', onClick);
     };
   }, [removeHeatListener, addHeatListener, sendTmiMessage]);

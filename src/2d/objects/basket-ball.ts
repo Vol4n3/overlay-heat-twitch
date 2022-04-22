@@ -12,7 +12,7 @@ export class BasketBall extends PhysicBall2 implements Item2Scene {
     public hoopSegment: HoopSegment,
     private texture?: null | CanvasPattern) {
     super({x, y}, 30);
-    this.gravity.y = 0.3;
+    this.gravity.y = 0.4;
   }
 
   onPanier: ((owner: string) => void) | null = null;

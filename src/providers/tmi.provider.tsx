@@ -1,6 +1,6 @@
 import {createContext, FC, PropsWithChildren, useContext, useEffect, useRef} from 'react';
 import tmi from 'tmi.js';
-import {RemoveItemInArray} from '../utils/deep-object.utils';
+import {RemoveItemsInArray} from '../utils/deep-object.utils';
 
 
 export type TmiMessage = {
@@ -12,9 +12,9 @@ export type TmiMessage = {
 export type TmiListener = (event: TmiMessage) => void;
 
 interface TmiContextProps {
-  addTmiListener(listener: TmiListener): number;
+  addTmiListener(listener: TmiListener): void;
 
-  removeTmiListener(uid: number): void;
+  removeTmiListener(listener: TmiListener): void;
 
   sendTmiMessage(message: string, timeout?: number): void;
 }
@@ -37,18 +37,15 @@ export interface TmiProviderProps {
 
 export const TmiProvider: FC<PropsWithChildren<TmiProviderProps>> = props => {
   const {channelId, children, username, password} = props;
-  const listeners = useRef<{ uid: number, callback: TmiListener }[]>([]);
-  const listenersIdRef = useRef<number>(0);
+  const listeners = useRef<TmiListener[]>([]);
   const clientRef = useRef<tmi.Client>();
-  const addListener = (listener: TmiListener) => {
-    const uid = listenersIdRef.current++;
-    listeners.current = [...listeners.current, {callback: listener, uid}];
-    return uid;
+  const addTmiListener = (listener: TmiListener) => {
+    listeners.current = [...listeners.current, listener];
   }
-  const removeListener = (uid: number): void => {
-    listeners.current = RemoveItemInArray(listeners.current, uid);
+  const removeTmiListener = (listener: TmiListener): void => {
+    listeners.current = RemoveItemsInArray(listeners.current, listener);
   }
-  const sendTmiMessage = (message: string,timeout:number = 4000) => {
+  const sendTmiMessage = (message: string, timeout: number = 4000) => {
     if (!channelId) {
       return
     }
@@ -77,7 +74,7 @@ export const TmiProvider: FC<PropsWithChildren<TmiProviderProps>> = props => {
       console.warn('tmi client disconnected', result);
     });
     clientRef.current.on('message', (channel, tags, message, self) => {
-      listeners.current.forEach(listener => listener.callback({channel, tags, message, self}))
+      listeners.current.forEach(listener => listener({channel, tags, message, self}))
     })
     return () => {
       if (!clientRef.current) {
@@ -90,8 +87,8 @@ export const TmiProvider: FC<PropsWithChildren<TmiProviderProps>> = props => {
   }, [channelId, username, password])
   return <TmiContext.Provider
     value={{
-      addTmiListener: addListener,
-      removeTmiListener: removeListener,
+      addTmiListener,
+      removeTmiListener,
       sendTmiMessage
     }}>{children}</TmiContext.Provider>
 }

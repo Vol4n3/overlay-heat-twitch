@@ -1,13 +1,14 @@
 import {createContext, FC, PropsWithChildren, useContext, useEffect, useRef} from 'react';
 import {HeatApi, HeatUser, MessageHeat, UserPoint} from '../types/heat.types';
 import {CoordinateRatioToScreen} from '../utils/number.utils';
-import {RemoveItemInArray} from '../utils/deep-object.utils';
+import {RemoveItemsInArray} from '../utils/deep-object.utils';
 
 const cachedUsers: { [key: string]: HeatUser } = {};
 const getUserName = async (id: string): Promise<string | HeatUser> => {
   if (typeof cachedUsers[id] !== 'undefined') {
     return cachedUsers[id];
   }
+
   if (id.startsWith("A")) return "Anonyme";
   else if (id.startsWith("U")) return "Inconnu";
   else {
@@ -22,9 +23,9 @@ const getUserName = async (id: string): Promise<string | HeatUser> => {
 type HeatListener = (event: UserPoint) => void;
 
 interface HeatContextProps {
-  addHeatListener(listener: HeatListener): number;
+  addHeatListener(listener: HeatListener): void;
 
-  removeHeatListener(uid: number): void;
+  removeHeatListener(listener: HeatListener): void;
 }
 
 const notInit = () => {
@@ -41,15 +42,12 @@ interface HeatProviderProps {
 }
 
 export const HeatProvider: FC<PropsWithChildren<HeatProviderProps>> = ({heatId, children}) => {
-  const listeners = useRef<{ uid: number, callback: HeatListener }[]>([]);
-  const listenersIdRef = useRef<number>(0);
-  const addListener = (listener: HeatListener) => {
-    const uid = listenersIdRef.current++;
-    listeners.current = [...listeners.current, {callback: listener, uid}];
-    return uid
+  const listeners = useRef<HeatListener[]>([]);
+  const addHeatListener = (listener: HeatListener) => {
+    listeners.current = [...listeners.current, listener];
   }
-  const removeListener = (uid: number): void => {
-    listeners.current = RemoveItemInArray(listeners.current, uid);
+  const removeHeatListener = (listener: HeatListener): void => {
+    listeners.current = RemoveItemsInArray(listeners.current, listener);
   }
   useEffect(() => {
     if (!heatId) {
@@ -67,7 +65,7 @@ export const HeatProvider: FC<PropsWithChildren<HeatProviderProps>> = ({heatId, 
       else if (data.id.startsWith("U")) return;
       const screen = CoordinateRatioToScreen(parseFloat(data.x), parseFloat(data.y), document.body.clientWidth, document.body.clientHeight);
       getUserName(data.id).then(user => {
-        listeners.current.forEach(listener => listener.callback({
+        listeners.current.forEach(listener => listener({
           ...screen,
           userID: typeof user === 'string' ? user : user.display_name
         }));
@@ -98,5 +96,5 @@ export const HeatProvider: FC<PropsWithChildren<HeatProviderProps>> = ({heatId, 
     }
   }, [heatId]);
   return <HeatContext.Provider
-    value={{addHeatListener: addListener, removeHeatListener: removeListener}}>{children}</HeatContext.Provider>;
+    value={{addHeatListener, removeHeatListener}}>{children}</HeatContext.Provider>;
 }

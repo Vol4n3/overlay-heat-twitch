@@ -74,7 +74,7 @@ export const BasketGame = () => {
     const onClick = (event: UserPoint) => {
       queuePoints.push(event);
     }
-    const idHeat = addHeatListener(onClick);
+    addHeatListener(onClick);
     const testClick = (event: MouseEvent) => {
       queuePoints.push({x: event.x, y: event.y, userID: 'test'});
     }
@@ -90,19 +90,21 @@ export const BasketGame = () => {
       if(!split[0].toLocaleLowerCase().startsWith('!power')){
         return;
       }
-      if(split.length < 2){
+      if (split.length < 2) {
         return;
       }
-      const parse = parseInt(split[1],10);
+      const parse = parseInt(split[1], 10);
       const power = parse > 40 ? 40 : parse < 0 ? 0 : parse;
       bddPlayers[user] = {power};
-      sendTmiMessage(`la puissance de tir pour @${user} est maintenant de ${power}`,10);
+      sendTmiMessage(`la puissance de tir pour @${user} est maintenant de ${power}`, 10);
     }
-    const idTmiEvent = addTmiListener(onPowerChange);
+    addTmiListener(onPowerChange);
     window.addEventListener('click', testClick);
+
+    sendTmiMessage('Le jeu de basket est activé !power (0 - 40) pour ajuster la puissance du tir');
     return () => {
-      removeHeatListener(idHeat);
-      removeTmiListener(idTmiEvent);
+      removeHeatListener(onClick);
+      removeTmiListener(onPowerChange);
       scene.destroy();
       window.removeEventListener('click', testClick);
     };

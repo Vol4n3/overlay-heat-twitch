@@ -40,14 +40,14 @@ export const FlechetteGame: FC = () => {
     const onClick = (event: MouseEvent) => {
       addFlechette(event.x, event.y, "test");
     }
-    const idEvent = addHeatListener(onUserClick);
+    addHeatListener(onUserClick);
     window.addEventListener("click", onClick)
     return () => {
       scene.destroy();
       if (!div) {
         return;
       }
-      removeHeatListener(idEvent);
+      removeHeatListener(onUserClick);
       window.removeEventListener("click", onClick)
     };
   }, [addHeatListener, containerRef, removeHeatListener])
@@ -63,19 +63,19 @@ export const FlechetteGame: FC = () => {
     }}>
       Jeu des fléchettes
       {Object.keys(scores).sort((a, b) => (scores[b] / shoots[b] - scores[a] / shoots[a]))
-        .map((key,index) => <div key={key} style={{
-        padding: "10px 0",
+        .map((key, index) => <div key={key} style={{
+          padding: "10px 0",
           display: 'flex',
           justifyContent: 'space-between'
-      }}>
-        <div >
-          [{index + 1}] {key} :
-        </div>
-        <div>
-          {scores[key]} ({shoots[key]})
-        </div>
+        }}>
+          <div>
+            [{index + 1}] {key} :
+          </div>
+          <div>
+            {scores[key]} ({shoots[key]})
+          </div>
 
-      </div>)}
+        </div>)}
     </div>
   </>
 }

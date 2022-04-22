@@ -115,12 +115,12 @@ export const AsteroidGame: FC = () => {
       }
       createAsteroid(x, y, userID);
     }
-    const idEvent = addHeatListener(onUserClick);
+    addHeatListener(onUserClick);
     window.addEventListener('click', onClick);
     return () => {
       clearInterval(intervalRefAsteroid);
       scene.destroy();
-      removeHeatListener(idEvent);
+      removeHeatListener(onUserClick);
       window.removeEventListener('click', onClick);
     };
   }, [refScene, addHeatListener, removeHeatListener]);

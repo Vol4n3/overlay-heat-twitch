@@ -1,5 +1,5 @@
 import {Reducer} from 'react';
-import {RemoveItemInArray, UpdateItemInArray} from './deep-object.utils';
+import {RemoveItemInArrayByIndex, UpdateItemInArray} from './deep-object.utils';
 
 export interface ActionArray<T> {
   clean?: boolean;
@@ -18,7 +18,7 @@ export const ReducerArray = <T>(current: T[], action: ActionArray<T>): T[] => {
     return [];
   }
   if (typeof action.removeOne === 'number') {
-    return RemoveItemInArray(current, action.removeOne);
+    return RemoveItemInArrayByIndex(current, action.removeOne);
   }
   if (typeof action.mergeAfter !== 'undefined') {
     return [...current, ...action.mergeAfter];
