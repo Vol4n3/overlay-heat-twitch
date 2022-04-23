@@ -17,6 +17,7 @@ img.src = "/overlay-heat-twitch/assets/texture_asteroid.jpg";
 
 
 export class Asteroid extends OldPhysicBall2 implements Item2Scene, CanCollide {
+
   constructor(
     x: number, y: number,
     public owner: string,
@@ -26,7 +27,7 @@ export class Asteroid extends OldPhysicBall2 implements Item2Scene, CanCollide {
     this.rotation = Math.random() * PI2;
     this.rotationSpeed = (Math.random() * 2 - 1) / 50;
   }
-
+  isUpdated: boolean = true;
   collisionId: number = 0;
 
   detection(item: CanCollide) {
@@ -82,6 +83,7 @@ export class Asteroid extends OldPhysicBall2 implements Item2Scene, CanCollide {
   }
 
   update({ctx: {canvas: {width, height}}}: Scene2d, time: number): void {
+    this.isUpdated = true;
     if (this.easingGrow !== null) {
       const next = this.easingGrow();
       if (next !== null) {

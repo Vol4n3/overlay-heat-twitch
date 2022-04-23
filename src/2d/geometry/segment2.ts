@@ -7,6 +7,7 @@ import {AngleKeepRange, PI2} from '../../utils/number.utils';
 
 
 export class Segment2 implements Item2Scene {
+  isUpdated: boolean = true;
   constructor(public p1: IPoint2, public p2: IPoint2) {
   }
 

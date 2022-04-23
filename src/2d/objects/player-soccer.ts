@@ -9,7 +9,7 @@ import {SoccerBall} from './soccerBall';
 
 export class PlayerSoccer extends OldPhysicBall2 implements Item2Scene, CanCollide {
   collisionId: number = 0;
-
+  isUpdated: boolean = true;
   target: null | Vector2 = null;
 
   easingMovement: EasingCallback | null = null;
@@ -21,6 +21,7 @@ export class PlayerSoccer extends OldPhysicBall2 implements Item2Scene, CanColli
   team: string = "";
 
   update(scene: Scene2d, time: number): void {
+    this.isUpdated = true;
     this.position.operation('add', this.velocity);
     this.velocity.b.operation("multiply", 0.8);
     if (this.easingRotation !== null) {

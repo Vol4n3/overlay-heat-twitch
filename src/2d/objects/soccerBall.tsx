@@ -16,6 +16,7 @@ img.onload = () => {
 img.src = "/overlay-heat-twitch/assets/texture_ballon.jpg";
 
 export class SoccerBall extends OldPhysicBall2 implements Item2Scene, CanCollide {
+  isUpdated: boolean = true;
   constructor(x: number, y: number, private messager: (m: string) => void) {
     super(x, y, 30);
     this.initialPosition = {x, y}
@@ -90,6 +91,7 @@ export class SoccerBall extends OldPhysicBall2 implements Item2Scene, CanCollide
   private texture: null | CanvasPattern = null
 
   update(scene: Scene2d, time: number): void {
+    this.isUpdated = true;
     const padding = 50;
     this.bounceBoundary(new Rectangle2(padding, padding, scene.canvas.width - padding, scene.canvas.height - padding), {
       x: 0.9,

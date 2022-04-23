@@ -6,6 +6,7 @@ import {Segment2} from '../geometry/segment2';
 import {Rectangle2} from '../geometry/rectangle2';
 
 export class BasketBall extends PhysicBall2 implements Item2Scene {
+  isUpdated: boolean = true;
   constructor(
     x: number,
     y: number,
@@ -50,6 +51,7 @@ export class BasketBall extends PhysicBall2 implements Item2Scene {
   }
 
   update(scene: Scene2d, time: number): void {
+    this.isUpdated = true;
     const {width, height} = scene.canvas;
     this.bounceBoundary(new Rectangle2(this.r, -5000, width - this.r, height - this.r), {
       x: 0.9,

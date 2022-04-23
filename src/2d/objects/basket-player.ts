@@ -4,7 +4,7 @@ import {OldPhysicBall2} from '../physics/old-physic-ball2';
 
 export class BasketPlayer extends OldPhysicBall2 implements Item2Scene {
 
-
+  isUpdated: boolean = true;
   constructor(x: number, y: number) {
     super(x, y, 50);
   }

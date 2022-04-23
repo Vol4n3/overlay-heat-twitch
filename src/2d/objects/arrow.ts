@@ -5,6 +5,7 @@ import {DartTarget} from './dart-target';
 import {HALF_PI} from '../../utils/number.utils';
 
 export class Arrow extends OldPhysicBall2 implements Item2Scene {
+  isUpdated: boolean = true;
   constructor(x: number, y: number, private target: DartTarget) {
     super(x, y, 70);
   }
@@ -52,11 +53,13 @@ export class Arrow extends OldPhysicBall2 implements Item2Scene {
     if (this.isTouched && this.targetVector) {
       this.position.x = this.target.position.x + this.targetVector.x;
       this.position.y = this.target.position.y + this.targetVector.y;
+      this.isUpdated = true;
       return;
     }
     if (this.radius > 15) {
       this.rotation += Math.round(Math.random() * 100 - 50) / 100;
       this.radius -= 10;
+      this.isUpdated = true;
     } else {
       this.targetVector = new Vector2(this.position.x - this.target.position.x, this.position.y - this.target.position.y);
       if (this.targetVector.length < this.target.radius && !this.isTouched) {

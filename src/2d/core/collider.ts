@@ -21,7 +21,11 @@ export interface CanCollide extends IPoint2 {
   detection(item: CanCollide): void;
 }
 
+/**
+ * @deprecated use scene system
+ */
 export class Collider implements Item2Scene {
+  isUpdated: boolean = false;
   sceneId: number = 0;
   scenePriority: number = 0;
 

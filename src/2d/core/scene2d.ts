@@ -1,9 +1,11 @@
 import {loadImage} from '../../utils/loader.utils';
 import {System, Vector} from 'detect-collisions';
+import {Point2} from '../geometry/point2';
 
 export interface Item2Scene {
   sceneId: number;
   scenePriority: number;
+  isUpdated: boolean;
 
   draw2d(scene: Scene2d, time: number): void;
 
@@ -56,13 +58,45 @@ export class Scene2d {
   private tickAnimation: number = 0;
   private uid: number = 100;
   private loopTime: number = 0;
+  private camera: Point2 = new Point2();
+  private forceUpdate: boolean = true;
 
   addItem(item: Item2Scene, order?: number) {
+    this.forceUpdate = true;
     const id = this.uid++;
     item.sceneId = id;
     item.scenePriority = order || id;
     this.items.push(item);
     this.items = this.items.sort((a, b) => b.scenePriority - a.scenePriority);
+  }
+
+  animate(newTime: DOMHighResTimeStamp) {
+    this.tickAnimation = requestAnimationFrame(this.animate.bind(this));
+    this.now = newTime;
+    this.elapsed = this.now - this.then;
+    if (this.elapsed > this.fpsInterval) {
+      this.then = this.now - (this.elapsed % this.fpsInterval);
+      if (!this.forceUpdate && !this.items.some(i => i.isUpdated)) {
+        return;
+      }
+      this.forceUpdate = false;
+      this.system.checkAll(({a, overlapV, b}) => {
+        a.isCollide(b, overlapV);
+      });
+      this.loopTime++;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.items.forEach(d => {
+        // move camera
+        this.ctx.translate(this.camera.x, this.camera.y);
+        // draw first
+        this.ctx.save();
+        d.draw2d(this, this.loopTime);
+        this.ctx.restore();
+        // set updated too false because draw
+        d.isUpdated = false;
+        d.update(this, this.loopTime);
+      });
+    }
   }
 
   addMultipleItem(items: Item2Scene[]) {
@@ -83,27 +117,10 @@ export class Scene2d {
   private then: number = 0;
   private startTime: number = 0;
 
-  animate(newTime: DOMHighResTimeStamp) {
-    this.tickAnimation = requestAnimationFrame(this.animate.bind(this));
-    this.now = newTime;
-    this.elapsed = this.now - this.then;
-    if (this.elapsed > this.fpsInterval) {
-      // Get ready for next frame by setting then=now, but...
-      // Also, adjust for fpsInterval not being multiple of 16.67
-      this.then = this.now - (this.elapsed % this.fpsInterval);
-      // draw stuff here
-      this.system.checkAll(({a, overlapV, b}) => {
-        a.isCollide(b, overlapV);
-      });
-      this.loopTime++;
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.items.forEach(d => {
-        d.update(this, this.loopTime);
-        this.ctx.save();
-        d.draw2d(this, this.loopTime);
-        this.ctx.restore();
-      });
-    }
+  moveCamera(x: number, y: number) {
+    this.camera.x = x;
+    this.camera.y = y;
+    this.forceUpdate = true;
   }
 
   writeText(config: canvasWriteTextConfig) {
@@ -140,11 +157,13 @@ export class Scene2d {
     const findDrawIndex = this.items.findIndex(f => f.sceneId === item.sceneId);
     if (findDrawIndex >= 0) {
       this.items.splice(findDrawIndex, 1);
+      this.forceUpdate = true;
     }
   }
 
   resize() {
     this.canvas.width = this.container.clientWidth;
     this.canvas.height = this.container.clientHeight;
+    this.forceUpdate = true;
   }
 }

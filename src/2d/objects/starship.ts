@@ -9,7 +9,7 @@ import {Asteroid} from './asteroid';
 const rotationSpeed = 50;
 
 export class Starship extends OldPhysicBall2 implements Item2Scene, CanCollide {
-
+  isUpdated: boolean = true;
   constructor(x: number, y: number, public owner: string = "",
               private onDestroyed: (asteroidOwner: string) => void) {
     super(x, y, 25);
@@ -83,6 +83,7 @@ export class Starship extends OldPhysicBall2 implements Item2Scene, CanCollide {
   }
 
   update(scene: Scene2d, time: number): void {
+    this.isUpdated = true;
     const {ctx} = scene;
     const {width, height} = ctx.canvas;
     if (this.isDestroyed) {

@@ -7,8 +7,11 @@ import {Item2Scene, Scene2d} from '../core/scene2d';
 import {AngleKeepRange, PI2} from '../../utils/number.utils';
 import {Segment2} from '../geometry/segment2';
 
-
+/**
+ * @deprecated
+ */
 export class OldPhysicBall2 extends Circle2 implements Item2Scene {
+  isUpdated: boolean = true;
   constructor(x: number, y: number, radius: number) {
     super(x, y, radius);
     this.position = new Point2(x, y);

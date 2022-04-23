@@ -46,6 +46,7 @@ export const BasketGame = () => {
       scene.system.insert(hoop1);
       scene.system.insert(hoop2);
       const onPanier = (owner: string) => {
+        player.isUpdated = true;
         player.position.x = Math.round(Math.random() * scene.canvas.width);
         player.position.y = Math.round(Math.random() * scene.canvas.height);
         sendTmiMessage(`FootGoal ${owner} a marqué un panier FootGoal`)
@@ -67,7 +68,7 @@ export const BasketGame = () => {
         setTimeout(() => {
           scene.removeItem(ballon);
           scene.system.remove(ballon);
-        }, 50000);
+        }, 5000);
       }, 1);
     }
     startGame();

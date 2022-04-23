@@ -3,6 +3,7 @@ import {PI2} from '../../utils/number.utils';
 import {PhysicBall2} from '../physics/physic-ball2';
 
 export class Hoop extends PhysicBall2 implements Item2Scene {
+  isUpdated: boolean = true;
   isStatic = true;
   mass = 3;
   sceneId: number = 0;

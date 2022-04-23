@@ -4,6 +4,7 @@ import {SoccerBall} from './soccerBall';
 import {CanCollide} from '../core/collider';
 
 export class Cage extends Rectangle2 implements Item2Scene, CanCollide {
+  isUpdated: boolean = true;
   constructor(x: number, y: number, w: number, h: number, public team: string) {
     super(x, y, w, h);
   }

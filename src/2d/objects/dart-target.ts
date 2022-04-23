@@ -19,7 +19,7 @@ const maxRadiusTriplePoint = targetSize - 100;
 
 export class DartTarget extends OldPhysicBall2 implements Item2Scene {
   velocity = new Vector2(0, 0);
-
+  isUpdated: boolean = true;
   constructor(x: number, y: number) {
     super(x, y, targetSize);
   }
@@ -40,6 +40,7 @@ export class DartTarget extends OldPhysicBall2 implements Item2Scene {
   }
 
   update(scene: Scene2d, time: number): void {
+    this.isUpdated = true;
     const {width, height} = scene.canvas;
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;

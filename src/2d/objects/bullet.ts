@@ -6,6 +6,7 @@ import {PI2} from '../../utils/number.utils';
 
 
 export class Bullet extends OldPhysicBall2 implements Item2Scene, CanCollide {
+  isUpdated: boolean = true;
   constructor(x: number, y: number, public owner: string) {
     super(x, y, 5);
   }
@@ -32,6 +33,7 @@ export class Bullet extends OldPhysicBall2 implements Item2Scene, CanCollide {
   }
 
   update(scene: Scene2d, time: number): void {
+    this.isUpdated = true;
     this.position.operation("add", this.velocity);
     this.position.teleportBoundary(0, scene.ctx.canvas.width, 0, scene.ctx.canvas.height);
   }

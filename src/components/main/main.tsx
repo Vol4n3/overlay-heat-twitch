@@ -70,6 +70,9 @@ export const Main: FC = () => {
           }}/>
         </label>
       </div>
+      <div>
+        <a href={getUriConfig.trim()} target={'_blank'} rel="noreferrer">Ouvrir dans un nouvelle onglet</a>
+      </div>
     </div>
 
     <div style={{position: 'relative', flex: 1}}>

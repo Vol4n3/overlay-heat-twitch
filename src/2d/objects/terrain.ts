@@ -5,7 +5,7 @@ const padding = 50;
 export class Terrain implements Item2Scene {
   sceneId: number = 0;
   scenePriority: number = 0;
-
+  isUpdated: boolean = true;
   draw2d(scene: Scene2d, time: number): void {
     const {ctx, canvas} = scene;
     const {width, height} = canvas;
