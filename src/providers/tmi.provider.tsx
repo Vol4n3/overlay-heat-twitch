@@ -50,7 +50,6 @@ export const TmiProvider: FC<PropsWithChildren<TmiProviderProps>> = props => {
       return
     }
     const client = clientRef.current;
-    debugger;
     if (!client || client.readyState() !== 'OPEN') {
       return;
     }

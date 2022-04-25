@@ -1,6 +1,6 @@
 import {IPoint2} from '../types/point.types';
 
-export const PointDistance = (p1: IPoint2, p2: IPoint2): number => {
+export const PointDistance = (p1: IPoint2, p2: IPoint2 = {x: 0, y: 0}): number => {
   const dx = p1.x - p2.x;
   const dy = p1.y - p2.y;
   return Math.sqrt(dx * dx + dy * dy);
@@ -21,4 +21,9 @@ export const PointRotate = (origin: IPoint2, rotateAnchor: IPoint2, angle: numbe
     x: dx * cos + dy * sin + rotateAnchor.x,
     y: -dx * sin + dy * cos + rotateAnchor.y
   }
+}
+export const PointsSum = (points: IPoint2[]): IPoint2 => {
+  return points.reduce((prev, current) => ({
+    x: prev.x + current.x, y: prev.y + current.y
+  }), {x: 0, y: 0})
 }

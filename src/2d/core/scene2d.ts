@@ -15,7 +15,7 @@ export interface Item2Scene {
 export interface ItemSystem {
   isStatic?: boolean;
 
-  isCollide(other: ItemSystem, overlap: Vector): void;
+  isCollide(other: ItemSystem, overlapV: Vector, overlapN: Vector): void;
 }
 
 export type canvasWriteTextConfig = {
@@ -80,8 +80,8 @@ export class Scene2d {
         return;
       }
       this.forceUpdate = false;
-      this.system.checkAll(({a, overlapV, b}) => {
-        a.isCollide(b, overlapV);
+      this.system.checkAll(({a, overlapV, b, overlapN}) => {
+        a.isCollide(b, overlapV, overlapN);
       });
       this.loopTime++;
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

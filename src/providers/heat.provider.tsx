@@ -64,6 +64,7 @@ export const HeatProvider: FC<PropsWithChildren<HeatProviderProps>> = ({heatId, 
       if (data.id.startsWith("A")) return;
       else if (data.id.startsWith("U")) return;
       const screen = CoordinateRatioToScreen(parseFloat(data.x), parseFloat(data.y), document.body.clientWidth, document.body.clientHeight);
+
       getUserName(data.id).then(user => {
         listeners.current.forEach(listener => listener({
           ...screen,

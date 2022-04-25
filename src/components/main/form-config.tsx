@@ -44,6 +44,8 @@ export const FormConfig: FC<FormConfigProps> = ({config, onChange}) => {
           value={formControl.username || ''}
           onChange={ev => setFormControl({merge: {username: ev.target.value}})}/>
       </label>
+
+      <a href={"https://twitchapps.com/tmi/"} target={"_blank"} rel={"noreferrer"}>Pour recupérer la clé oauth</a>
       <label>
         <div>clé oAuth du bot</div>
         <input
