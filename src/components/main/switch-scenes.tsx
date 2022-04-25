@@ -1,10 +1,10 @@
 import React, {FC, useMemo} from 'react';
-import {AsteroidGame} from '../../games/asteroid-game';
-import {FlechetteGame} from '../../games/flechette-game';
+import {AsteroidGame} from '../../games/asteroid/asteroid-game';
+import {FlechetteGame} from '../../games/dart-target/flechette-game';
 import {ScenesConfig, SceneType} from '../../types/config.types';
-import {FootballGame} from '../../games/football-game';
-import {BasketGame} from '../../games/basket-game';
-import {PlinkoGame} from '../../games/plinko-game';
+import {FootballGame} from '../../games/foot/football-game';
+import {BasketGame} from '../../games/basket/basket-game';
+import {PlinkoGame} from '../../games/plinko/plinko-game';
 
 export const SceneNames: { [key in SceneType]: string } = {
   dartTarget: "Jeux de fléchette",

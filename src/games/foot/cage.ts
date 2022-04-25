@@ -1,7 +1,7 @@
-import {Rectangle2} from '../../geometry/rectangle2';
-import {Item2Scene, Scene2d} from '../../core/scene2d';
+import {Rectangle2} from '../../2d/geometry/rectangle2';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
 import {SoccerBall} from './soccerBall';
-import {CanCollide} from '../../core/collider';
+import {CanCollide} from '../../2d/core/collider';
 
 export class Cage extends Rectangle2 implements Item2Scene, CanCollide {
   isUpdated: boolean = true;

@@ -1,14 +1,14 @@
-import {ContainerScene} from '../components/ui/container-scene';
+import {ContainerScene} from '../../components/ui/container-scene';
 import {useEffect, useRef} from 'react';
-import {Scene2d} from '../2d/core/scene2d';
-import {useHeat} from '../providers/heat.provider';
-import {UserPoint} from '../types/heat.types';
-import {Vector2} from '../2d/geometry/vector2';
-import {BasketPlayer} from '../2d/objects/basket/basket-player';
-import {Hoop} from '../2d/objects/basket/hoop';
-import {HoopSegment} from '../2d/objects/basket/hoop-segment';
-import {TmiMessage, useTmi} from '../providers/tmi.provider';
-import {BasketBall} from '../2d/objects/basket/basket-ball';
+import {Scene2d} from '../../2d/core/scene2d';
+import {useHeat} from '../../providers/heat.provider';
+import {UserPoint} from '../../types/heat.types';
+import {Vector2} from '../../2d/geometry/vector2';
+import {BasketPlayer} from './basket-player';
+import {Hoop} from './hoop';
+import {HoopSegment} from './hoop-segment';
+import {TmiMessage, useTmi} from '../../providers/tmi.provider';
+import {BasketBall} from './basket-ball';
 
 export const BasketGame = () => {
   const refScene = useRef<HTMLDivElement>(null);

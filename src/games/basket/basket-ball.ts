@@ -1,9 +1,9 @@
-import {PhysicBall2} from '../../physics/physic-ball2';
+import {PhysicBall2} from '../../2d/physics/physic-ball2';
 import {HoopSegment} from './hoop-segment';
-import {Item2Scene, Scene2d} from '../../core/scene2d';
-import {PI2} from '../../../utils/number.utils';
-import {Segment2} from '../../geometry/segment2';
-import {Rectangle2} from '../../geometry/rectangle2';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
+import {PI2} from '../../utils/number.utils';
+import {Segment2} from '../../2d/geometry/segment2';
+import {Rectangle2} from '../../2d/geometry/rectangle2';
 
 export class BasketBall extends PhysicBall2 implements Item2Scene {
   isUpdated: boolean = true;

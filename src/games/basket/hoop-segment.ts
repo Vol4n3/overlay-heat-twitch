@@ -1,5 +1,5 @@
-import {Item2Scene, Scene2d} from '../../core/scene2d';
-import {Segment2} from '../../geometry/segment2';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
+import {Segment2} from '../../2d/geometry/segment2';
 
 export class HoopSegment extends Segment2 implements Item2Scene {
   sceneId: number = 0;

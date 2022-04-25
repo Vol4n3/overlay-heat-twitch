@@ -1,5 +1,5 @@
-import {PhysicWall2} from '../../physics/physic-wall2';
-import {Item2Scene, Scene2d} from '../../core/scene2d';
+import {PhysicWall2} from '../../2d/physics/physic-wall2';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
 
 
 export class PlinkoWall extends PhysicWall2 implements Item2Scene {

@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useReducer, useRef} from 'react';
-import {Scene2d} from '../2d/core/scene2d';
-import {DartTarget} from '../2d/objects/dart-target/dart-target';
-import {Arrow} from '../2d/objects/dart-target/arrow';
-import {UserPoint} from '../types/heat.types';
-import {ReducerObject, ReducerObjectType} from '../utils/react-reducer.utils';
-import {ContainerScene} from '../components/ui/container-scene';
-import {useHeat} from '../providers/heat.provider';
+import {Scene2d} from '../../2d/core/scene2d';
+import {DartTarget} from './dart-target';
+import {Arrow} from './arrow';
+import {UserPoint} from '../../types/heat.types';
+import {ReducerObject, ReducerObjectType} from '../../utils/react-reducer.utils';
+import {ContainerScene} from '../../components/ui/container-scene';
+import {useHeat} from '../../providers/heat.provider';
 
 export const FlechetteGame: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);

@@ -1,12 +1,12 @@
-import {Item2Scene, Scene2d} from '../../core/scene2d';
-import {OldPhysicBall2} from '../../physics/old-physic-ball2';
-import {CanCollide} from '../../core/collider';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
+import {OldPhysicBall2} from '../../2d/physics/old-physic-ball2';
+import {CanCollide} from '../../2d/core/collider';
 import {PlayerSoccer} from './player-soccer';
-import {Vector2} from '../../geometry/vector2';
-import {AngleKeepRange, PI2} from '../../../utils/number.utils';
+import {Vector2} from '../../2d/geometry/vector2';
+import {AngleKeepRange, PI2} from '../../utils/number.utils';
 import {Cage} from './cage';
-import {IPoint2} from '../../../types/point.types';
-import {Rectangle2} from '../../geometry/rectangle2';
+import {IPoint2} from '../../types/point.types';
+import {Rectangle2} from '../../2d/geometry/rectangle2';
 
 const img = new Image();
 let loaded = false;

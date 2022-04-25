@@ -1,11 +1,11 @@
 import {FC, useEffect, useRef} from 'react';
-import {ContainerScene} from '../components/ui/container-scene';
-import {Scene2d} from '../2d/core/scene2d';
-import {Bille} from '../2d/objects/plinko/bille';
-import {useHeat} from '../providers/heat.provider';
-import {UserPoint} from '../types/heat.types';
-import {Pico} from '../2d/objects/plinko/pico';
-import {PlinkoWall} from '../2d/objects/plinko/plinko-wall';
+import {ContainerScene} from '../../components/ui/container-scene';
+import {Scene2d} from '../../2d/core/scene2d';
+import {Bille} from './bille';
+import {useHeat} from '../../providers/heat.provider';
+import {UserPoint} from '../../types/heat.types';
+import {Pico} from './pico';
+import {PlinkoWall} from './plinko-wall';
 
 export const PlinkoGame: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);

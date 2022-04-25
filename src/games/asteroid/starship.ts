@@ -1,9 +1,9 @@
-import {Item2Scene, Scene2d} from '../../core/scene2d';
-import {OldPhysicBall2} from '../../physics/old-physic-ball2';
-import {Vector2} from '../../geometry/vector2';
-import {createEasing, Easing, EasingCallback} from '../../../utils/easing.utils';
-import {AngleFlip, AngleKeepRange, HALF_PI, PI} from '../../../utils/number.utils';
-import {CanCollide} from '../../core/collider';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
+import {OldPhysicBall2} from '../../2d/physics/old-physic-ball2';
+import {Vector2} from '../../2d/geometry/vector2';
+import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
+import {AngleFlip, AngleKeepRange, HALF_PI, PI} from '../../utils/number.utils';
+import {CanCollide} from '../../2d/core/collider';
 import {Asteroid} from './asteroid';
 
 const rotationSpeed = 50;

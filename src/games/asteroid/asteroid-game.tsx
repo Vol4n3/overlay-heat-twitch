@@ -1,14 +1,14 @@
 import {FC, useEffect, useRef} from 'react';
-import {Scene2d} from '../2d/core/scene2d';
-import {Starship} from '../2d/objects/asteroid/starship';
-import {UserPoint} from '../types/heat.types';
-import {Asteroid} from '../2d/objects/asteroid/asteroid';
-import {Vector2} from '../2d/geometry/vector2';
-import {Bullet} from '../2d/objects/asteroid/bullet';
-import {PickRandomOne} from '../utils/array.utils';
-import {ContainerScene} from '../components/ui/container-scene';
-import {Collider} from '../2d/core/collider';
-import {useHeat} from '../providers/heat.provider';
+import {Scene2d} from '../../2d/core/scene2d';
+import {Starship} from './starship';
+import {UserPoint} from '../../types/heat.types';
+import {Asteroid} from './asteroid';
+import {Vector2} from '../../2d/geometry/vector2';
+import {Bullet} from './bullet';
+import {PickRandomOne} from '../../utils/array.utils';
+import {ContainerScene} from '../../components/ui/container-scene';
+import {Collider} from '../../2d/core/collider';
+import {useHeat} from '../../providers/heat.provider';
 
 export const AsteroidGame: FC = () => {
   const refScene = useRef<HTMLDivElement>(null);

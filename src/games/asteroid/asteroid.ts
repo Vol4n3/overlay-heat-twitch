@@ -1,12 +1,12 @@
-import {OldPhysicBall2} from '../../physics/old-physic-ball2';
-import {Item2Scene, Scene2d} from '../../core/scene2d';
-import {Vector2} from '../../geometry/vector2';
-import {Perlin} from '../../../utils/perlin.utils';
-import {createEasing, Easing, EasingCallback} from '../../../utils/easing.utils';
-import {CanCollide} from '../../core/collider';
+import {OldPhysicBall2} from '../../2d/physics/old-physic-ball2';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
+import {Vector2} from '../../2d/geometry/vector2';
+import {Perlin} from '../../utils/perlin.utils';
+import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
+import {CanCollide} from '../../2d/core/collider';
 import {Starship} from './starship';
 import {Bullet} from './bullet';
-import {PI2} from '../../../utils/number.utils';
+import {PI2} from '../../utils/number.utils';
 
 const img = new Image();
 let loaded = false;

@@ -1,4 +1,4 @@
-import {Item2Scene, Scene2d} from '../../core/scene2d';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
 
 const padding = 50;
 

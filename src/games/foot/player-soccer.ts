@@ -1,10 +1,10 @@
-import {OldPhysicBall2} from '../../physics/old-physic-ball2';
-import {Item2Scene, Scene2d} from '../../core/scene2d';
-import {CanCollide} from '../../core/collider';
-import {createEasing, Easing, EasingCallback} from '../../../utils/easing.utils';
-import {AngleFlip, AngleKeepRange, HALF_PI, PI, PI2} from '../../../utils/number.utils';
-import {Vector2} from '../../geometry/vector2';
-import {Point2} from '../../geometry/point2';
+import {OldPhysicBall2} from '../../2d/physics/old-physic-ball2';
+import {Item2Scene, Scene2d} from '../../2d/core/scene2d';
+import {CanCollide} from '../../2d/core/collider';
+import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
+import {AngleFlip, AngleKeepRange, HALF_PI, PI, PI2} from '../../utils/number.utils';
+import {Vector2} from '../../2d/geometry/vector2';
+import {Point2} from '../../2d/geometry/point2';
 import {SoccerBall} from './soccerBall';
 
 export class PlayerSoccer extends OldPhysicBall2 implements Item2Scene, CanCollide {
