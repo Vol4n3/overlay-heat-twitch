@@ -5,6 +5,7 @@ import {ScenesConfig, SceneType} from '../../types/config.types';
 import {FootballGame} from '../../games/foot/football-game';
 import {BasketGame} from '../../games/basket/basket-game';
 import {PlinkoGame} from '../../games/plinko/plinko-game';
+import {MinesweeperGame} from '../../games/minesweeper/minesweeper-game';
 
 export const SceneNames: { [key in SceneType]: string } = {
   dartTarget: "Jeux de fléchette",
@@ -12,6 +13,7 @@ export const SceneNames: { [key in SceneType]: string } = {
   soccer: "Football",
   basket: "Basket ball",
   plinko: "Jeu du Plinko",
+  minesweeper: "Jeu du Démineur",
 }
 
 export const SwitchScenes: FC<{ config: ScenesConfig }> = ({config}) => {
@@ -27,6 +29,8 @@ export const SwitchScenes: FC<{ config: ScenesConfig }> = ({config}) => {
         return <BasketGame/>
       case 'plinko':
         return <PlinkoGame/>
+      case 'minesweeper':
+        return <MinesweeperGame/>
       default:
         return null
     }

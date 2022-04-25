@@ -3,9 +3,10 @@ import {System, Vector} from 'detect-collisions';
 import {Point2} from '../geometry/point2';
 
 export interface Item2Scene {
+  isUpdated: boolean;
+  onResize?: (width: number, height: number) => void;
   sceneId: number;
   scenePriority: number;
-  isUpdated: boolean;
 
   draw2d(scene: Scene2d, time: number): void;
 
@@ -32,9 +33,6 @@ export type canvasWriteTextConfig = {
 }
 
 export class Scene2d {
-  system = new System();
-  fpsInterval;
-
   constructor(private container: HTMLDivElement, fps: number = 60) {
     this.fpsInterval = 1000 / fps;
     this.then = window.performance.now();
@@ -53,13 +51,19 @@ export class Scene2d {
 
   public readonly canvas: HTMLCanvasElement;
   public readonly ctx: CanvasRenderingContext2D;
+  fpsInterval;
+  system = new System();
+  private camera: Point2 = new Point2();
+  private elapsed: number = 0;
+  private forceUpdate: boolean = true;
   private items: Item2Scene[] = [];
+  private loopTime: number = 0;
+  private now: number = 0;
   private refResize = this.resize.bind(this)
+  private startTime: number = 0;
+  private then: number = 0;
   private tickAnimation: number = 0;
   private uid: number = 100;
-  private loopTime: number = 0;
-  private camera: Point2 = new Point2();
-  private forceUpdate: boolean = true;
 
   addItem(item: Item2Scene, order?: number) {
     this.forceUpdate = true;
@@ -68,6 +72,10 @@ export class Scene2d {
     item.scenePriority = order || id;
     this.items.push(item);
     this.items = this.items.sort((a, b) => b.scenePriority - a.scenePriority);
+  }
+
+  addMultipleItem(items: Item2Scene[]) {
+    items.forEach(i => this.addItem(i))
   }
 
   animate(newTime: DOMHighResTimeStamp) {
@@ -99,8 +107,9 @@ export class Scene2d {
     }
   }
 
-  addMultipleItem(items: Item2Scene[]) {
-    items.forEach(i => this.addItem(i))
+  cleanItems(): void {
+    this.items = [];
+    this.uid = 100;
   }
 
   async createTexture(url: string, repetition: string | null = null, matrix?: DOMMatrix): Promise<CanvasPattern | null> {
@@ -112,15 +121,42 @@ export class Scene2d {
     return pattern
   }
 
-  private now: number = 0;
-  private elapsed: number = 0;
-  private then: number = 0;
-  private startTime: number = 0;
+  destroy() {
+    this.system.clear();
+    this.container.removeChild(this.canvas);
+    window.removeEventListener('resize', this.refResize);
+    window.cancelAnimationFrame(this.tickAnimation);
+  }
+
+  getItem(id: number): Item2Scene | undefined {
+    return this.items.find(f => f.sceneId === id);
+  }
 
   moveCamera(x: number, y: number) {
     this.camera.x = x;
     this.camera.y = y;
     this.forceUpdate = true;
+  }
+
+  removeItem(item: Item2Scene): void {
+    const findDrawIndex = this.items.findIndex(f => f.sceneId === item.sceneId);
+    if (findDrawIndex >= 0) {
+      this.items.splice(findDrawIndex, 1);
+      this.forceUpdate = true;
+    }
+  }
+
+  resize() {
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.forceUpdate = true;
+    this.items.forEach(item => {
+      if (item.onResize) {
+        item.onResize(width, height);
+      }
+    })
   }
 
   writeText(config: canvasWriteTextConfig) {
@@ -135,35 +171,5 @@ export class Scene2d {
     if (config.fillStyle) this.ctx.fillText(config.text, config.x, config.y);
     if (config.strokeStyle) this.ctx.strokeText(config.text, config.x, config.y);
     this.ctx.restore();
-  }
-
-  cleanItems(): void {
-    this.items = [];
-    this.uid = 100;
-  }
-
-  destroy() {
-    this.system.clear();
-    this.container.removeChild(this.canvas);
-    window.removeEventListener('resize', this.refResize);
-    window.cancelAnimationFrame(this.tickAnimation);
-  }
-
-  getItem(id: number): Item2Scene | undefined {
-    return this.items.find(f => f.sceneId === id);
-  }
-
-  removeItem(item: Item2Scene): void {
-    const findDrawIndex = this.items.findIndex(f => f.sceneId === item.sceneId);
-    if (findDrawIndex >= 0) {
-      this.items.splice(findDrawIndex, 1);
-      this.forceUpdate = true;
-    }
-  }
-
-  resize() {
-    this.canvas.width = this.container.clientWidth;
-    this.canvas.height = this.container.clientHeight;
-    this.forceUpdate = true;
   }
 }
