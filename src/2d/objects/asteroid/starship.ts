@@ -1,15 +1,16 @@
-import {Item2Scene, Scene2d} from '../core/scene2d';
-import {OldPhysicBall2} from '../physics/old-physic-ball2';
-import {Vector2} from '../geometry/vector2';
-import {createEasing, Easing, EasingCallback} from '../../utils/easing.utils';
-import {AngleFlip, AngleKeepRange, HALF_PI, PI} from '../../utils/number.utils';
-import {CanCollide} from '../core/collider';
+import {Item2Scene, Scene2d} from '../../core/scene2d';
+import {OldPhysicBall2} from '../../physics/old-physic-ball2';
+import {Vector2} from '../../geometry/vector2';
+import {createEasing, Easing, EasingCallback} from '../../../utils/easing.utils';
+import {AngleFlip, AngleKeepRange, HALF_PI, PI} from '../../../utils/number.utils';
+import {CanCollide} from '../../core/collider';
 import {Asteroid} from './asteroid';
 
 const rotationSpeed = 50;
 
 export class Starship extends OldPhysicBall2 implements Item2Scene, CanCollide {
   isUpdated: boolean = true;
+
   constructor(x: number, y: number, public owner: string = "",
               private onDestroyed: (asteroidOwner: string) => void) {
     super(x, y, 25);

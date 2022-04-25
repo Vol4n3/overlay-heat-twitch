@@ -1,8 +1,8 @@
-import {Item2Scene, Scene2d} from '../core/scene2d';
-import {OldPhysicBall2} from '../physics/old-physic-ball2';
-import {Vector2} from '../geometry/vector2';
-import {HALF_PI, PI, PI2, QUART_PI, TENTH_PI, TWENTIETH_PI} from '../../utils/number.utils';
-import {Rectangle2} from '../geometry/rectangle2';
+import {Item2Scene, Scene2d} from '../../core/scene2d';
+import {OldPhysicBall2} from '../../physics/old-physic-ball2';
+import {Vector2} from '../../geometry/vector2';
+import {HALF_PI, PI, PI2, QUART_PI, TENTH_PI, TWENTIETH_PI} from '../../../utils/number.utils';
+import {Rectangle2} from '../../geometry/rectangle2';
 
 const parts: number[] = [6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5, 20, 1, 18, 4, 13];
 const vectorToPoint: number[] = [11, 14, 9, 12, 5, 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11]

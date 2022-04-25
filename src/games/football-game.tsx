@@ -1,15 +1,15 @@
 import {FC, useEffect, useRef} from 'react';
 import {ContainerScene} from '../components/ui/container-scene';
 import {Scene2d} from '../2d/core/scene2d';
-import {SoccerBall} from '../2d/objects/soccerBall';
-import {PlayerSoccer} from '../2d/objects/player-soccer';
+import {SoccerBall} from '../2d/objects/foot/soccerBall';
+import {PlayerSoccer} from '../2d/objects/foot/player-soccer';
 import {UserPoint} from '../types/heat.types';
 import {Collider} from '../2d/core/collider';
 import {Point2} from '../2d/geometry/point2';
 import {PI} from '../utils/number.utils';
 import {useHeat} from '../providers/heat.provider';
-import {Terrain} from '../2d/objects/terrain';
-import {Cage} from '../2d/objects/cage';
+import {Terrain} from '../2d/objects/foot/terrain';
+import {Cage} from '../2d/objects/foot/cage';
 import {useTmi} from '../providers/tmi.provider';
 
 const cageWidth = 50;

@@ -1,6 +1,6 @@
-import {PhysicBall2} from '../physics/physic-ball2';
-import {Item2Scene, ItemSystem, Scene2d} from '../core/scene2d';
-import {PI2} from '../../utils/number.utils';
+import {PhysicBall2} from '../../physics/physic-ball2';
+import {Item2Scene, ItemSystem, Scene2d} from '../../core/scene2d';
+import {PI2} from '../../../utils/number.utils';
 
 export class Pico extends PhysicBall2 implements Item2Scene, ItemSystem {
   constructor(x: number, y: number) {

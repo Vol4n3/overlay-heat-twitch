@@ -4,11 +4,11 @@ import {Scene2d} from '../2d/core/scene2d';
 import {useHeat} from '../providers/heat.provider';
 import {UserPoint} from '../types/heat.types';
 import {Vector2} from '../2d/geometry/vector2';
-import {BasketPlayer} from '../2d/objects/basket-player';
-import {Hoop} from '../2d/objects/hoop';
-import {HoopSegment} from '../2d/objects/hoop-segment';
+import {BasketPlayer} from '../2d/objects/basket/basket-player';
+import {Hoop} from '../2d/objects/basket/hoop';
+import {HoopSegment} from '../2d/objects/basket/hoop-segment';
 import {TmiMessage, useTmi} from '../providers/tmi.provider';
-import {BasketBall} from '../2d/objects/basket-ball';
+import {BasketBall} from '../2d/objects/basket/basket-ball';
 
 export const BasketGame = () => {
   const refScene = useRef<HTMLDivElement>(null);

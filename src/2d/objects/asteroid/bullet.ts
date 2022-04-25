@@ -1,12 +1,13 @@
-import {OldPhysicBall2} from '../physics/old-physic-ball2';
-import {Item2Scene, Scene2d} from '../core/scene2d';
-import {CanCollide} from '../core/collider';
+import {OldPhysicBall2} from '../../physics/old-physic-ball2';
+import {Item2Scene, Scene2d} from '../../core/scene2d';
+import {CanCollide} from '../../core/collider';
 import {Asteroid} from './asteroid';
-import {PI2} from '../../utils/number.utils';
+import {PI2} from '../../../utils/number.utils';
 
 
 export class Bullet extends OldPhysicBall2 implements Item2Scene, CanCollide {
   isUpdated: boolean = true;
+
   constructor(x: number, y: number, public owner: string) {
     super(x, y, 5);
   }

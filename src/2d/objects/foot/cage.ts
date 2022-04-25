@@ -1,10 +1,11 @@
-import {Rectangle2} from '../geometry/rectangle2';
-import {Item2Scene, Scene2d} from '../core/scene2d';
+import {Rectangle2} from '../../geometry/rectangle2';
+import {Item2Scene, Scene2d} from '../../core/scene2d';
 import {SoccerBall} from './soccerBall';
-import {CanCollide} from '../core/collider';
+import {CanCollide} from '../../core/collider';
 
 export class Cage extends Rectangle2 implements Item2Scene, CanCollide {
   isUpdated: boolean = true;
+
   constructor(x: number, y: number, w: number, h: number, public team: string) {
     super(x, y, w, h);
   }

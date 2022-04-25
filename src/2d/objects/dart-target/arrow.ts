@@ -1,11 +1,12 @@
-import {OldPhysicBall2} from '../physics/old-physic-ball2';
-import {Item2Scene, Scene2d} from '../core/scene2d';
-import {Vector2} from '../geometry/vector2';
+import {OldPhysicBall2} from '../../physics/old-physic-ball2';
+import {Item2Scene, Scene2d} from '../../core/scene2d';
+import {Vector2} from '../../geometry/vector2';
 import {DartTarget} from './dart-target';
-import {HALF_PI} from '../../utils/number.utils';
+import {HALF_PI} from '../../../utils/number.utils';
 
 export class Arrow extends OldPhysicBall2 implements Item2Scene {
   isUpdated: boolean = true;
+
   constructor(x: number, y: number, private target: DartTarget) {
     super(x, y, 70);
   }
